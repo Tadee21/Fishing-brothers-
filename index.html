@@ -1005,6 +1005,22 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 #screen .fish-gallery .fish-card[data-fish="bolen"] .fish-image{background-image:repeating-linear-gradient(0deg,transparent 0 38px,#b9e2dc16 39px 42px,transparent 43px 62px),linear-gradient(180deg,#1b6970,#16464c 62%,#243c3d)}
 #screen .fish-gallery .fish-card[data-fish="okoun"] .fish-image{background-image:repeating-linear-gradient(84deg,transparent 0 30px,#a4bd5d26 31px 35px,transparent 36px 53px),linear-gradient(180deg,#45613a,#26462c 62%,#51452a)}
 </style>
+<style id="fb-fish-habitat-panels">
+/* Habitat-photo treatment: make each existing species artwork fill a wide card, like the approved reference. */
+.home-fish-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:11px!important}
+.home-fish-card{padding:8px!important;gap:0;border-radius:15px!important;background:linear-gradient(145deg,#14291e,#0b1711)!important}
+.home-fish-card .home-fish-image{height:clamp(132px,31vw,190px)!important;min-height:0!important;padding:0!important;overflow:hidden!important;border-radius:11px!important;background:#102b20!important}
+.home-fish-card .home-fish-image img{width:100%!important;height:100%!important;padding:0!important;object-fit:cover!important;object-position:center 52%!important;border-radius:0!important;filter:saturate(1.06) contrast(1.04)!important}
+.home-fish-copy{padding:9px 3px 2px!important;gap:5px!important}
+.home-fish-copy b{font-size:clamp(13px,1.7vw,17px)!important}
+.home-fish-copy small{font-size:12px!important}
+#screen .fish-gallery{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:11px!important}
+#screen .fish-gallery .fish-card{padding:8px!important;border-radius:15px!important;background:linear-gradient(145deg,#14291e,#0b1711)!important}
+#screen .fish-gallery .fish-card img{width:100%!important;height:clamp(132px,31vw,190px)!important;padding:0!important;object-fit:cover!important;object-position:center 52%!important;border-radius:11px!important;background:#102b20!important}
+@media(max-width:480px){
+ .home-fish-card .home-fish-image,#screen .fish-gallery .fish-card img{height:clamp(125px,34vw,155px)!important}
+}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
