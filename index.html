@@ -790,6 +790,103 @@ body.fb-premium{color:var(--fb-text);font-family:Inter,system-ui,-apple-system,S
  .home-latest .latest-catch img{width:75px;height:68px}
 }
 </style>
+
+<style id="fb-video-fixes">
+/* Video review fixes: compact responsive layout, sharp scenery, clear Fishing Friends hero */
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+*,*:before,*:after{min-width:0}
+.fb-top{width:100%;max-width:none;grid-template-columns:minmax(180px,235px) minmax(0,1fr) minmax(180px,225px);gap:10px;padding:12px clamp(10px,2vw,28px)}
+.fb-nav{min-width:0;flex-wrap:wrap;justify-content:center}
+.fb-nav button{min-width:62px;flex:1 1 65px}
+.fb-header-hud{position:static!important;display:grid;grid-template-columns:1fr;gap:6px;min-width:0}
+.fb-layout:has(#screen .fb-home){width:100%;max-width:1680px;padding:14px clamp(8px,2vw,24px) 30px}
+.fb-home-grid{width:100%;grid-template-columns:minmax(190px,230px) minmax(0,1fr) minmax(210px,260px);gap:12px}
+.fb-friends-hero{position:relative;isolation:isolate;display:flex;min-height:174px;flex-direction:column;justify-content:center;align-items:center;overflow:hidden;margin:0 0 17px;padding:22px 16px;border:1px solid #c39a59;border-radius:17px;text-align:center;background:linear-gradient(90deg,rgba(4,18,13,.9),rgba(5,25,17,.47),rgba(4,18,13,.9)),url('https://images.pexels.com/photos/35008328/pexels-photo-35008328.jpeg?auto=compress&cs=tinysrgb&w=1800') center 48%/cover;box-shadow:0 10px 28px #000a,inset 0 0 35px #0008}
+.fb-friends-hero:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(180deg,transparent,rgba(2,12,8,.46))}
+.fb-friends-kicker{color:#e7d3a2;font:700 10px/1.3 system-ui,sans-serif;letter-spacing:4px;text-shadow:0 2px 5px #000}
+.fb-friends-hero h1{margin:8px 0 5px;color:#fff4d4;font:900 clamp(31px,5vw,58px)/1 Georgia,serif;letter-spacing:2px;text-shadow:0 4px 12px #000,0 0 22px #d7b76a55}
+.fb-friends-hero p{margin:7px 0 0;color:#f4ebd4;font:500 clamp(11px,1.4vw,14px)/1.4 system-ui,sans-serif;text-shadow:0 2px 6px #000}
+.fb-hero-line{display:flex;align-items:center;gap:10px;margin-top:12px;color:#f2d18a}
+.fb-hero-line i{display:block;width:70px;height:1px;background:linear-gradient(90deg,transparent,#d4b16b,transparent)}
+.fb-home-title h2{font-size:clamp(17px,1.7vw,22px)}
+.home-places{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.home-place-image{height:clamp(130px,13vw,180px);background:#12271c}
+.home-place-image img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 50%;filter:none;image-rendering:auto}
+#screen .place-photo{display:block;width:100%;height:clamp(110px,16vw,175px);object-fit:cover;object-position:center;background:#12271c;filter:none;image-rendering:auto}
+.home-place-content p{min-height:40px}
+.home-side,.home-main,.home-panel,.home-place,.home-place-content{min-width:0}
+.home-main-actions{grid-template-columns:1.35fr repeat(3,minmax(0,1fr))}
+.home-latest .latest-catch{grid-template-columns:68px minmax(0,1fr);gap:8px}
+.home-latest .latest-catch img{width:68px;height:60px;object-fit:contain}
+.latest-catch-copy b{font-size:12px}.latest-catch-copy span{font-size:11px}.latest-catch-copy small{font-size:9px}
+#screen .leaderboard-row{width:100%;max-width:100%;display:grid;grid-template-columns:24px 28px minmax(0,1fr) auto 56px;gap:7px;align-items:center;overflow:hidden;padding:8px 6px;border-bottom:1px solid #8a704b55;border-radius:8px;background:linear-gradient(100deg,#30251a,#17130f);box-sizing:border-box}
+#screen .leaderboard-row .leader-rank{font-size:14px;text-align:center;color:#f2ce78}
+#screen .leaderboard-row .leader-avatar{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#314833;border:1px solid #a68a52;font-size:11px}
+#screen .leaderboard-row .leader-person{display:grid;gap:2px;min-width:0;overflow:hidden}
+#screen .leaderboard-row .leader-person strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:#fff0ce}
+#screen .leaderboard-row .leader-person small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;color:#cbbb9b}
+#screen .leaderboard-row .leader-value{white-space:nowrap;font-size:11px;color:#f3d38b}
+#screen .leaderboard-row .leader-fish-thumb{display:block;width:54px!important;height:38px!important;max-width:54px;max-height:38px;object-fit:contain!important;padding:2px;border:1px solid #7e6948;border-radius:6px;background:linear-gradient(145deg,#183326,#0a1710)}
+#screen #onlineLeaderboard{width:100%;max-width:100%;min-width:0;overflow:hidden}
+#screen .record{width:100%;min-width:0;grid-template-columns:24px 58px minmax(0,1fr) auto;gap:7px}
+#screen .record img.artmini{width:58px;height:48px;object-fit:contain!important}
+@media(max-width:1050px){
+ .fb-top{grid-template-columns:minmax(145px,190px) minmax(0,1fr);gap:8px}
+ .fb-header-hud{grid-column:1/-1;grid-template-columns:1fr 1fr}
+ .fb-nav{grid-column:1/-1;grid-row:2}
+ .fb-home-grid{grid-template-columns:190px minmax(0,1fr)}
+ .home-side-right{grid-column:1/-1;grid-template-columns:1fr 1fr}
+}
+@media(max-width:760px){
+ .fb-top{display:grid;grid-template-columns:1fr;grid-template-areas:"brand" "hud" "nav";gap:8px;padding:9px 9px 11px;min-height:0;height:auto}
+ .fb-top .brand{grid-area:brand;position:static!important;justify-self:center;min-width:0;grid-template-columns:48px auto}
+ .fb-top .brand-mark{width:48px;height:48px}
+ .fb-top .brand .logo{font-size:27px}
+ .fb-top .brand .tag{font-size:7px;letter-spacing:2px}
+ .fb-top .fb-header-hud{grid-area:hud;position:static!important;display:grid!important;grid-template-columns:1fr 1fr;gap:6px;width:100%;min-width:0}
+ .fb-top .hud-coins,.fb-top .hud-level{min-width:0;width:100%;padding:7px 8px;font-size:11px;box-sizing:border-box}
+ .fb-top .fb-nav{grid-area:nav;position:static!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;max-width:none;margin:0;gap:4px}
+ .fb-top .fb-nav button{min-width:0;max-width:none;width:100%;padding:6px 2px;font-size:16px;border:1px solid #66543a;border-radius:8px}
+ .fb-top .fb-nav button span{font-size:9px}
+ .fb-layout:has(#screen .fb-home){padding:9px 8px 24px}
+ .fb-home-grid{display:grid!important;grid-template-columns:1fr;gap:9px}
+ .home-side-left{order:1;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .home-side-left .home-side-button{grid-column:1/-1}
+ .home-main{order:2}
+ .home-side-right{order:3;grid-column:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .fb-friends-hero{min-height:132px;margin-bottom:12px;padding:17px 10px;background-position:center;background-size:cover}
+ .fb-friends-hero h1{font-size:clamp(27px,8vw,40px)}
+ .fb-friends-hero p{max-width:290px}
+ .home-places{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .home-place{display:flex;flex-direction:column}
+ .home-place-image{height:112px}
+ .home-place-content{flex:1;padding:8px}
+ .home-place-content p{min-height:44px;font-size:10px}
+ .home-place-content button{margin-top:auto}
+ .home-baits-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .home-fish-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .home-fish-image{height:92px}
+ .home-main-actions{grid-template-columns:1fr 1fr}
+ .home-main-actions button:first-child{grid-column:1/-1}
+ #screen .leaderboard-row{grid-template-columns:22px 26px minmax(0,1fr) auto 48px;gap:5px}
+ #screen .leaderboard-row .leader-fish-thumb{width:46px!important;height:34px!important}
+}
+@media(max-width:480px){
+ .fb-home-title{margin:9px 0 10px}
+ .home-side-left{grid-template-columns:1fr 1fr}
+ .home-side-right{grid-template-columns:1fr}
+ .home-places{grid-template-columns:1fr}
+ .home-place{display:grid;grid-template-columns:37% minmax(0,1fr);grid-template-rows:auto 1fr}
+ .home-place h3{grid-column:1/-1;text-align:left;padding:8px 10px}
+ .home-place-image{grid-column:1;grid-row:2;height:100%;min-height:105px}
+ .home-place-content{grid-column:2;grid-row:2;justify-content:center}
+ .home-place-content p{min-height:0}
+ .home-baits-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .home-fish-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #screen .leaderboard-row{grid-template-columns:20px 24px minmax(0,1fr) auto 42px;gap:4px;padding:7px 4px}
+ #screen .leaderboard-row .leader-fish-thumb{width:40px!important;height:30px!important}
+}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
@@ -846,17 +943,17 @@ fishImages.tolstolobik='tolstolobik.png';
 function fishImage(f){return `<div class="fishart-frame"><img class="fishart ${f.id==='bolen'?'fishart-bolen':''}" src="${fishImages[f.id]||fishImages.kapr}" alt="${f.name}" loading="eager"></div>`;}
 function placeArt(place){
  const scenes={
-  'Rybník':'pond.jpg',
-  'Jezero':'lake.jpg',
-  'Řeka':'river.jpg'
+  'Rybník':'https://images.pexels.com/photos/17786368/pexels-photo-17786368.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'Jezero':'https://images.pexels.com/photos/35008328/pexels-photo-35008328.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'Řeka':'https://images.pexels.com/photos/24205803/pexels-photo-24205803.jpeg?auto=compress&cs=tinysrgb&w=1200'
  };
- return `<img class="place-photo" src="${scenes[place]}" alt="${place} – realistická fotografie" loading="lazy">`;
+ return `<img class="place-photo" src="${scenes[place]}" alt="${place} – ostrá fotografie přírody" loading="lazy">`;
 }
 
 function playerLevel(){return Math.floor((Number(state.xp)||0)/500)+1;}
 function placeRequiredLevel(place){return place==='Jezero'?25:place==='Řeka'?50:1;}
 function placeUnlocked(place){return playerLevel()>=placeRequiredLevel(place);}
-const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],best:0,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
+const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
 let cloudSaveTimer=null,cloudSaveBusy=false,cloudSaveAgain=false;
 function load(){try{const s=JSON.parse(window.localStorage.getItem('fb-save'));if(s)Object.assign(state,s)}catch(e){/* local storage may be unavailable */}if(!placeUnlocked(state.place))state.place='Rybník';}
 function save(){
@@ -908,20 +1005,21 @@ function render(){
 }
 function renderHome(el){
  const places=[
-  {name:'Rybník',desc:'Kapr, amur, lín, štika, okoun',image:'pond.jpg'},
-  {name:'Jezero',desc:'Kapr, amur, jeseter, sumec, candát',image:'lake.jpg'},
-  {name:'Řeka',desc:'Štika, candát, bolen, okoun, sumec',image:'river.jpg'}
+  {name:'Rybník',desc:'Kapr, amur, lín, štika, okoun',image:'https://images.pexels.com/photos/17786368/pexels-photo-17786368.jpeg?auto=compress&cs=tinysrgb&w=1200'},
+  {name:'Jezero',desc:'Kapr, amur, jeseter, sumec, candát',image:'https://images.pexels.com/photos/35008328/pexels-photo-35008328.jpeg?auto=compress&cs=tinysrgb&w=1200'},
+  {name:'Řeka',desc:'Štika, candát, bolen, okoun, sumec',image:'https://images.pexels.com/photos/24205803/pexels-photo-24205803.jpeg?auto=compress&cs=tinysrgb&w=1200'}
  ];
  const recent=(state.records||[]).slice(0,1)[0];
  const fishHere=fishData.filter(f=>f.places.includes(state.place));
  const baitList=['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha','Pelety'];
  const shortName=n=>n.replace(' obecný','').replace(' obecná','').replace(' bílý','');
  el.innerHTML=`<section class="fb-home">
-  <div class="fb-home-title"><span></span><h1>Vyber revír a vyraz na lov!</h1><span></span></div>
+  <section class="fb-friends-hero"><div class="fb-friends-kicker">RYBÁŘSKÁ KOMUNITA</div><h1>FISHING FRIENDS</h1><p>Každý úlovek má svůj příběh. Ten další začíná právě tady.</p><div class="fb-hero-line"><span>🎣</span><i></i><span>🌊</span></div></section>
+  <div class="fb-home-title"><span></span><h2>Vyber revír a vyraz na lov!</h2><span></span></div>
   <div class="fb-home-grid">
    <aside class="home-side home-side-left">
     <section class="home-panel profile-panel"><div class="home-avatar">🎣</div><div class="home-player-name">${escapeHtml(currentProfile?.username||currentUser?.user_metadata?.username||'Rybář')}</div><small>Člen Fishing Brothers</small><div class="profile-divider"></div><div class="profile-stat"><span>🪙</span><b>${money(state.money)}</b></div><div class="profile-stat"><span>🏆</span><b>${Number(state.xp)||0} XP</b></div><div class="profile-stat"><span>🐟</span><b>${state.count} úlovků</b></div></section>
-    <section class="home-panel"><h2>📊 Tvoje statistiky</h2><div class="home-stat-row"><span>Celkem úlovků</span><b>${state.count}</b></div><div class="home-stat-row"><span>Největší ryba</span><b>${state.best?state.best+' cm':'—'}</b></div><div class="home-stat-row"><span>Nejtěžší ryba</span><b>${(state.records||[]).length?Math.max(...state.records.map(r=>Number(r.kg)||0)).toFixed(2)+' kg':'—'}</b></div><div class="home-stat-row"><span>Úroveň</span><b>LVL ${playerLevel()}</b></div></section>
+    <section class="home-panel"><h2>📊 Tvoje statistiky</h2><div class="home-stat-row"><span>Celkem úlovků</span><b>${state.count}</b></div><div class="home-stat-row"><span>Největší ryba</span><b>${state.best?state.best+' cm':'—'}</b></div><div class="home-stat-row"><span>Nejtěžší ryba</span><b>${Number(state.bestWeight||state.heaviestCatch?.kg||0)>0?Number(state.bestWeight||state.heaviestCatch.kg).toFixed(2)+' kg':'—'}</b></div><div class="home-stat-row"><span>Úroveň</span><b>LVL ${playerLevel()}</b></div></section>
     <button class="home-side-button" data-tab="account">👤 Můj profil a kamarádi</button>
    </aside>
    <div class="home-main">
@@ -1037,7 +1135,9 @@ function finishCatch(release=false){
   state.records.unshift(rec);state.records=state.records.slice(0,100);
   if(currentUser&&sb){sb.from('trophy_catches').insert({user_id:currentUser.id,fish_id:f.id,fish_name:f.name,length_cm:f.cm,weight_kg:f.kg,place:state.place,caught_at:new Date().toISOString()}).then(({error})=>{if(error)console.warn('Online trofej se nepodařilo uložit:',error.message);else renderOnlineLeaderboard();});}
  }
- state.count++;if(f.cm>state.best)state.best=f.cm;const oldLevel=Math.floor((Number(state.xp)||0)/500)+1;state.xp=(Number(state.xp)||0)+(f.xpReward||Math.round(35+f.cm*1.1+f.kg*3));const newLevel=Math.floor(state.xp/500)+1;state._levelUp=newLevel>oldLevel?newLevel:0;
+ state.count++;if(f.cm>Number(state.best||0))state.best=f.cm;
+ if(Number(f.kg)>Number(state.bestWeight||0)){state.bestWeight=Number(f.kg);state.heaviestCatch={name:f.name,id:f.id,cm:f.cm,kg:f.kg,place:state.place,date:new Date().toLocaleString('cs-CZ')};}
+ const oldLevel=Math.floor((Number(state.xp)||0)/500)+1;state.xp=(Number(state.xp)||0)+(f.xpReward||Math.round(35+f.cm*1.1+f.kg*3));const newLevel=Math.floor(state.xp/500)+1;state._levelUp=newLevel>oldLevel?newLevel:0;
  if(release)state.released++;else{state.sold++;state.money+=f.reward}
  state.current=null;state.phase='idle';state.message=release?'Ryba je zpět ve vodě. Díky za šetrný lov!':`Ryba prodána za ${money(f.reward)}!`;
  save();render();if(isTrophy||state._levelUp)showTrophyCelebration(f,state._levelUp);state._levelUp=0;
