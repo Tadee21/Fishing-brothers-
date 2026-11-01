@@ -1455,7 +1455,8 @@ else{startGame();}
   for(const id of species){
    const file=archive.file('fish-habitat-'+id+'.webp');
    if(!file)continue;
-   const blob=await file.async('blob');
+   const bytes=await file.async('uint8array');
+   const blob=new Blob([bytes],{type:'image/webp'});
    const url=URL.createObjectURL(blob);
    rules.push('.fish-habitat-scene.habitat-'+id+'{background-image:url("'+url+'")!important;background-position:center!important;background-size:cover!important;}');
   }
