@@ -617,6 +617,29 @@ body.fb-premium{background:linear-gradient(180deg,rgba(2,12,10,.38),rgba(3,10,8,
 @media(max-width:760px){.fb-top{height:165px;min-height:165px;background-size:auto 165px;background-position:center top}.fb-top .fb-nav{width:100%;margin:0;gap:2px}.fb-top .fb-nav button{flex:1;min-width:0;font-size:17px;padding:6px 2px}.fb-top .fb-nav button span{font-size:8px}.fb-top .fb-header-hud{top:5px;right:5px;min-width:0}.fb-top .hud-coins,.fb-top .hud-level{padding:3px 5px;font-size:9px}.fb-layout{padding:7px}.fb-home-grid{display:flex;flex-direction:column}.home-side-left{order:1;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:7px}.home-side-left .profile-panel,.home-side-left>section:nth-child(2){grid-column:auto}.home-side-left .home-side-button{grid-column:1/-1}.home-main{order:2;width:100%}.home-side-right{order:3;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:7px}.home-places{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.home-place{display:block}.home-place h3{font-size:17px}.home-place-image{height:105px}.home-place-content{padding:6px}.home-place-content p{font-size:9px;min-height:37px}.home-place-content button{font-size:10px;padding:7px 3px}.home-baits-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.home-bait{min-height:74px}.home-bait img{height:59px}.home-fish-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.home-fish-image{height:65px}.home-fish-card b{font-size:9px}.home-main-actions{grid-template-columns:1.3fr 1fr 1fr 1fr;gap:5px}.home-main-actions button{font-size:10px;padding:9px 3px}.home-main-actions .home-secondary{font-size:9px}.fb-ranking .leaderboard-row{grid-template-columns:18px 25px minmax(0,1fr) auto 42px;gap:3px}.fb-ranking .leader-fish-thumb{width:40px;height:25px}.fb-ranking .leader-value{font-size:8px}}
 @media(max-width:480px){.fb-top{height:146px;min-height:146px;background-size:auto 146px}.fb-top .fb-nav button{font-size:14px}.fb-top .fb-nav button span{font-size:7px}.fb-home-title h1{font-size:18px}.home-places{grid-template-columns:1fr}.home-place{display:grid;grid-template-columns:39% minmax(0,1fr);grid-template-rows:auto 1fr}.home-place h3{grid-column:1/-1}.home-place-image{grid-column:1;grid-row:2;height:100%;min-height:105px}.home-place-content{grid-column:2;grid-row:2;display:flex;flex-direction:column;justify-content:center}.home-place-content p{min-height:0}.home-place-content button{margin-top:auto}.home-fish-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.home-fish-image{height:54px}.home-fish-card b{font-size:8px}.home-side-right{grid-template-columns:1fr}.home-main-actions{grid-template-columns:1fr 1fr}.fb-ranking .leaderboard-row{grid-template-columns:20px 27px minmax(0,1fr) auto 48px}.fb-ranking .leader-person strong{font-size:10px}.fb-ranking .leader-value{font-size:9px}}
 
+
+/* === Dashboard refinement: unified ranking, consistent fish background, compact live catch === */
+.home-leader-subtitle{font-size:10px;color:#cdbb98;text-align:center;margin:-3px 0 9px}
+.home-leader-panel .leaderboard-row{display:grid;grid-template-columns:22px 24px minmax(0,1fr) auto;gap:6px;align-items:center;padding:7px 0;border-bottom:1px solid #85643c55}
+.home-leader-panel .leaderboard-row:last-child{border-bottom:0}
+.home-leader-panel .leader-avatar{width:23px;height:23px;display:grid;place-items:center;border-radius:50%;background:#4a3b25;border:1px solid #b18b4d;font-size:11px}
+.home-leader-panel .leader-person{min-width:0;display:grid;gap:1px}
+.home-leader-panel .leader-person strong{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-leader-panel .leader-person small{font-size:9px;color:#d3c19c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-leader-panel .leader-value{font-size:10px;color:#f5d58e;white-space:nowrap}
+.home-leader-panel .leader-fish-thumb{width:32px;height:27px;object-fit:contain;border-radius:5px;background:#14271e}
+.home-latest .latest-catch{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px;align-items:center;text-align:left}
+.home-latest .latest-catch img{width:76px;height:66px;object-fit:contain;padding:3px;background:linear-gradient(145deg,#19382b,#0b1712);border:1px solid #80613b;border-radius:8px}
+.latest-catch-copy{min-width:0;display:grid;gap:3px}
+.home-latest .latest-catch-copy b{font-size:13px;margin:0}
+.home-latest .latest-catch-copy span{font-size:11px;margin:0;color:#f2d58d}
+.home-latest .latest-catch-copy small{font-size:10px;color:#cdbb98;overflow-wrap:anywhere}
+.home-fish-image{background:linear-gradient(145deg,#173b2c,#0c1b14)!important;border:1px solid #6d6545}
+.home-fish-image img{object-fit:contain!important;padding:4px;mix-blend-mode:normal}
+#screen .fish-card img{background:linear-gradient(145deg,#173b2c,#0c1b14)!important;object-fit:contain!important;padding:5px}
+#screen .fishart-frame{background:linear-gradient(145deg,#173b2c,#0c1b14)!important;border:1px solid #8c7048;border-radius:12px;overflow:hidden}
+#screen .fishart{object-fit:contain!important;background:transparent!important}
+@media(max-width:680px){.home-latest .latest-catch{grid-template-columns:68px minmax(0,1fr)}.home-latest .latest-catch img{width:68px;height:60px}.home-leader-panel .leaderboard-row{grid-template-columns:20px 22px minmax(0,1fr) auto;gap:4px}}
 </style></head>
 <body class="fb-premium">
 <header class="fb-top">
@@ -646,7 +669,7 @@ body.fb-premium{background:linear-gradient(180deg,rgba(2,12,10,.38),rgba(3,10,8,
  <div class="fb-side-actions"><button data-tab="shop">🎒　Výbava a obchod</button><button data-tab="account">👥　Kamarádi a účet</button><button data-tab="log">📖　Rybářská kronika</button><button data-tab="fish">🎣　Zpět k lovu</button></div>
  <div class="fb-upgrade"><b>AKTIVNÍ VYBAVENÍ</b><p>🎣 Prut a naviják</p><small>Vylepšuj výbavu v obchodě a zdolávej větší ryby.</small></div></aside>
  <section class="fb-center"><div class="fb-slogan">Lov, který nikdy nekončí...</div><section id="screen"><div class="card">Načítám Fishing Brothers…</div></section></section>
- <aside class="fb-right"><section class="fb-leader"><h2>🏆 TOP 5 RYBÁŘŮ</h2><h3>📏 Největší úlovky</h3><div id="sideLongest" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div><h3>⚖️ Nejtěžší úlovky</h3><div id="sideHeaviest" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section><section class="fb-promo"><div>🌅</div><b>Každý záběr může být rekordní!</b><small>Vyber revír a vydej se za trofejí.</small></section></aside>
+ <aside class="fb-right"><section class="fb-leader"><h2>🏆 TOP 5 RYBÁŘŮ</h2><h3>📏 Nejdelší trofejní úlovky</h3><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section><section class="fb-promo"><div>🌅</div><b>Každý záběr může být rekordní!</b><small>Vyber revír a vydej se za trofejí.</small></section></aside>
  <section class="fb-bottom"><div class="fb-statbox"><b>Tvoje statistiky</b><div>🐟 Celkem úlovků: <strong id="bottomCount">0</strong></div><div>📏 Nejdelší ryba: <strong id="bottomRecord">—</strong></div></div><div class="fb-statbox"><b>Fishing Brothers</b><div>🎣 Rybník · Jezero · Řeka</div><div>🤝 Lov s kamarády</div></div></section>
  <footer>Fishing Brothers · FISH · CATCH · REPEAT</footer>
 </main>
@@ -758,8 +781,8 @@ function renderHome(el){
     <div class="home-main-actions"><button data-tab="fish">🐟 Začít lovit</button><button class="home-secondary" data-tab="shop">🛒 Obchod</button><button class="home-secondary" data-tab="shop">🎒 Výbava</button><button class="home-secondary" data-tab="log">🏆 Úspěchy</button></div>
    </div>
    <aside class="home-side home-side-right">
-    <section class="home-panel home-leader-panel"><h2>🏆 TOP RYBÁŘI</h2><div class="home-leader-tabs"><span>Nejdelší úlovek</span><span>Nejtěžší úlovek</span></div><div id="sideLongest" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div><div class="leader-separator"></div><div id="sideHeaviest" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section>
-    <section class="home-panel home-latest"><h2>📸 Poslední úlovek</h2>${recent?`<div class="latest-catch"><img src="${fishImages[recent.id]||fishImages.kapr}" alt="${recent.name}" loading="lazy"><b>${escapeHtml(recent.name)}</b><span>${recent.cm} cm · ${Number(recent.kg).toFixed(2)} kg</span></div>`:'<div class="latest-empty">🎣<p>Zatím žádný úlovek.</p><small>Tvůj první rekord čeká na hladině.</small></div>'}</section>
+    <section class="home-panel home-leader-panel"><h2>🏆 TOP RYBÁŘI</h2><div class="home-leader-subtitle">Pořadí podle nejdelší trofejní ryby</div><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section>
+    <section class="home-panel home-latest"><h2>📸 Poslední úlovek</h2>${(state.lastCatch||recent)?(()=>{const c=state.lastCatch||recent;return `<div class="latest-catch"><img src="${fishImages[c.id]||fishImages.kapr}" alt="${escapeHtml(c.name)}" loading="lazy"><div class="latest-catch-copy"><b>${escapeHtml(c.name)}</b><span>${c.cm} cm · ${Number(c.kg).toFixed(2)} kg</span><small>${escapeHtml(c.place||'Revír')} · ${escapeHtml(c.action||'Úlovek')}</small></div></div>`;})():'<div class="latest-empty">🎣<p>Zatím žádný úlovek.</p><small>Tvůj první úlovek čeká na hladině.</small></div>'}</section>
    </aside>
   </div>
  </section>`;
@@ -858,6 +881,7 @@ function showTrophyCelebration(f,levelUp=0){
 function finishCatch(release=false){
  const f=state.current;if(!f)return;
  const isTrophy=f.cm >= (f.trophy||999);
+ state.lastCatch={name:f.name,id:f.id,cm:f.cm,kg:f.kg,place:state.place,action:release?'Puštěna':'Prodána',date:new Date().toLocaleString('cs-CZ')};
  if(isTrophy) {
   const rec={name:f.name,id:f.id,cm:f.cm,kg:f.kg,place:state.place,action:release?'Puštěna':'Prodána',date:new Date().toLocaleDateString('cs-CZ'),angler:currentProfile?.username||'Ty'};
   state.records.unshift(rec);state.records=state.records.slice(0,100);
@@ -933,19 +957,15 @@ async function sendFriendRequest(id){const {error}=await sb.from('friendships').
 async function loadFriends(){if(!currentUser)return;const req=document.querySelector('#friendRequests'),list=document.querySelector('#friendList');if(!req||!list)return;const {data:incoming,error}=await sb.from('friendships').select('id,requester_id,profiles!friendships_requester_id_fkey(username)').eq('addressee_id',currentUser.id).eq('status','pending');req.innerHTML=error?escapeHtml(error.message):(incoming?.length?incoming.map(r=>`<div class="account-row"><span>${escapeHtml(r.profiles?.username||'Rybář')}</span><button data-accept="${r.id}">Přijmout</button></div>`).join(''):'Žádné nové žádosti.');req.querySelectorAll('[data-accept]').forEach(b=>b.onclick=async()=>{const {error}=await sb.from('friendships').update({status:'accepted'}).eq('id',b.dataset.accept);accountMessage(error?error.message:'Kamarád přidán.');loadFriends();});
  const {data:friends,error:e2}=await sb.from('friendships').select('id,requester_id,addressee_id,requester:profiles!friendships_requester_id_fkey(username,last_seen),addressee:profiles!friendships_addressee_id_fkey(username,last_seen)').eq('status','accepted').or(`requester_id.eq.${currentUser.id},addressee_id.eq.${currentUser.id}`);list.innerHTML=e2?escapeHtml(e2.message):(friends?.length?friends.map(f=>{const p=f.requester_id===currentUser.id?f.addressee:f.requester;return `<div class="account-row"><span><i class="${new Date(p?.last_seen||0)>new Date(Date.now()-5*60000)?'online-dot':'offline-dot'}"></i>${escapeHtml(p?.username||'Rybář')}<small>${presenceLabel(p?.last_seen)}</small></span><button class="secondary" data-removefriend="${f.id}">Odebrat</button></div>`}).join(''):'Zatím nemáš žádné kamarády.');list.querySelectorAll('[data-removefriend]').forEach(b=>b.onclick=async()=>{await sb.from('friendships').delete().eq('id',b.dataset.removefriend);loadFriends();});}
 async function renderOnlineLeaderboard(){
- const box=document.querySelector('#onlineLeaderboard');if(!sb)return;
- const [{data:longestRows,error:e1},{data:heaviestRows,error:e2}]=await Promise.all([
-  sb.from('trophy_catches').select('user_id,length_cm,weight_kg,fish_name').order('length_cm',{ascending:false}).limit(1000),
-  sb.from('trophy_catches').select('user_id,length_cm,weight_kg,fish_name').order('weight_kg',{ascending:false}).limit(1000)
- ]);
- if(e1||e2){console.warn('Online žebříček:',e1||e2);if(box)box.innerHTML='<p class="muted">Online žebříček se nepodařilo načíst. Zkontroluj oprávnění tabulky trophy_catches.</p>';return;}
- const uniquePlayers=(rows,metric)=>{const seen=new Set(),out=[];for(const r of rows||[]){if(!r.user_id||seen.has(r.user_id))continue;seen.add(r.user_id);out.push(r);if(out.length===5)break;}return out;};
- const longest=uniquePlayers(longestRows,'length_cm'),heaviest=uniquePlayers(heaviestRows,'weight_kg');
- const ids=[...new Set([...longest,...heaviest].map(r=>r.user_id))];let names={};
+ const box=document.querySelector('#onlineLeaderboard'),side=document.querySelector('#sideLeaderboard');
+ if(!sb){const msg='<p class="muted">Přihlas se pro online žebříček.</p>';if(box)box.innerHTML=msg;if(side)side.innerHTML=msg;return;}
+ const {data:rows,error}=await sb.from('trophy_catches').select('user_id,length_cm,weight_kg,fish_name').order('length_cm',{ascending:false}).limit(1000);
+ if(error){console.warn('Online žebříček:',error);const msg='<p class="muted">Online žebříček se nepodařilo načíst.</p>';if(box)box.innerHTML=msg;if(side)side.innerHTML=msg;return;}
+ const seen=new Set(),top=[];for(const r of rows||[]){if(!r.user_id||seen.has(r.user_id))continue;seen.add(r.user_id);top.push(r);if(top.length===5)break;}
+ const ids=[...new Set(top.map(r=>r.user_id))];let names={};
  if(ids.length){const {data:profiles,error:pe}=await sb.from('profiles').select('id,username').in('id',ids);if(!pe)(profiles||[]).forEach(p=>names[p.id]=p.username);}
- const list=(arr,key,unit)=>arr?.length?arr.map((r,i)=>{const metric=Number(r[key]);const fishName=String(r.fish_name||'Ryba');const fish=escapeHtml(fishName);const username=escapeHtml(names[r.user_id]||'Rybář');const value=Number.isFinite(metric)?metric.toFixed(key==='weight_kg'?2:0):'—';const entry=fishData.find(f=>f.name===fishName||f.id===fishName.toLowerCase());const thumb=fishImages[entry?.id]||fishImages.kapr;const initials=(names[r.user_id]||'R').trim().slice(0,1).toUpperCase();return `<div class="leaderboard-row"><b class="leader-rank">${['🥇','🥈','🥉','4','5'][i]}</b><span class="leader-avatar">${escapeHtml(initials)}</span><span class="leader-person"><strong>${username}</strong><small>${fish}</small></span><b class="leader-value">${value} ${unit}</b><img class="leader-fish-thumb" src="${thumb}" alt="${fish}" loading="lazy"></div>`;}).join(''):'<p class="muted">Zatím žádné online trofeje.</p>';
- if(box)box.innerHTML=`<h2>🌍 TOP 5 – nejdelší úlovky</h2>${list(longest,'length_cm','cm')}<h2>⚖️ TOP 5 – nejtěžší úlovky</h2>${list(heaviest,'weight_kg','kg')}`;
- const sl=document.querySelector('#sideLongest'),sh=document.querySelector('#sideHeaviest');if(sl)sl.innerHTML=list(longest,'length_cm','cm');if(sh)sh.innerHTML=list(heaviest,'weight_kg','kg');
+ const html=top.length?top.map((r,i)=>{const fishName=String(r.fish_name||'Ryba'),fish=escapeHtml(fishName),username=escapeHtml(names[r.user_id]||'Rybář'),cm=Number(r.length_cm);const entry=fishData.find(f=>f.name===fishName||f.id===fishName.toLowerCase());const thumb=fishImages[entry?.id]||fishImages.kapr,initials=(names[r.user_id]||'R').trim().slice(0,1).toUpperCase();return `<div class="leaderboard-row"><b class="leader-rank">${['🥇','🥈','🥉','4','5'][i]}</b><span class="leader-avatar">${escapeHtml(initials)}</span><span class="leader-person"><strong>${username}</strong><small>${fish}</small></span><b class="leader-value">${Number.isFinite(cm)?cm+' cm':'—'}</b><img class="leader-fish-thumb" src="${thumb}" alt="${fish}" loading="lazy"></div>`;}).join(''):'<p class="muted">Zatím žádné online trofeje.</p>';
+ if(box)box.innerHTML=`<h2>TOP 5 – nejdelší úlovky</h2>${html}`;if(side)side.innerHTML=html;
 }
 async function onAuthChanged(session){currentUser=session?.user||null;currentProfile=null;if(onlineChannel){sb.removeChannel(onlineChannel);onlineChannel=null;}if(currentUser){await refreshProfile();await sb.from('profiles').update({last_seen:new Date().toISOString()}).eq('id',currentUser.id);onlineChannel=sb.channel('fb-presence').on('presence',{event:'sync'},()=>{}).subscribe(async status=>{if(status==='SUBSCRIBED')await onlineChannel.track({user_id:currentUser.id,username:currentProfile?.username||'Rybář'});});if(window.fbHeartbeat)clearInterval(window.fbHeartbeat);window.fbHeartbeat=setInterval(()=>{if(currentUser)sb.from('profiles').update({last_seen:new Date().toISOString()}).eq('id',currentUser.id);},60000);}else{if(window.fbHeartbeat)clearInterval(window.fbHeartbeat);}render();if(currentUser)renderOnlineLeaderboard();}
 
