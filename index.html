@@ -1095,6 +1095,23 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 .fishart-frame.fish-habitat-scene{background-size:contain!important;background-position:center!important;background-color:#0b241b!important}
 @media(max-width:480px){.home-fish-card,#screen .fish-gallery .fish-card{aspect-ratio:1.34!important}}
 </style>
+<style id="fb-home-and-fish-image-refinements">
+#screen .home-bait-panel,#screen .home-fish-panel{display:none!important}
+#screen .home-main{display:flex;flex-direction:column;gap:12px}
+#screen .home-places-panel{width:100%}
+.fish-habitat-scene{background-size:88% auto!important;background-position:50% 50%!important;background-repeat:no-repeat!important}
+.home-fish-card .home-fish-image,#screen .fish-gallery .fish-card .fish-image{background-size:88% auto!important;background-position:50% 50%!important}
+#screen .fish-catch-frame{background:#0b2118!important;background-image:none!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:12px!important;box-sizing:border-box!important}
+#screen .fish-catch-frame img.fishart{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;background:transparent!important;transform:none!important}
+#screen .latest-catch{display:grid!important;grid-template-columns:88px minmax(0,1fr)!important;align-items:center!important;gap:12px!important;text-align:left!important}
+#screen .latest-fish-art{width:88px!important;height:78px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;border-radius:10px!important;background:#0b2118!important;border:1px solid #8e7047!important}
+#screen .latest-fish-art img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;background:transparent!important;border-radius:0!important}
+@media(max-width:480px){
+ #screen .fish-habitat-scene{background-size:84% auto!important}
+ #screen .latest-catch{grid-template-columns:82px minmax(0,1fr)!important;gap:10px!important}
+ #screen .latest-fish-art{width:82px!important;height:74px!important}
+}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
@@ -1251,13 +1268,11 @@ function renderHome(el){
    </aside>
    <div class="home-main">
     <section class="home-panel home-places-panel"><div class="home-section-title"><h2>🌅 Vyber revír</h2><span>3 lokality</span></div><div class="home-places">${places.map(p=>`<article class="home-place ${state.place===p.name?'is-selected':''}"><h3>${p.name}</h3><div class="home-place-image"><img src="${p.image}" alt="${p.name}" loading="lazy"></div><div class="home-place-content"><small>🐟 Typické druhy</small><p>${p.desc}</p><button data-home-place="${p.name}" ${placeUnlocked(p.name)?'':'disabled'}>${placeUnlocked(p.name)?'Vybrat revír　›':'🔒 Úroveň '+placeRequiredLevel(p.name)}</button></div></article>`).join('')}</div></section>
-    <section class="home-panel home-bait-panel"><div class="home-section-title"><h2>🎣 Nástrahy</h2><button class="home-text-button" data-tab="shop">Obchod →</button></div><div class="home-baits-grid">${baitList.map(n=>`<button class="home-bait ${state.bait===n?'is-selected':''}" data-bait-home="${n}"><img src="${baitImages[n]}" alt="${n}" loading="lazy"><span><b>${n}</b><small>LVL ${state.baitLevel}</small></span></button>`).join('')}</div></section>
-    <section class="home-panel home-fish-panel"><div class="home-section-title"><h2>🐟 Ryby v revíru</h2><button class="home-text-button" data-tab="fish">Zobrazit revír →</button></div><div class="home-fish-grid">${fishHere.map(f=>`<article class="home-fish-card" data-fish="${f.id}"><div class="home-fish-image fish-habitat-scene habitat-${f.id}" role="img" aria-label="${f.name}"></div><div class="home-fish-copy"><b>${f.name}</b><small>${f.min}–${f.max} cm</small></div></article>`).join('')}</div></section>
     <div class="home-main-actions"><button data-tab="fish">🐟 Začít lovit</button><button class="home-secondary" data-tab="shop">🛒 Obchod</button><button class="home-secondary" data-tab="shop">🎒 Výbava</button><button class="home-secondary" data-tab="log">🏆 Úspěchy</button></div>
    </div>
    <aside class="home-side home-side-right">
     <section class="home-panel home-leader-panel"><h2>🏆 TOP RYBÁŘI</h2><div class="home-leader-subtitle">Pořadí podle nejdelší trofejní ryby</div><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section>
-    <section class="home-panel home-latest"><h2>📸 Poslední úlovek</h2>${(state.lastCatch||recent)?(()=>{const c=state.lastCatch||recent;return `<div class="latest-catch"><img src="${fishImages[fishIdForCatch(c)]}" alt="${escapeHtml(c.name)}" loading="eager"><div class="latest-catch-copy"><b>${escapeHtml(c.name)}</b><span>${c.cm} cm · ${Number(c.kg).toFixed(2)} kg</span><small>${escapeHtml(c.place||'Revír')} · ${escapeHtml(c.action||'Úlovek')}</small></div></div>`;})():'<div class="latest-empty">🎣<p>Zatím žádný úlovek.</p><small>Tvůj první úlovek čeká na hladině.</small></div>'}</section>
+    <section class="home-panel home-latest"><h2>📸 Poslední úlovek</h2>${(state.lastCatch||recent)?(()=>{const c=state.lastCatch||recent;return `<div class="latest-catch"><div class="latest-fish-art"><img src="${fishImages[fishIdForCatch(c)]}" alt="${escapeHtml(c.name)}" loading="eager"></div><div class="latest-catch-copy"><b>${escapeHtml(c.name)}</b><span>${c.cm} cm · ${Number(c.kg).toFixed(2)} kg</span><small>${escapeHtml(c.place||'Revír')} · ${escapeHtml(c.action||'Úlovek')}</small></div></div>`;})():'<div class="latest-empty">🎣<p>Zatím žádný úlovek.</p><small>Tvůj první úlovek čeká na hladině.</small></div>'}</section>
    </aside>
   </div>
  </section>`;
