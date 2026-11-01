@@ -210,7 +210,7 @@ html,body{min-height:100%;}body.fb-premium{font-family:Georgia,'Times New Roman'
 :root{--fb-black:#050d0d;--fb-deep:#061c1b;--fb-teal:#0b302c;--fb-panel:#111a16;--fb-panel2:#1c241c;--fb-gold:#e9bb61;--fb-gold2:#a67532;--fb-cream:#f7ebcf;--fb-muted:#c8b995;--fb-green:#179b32}
 *{box-sizing:border-box}
 html{min-height:100%;background:#031312}
-body.fb-premium{margin:0;min-height:100vh;color:var(--fb-cream);font-family:Georgia,"Times New Roman",serif;background:linear-gradient(180deg,rgba(2,14,14,.42),rgba(2,12,11,.9)),url("assets/header-scene.jpg") center top/cover fixed}
+body.fb-premium{margin:0;min-height:100vh;color:var(--fb-cream);font-family:Georgia,"Times New Roman",serif;background:linear-gradient(180deg,rgba(2,14,14,.42),rgba(2,12,11,.9)),url("header-scene.jpg") center top/cover fixed}
 button,select,input{font-family:inherit}
 button{cursor:pointer;transition:filter .15s,transform .15s}
 button:hover:not(:disabled){filter:brightness(1.13)}
@@ -586,7 +586,7 @@ function renderHome(el){
    
   </div>
   <section class="dashboard-strip"><div class="dashboard-strip-title"><h2>🎣 Nástrahy <small>(rychlý výběr)</small></h2><button class="secondary" data-tab="shop">Obchod →</button></div>
-   <div class="dashboard-baits">${baitList.map(n=>`<button class="dashboard-bait" data-bait-home="${n}"><img src="${baitImages[n]}" alt="${n}" loading="lazy"><b>${n}</b></button>`).join('')}</div></section>
+   <div class="dashboard-baits">${baitList.map(n=>`<button class="dashboard-bait" data-bait-home="${n}"><img src="${baitImages[n]}" alt="${n}" loading="lazy"><span><b>${n}</b><small>ÚROVEŇ ${state.baitLevel}</small></span></button>`).join('')}</div></section>
   <section class="dashboard-strip"><div class="dashboard-strip-title"><h2>🐟 Ryby v revíru</h2><button class="secondary" data-tab="fish">Zobrazit revír →</button></div>
    <div class="dashboard-fish">${fishHere.map(f=>`<article class="dashboard-fish-card"><div class="dashboard-fish-photo"><img src="${fishImages[f.id]||fishImages.kapr}" alt="${f.name}" loading="lazy"></div><b>${f.name.replace(' obecný','').replace(' obecná','')}</b></article>`).join('')}</div></section>
   <div class="dashboard-footer-actions"><button data-tab="fish">🐟 Začít lovit</button><button class="secondary" data-tab="shop">🛒 Obchod</button><button class="secondary" data-tab="shop">🎒 Výbava</button><button class="secondary" data-tab="log">🏆 Úspěchy</button></div>
@@ -608,7 +608,7 @@ const baitImages={"Boilies":"assets/bait-boilies.jpg","Kukuřice":"assets/bait-c
 function renderFish(el){
  const f=state.current;
  let inner=`<div class="card stack"><h2>📍 Vyber revír</h2><div class="choices">${['Rybník','Jezero','Řeka'].map(p=>`<div class="choice place-choice ${state.place===p?'selected':''} ${placeUnlocked(p)?'':'place-locked'}" data-place="${p}" aria-disabled="${!placeUnlocked(p)}">${placeArt(p)}<b>${p==='Rybník'?'🌿':p==='Jezero'?'🌊':'🏞️'} ${p} ${placeUnlocked(p)?'':'🔒'}</b><small>${placeUnlocked(p)?(p==='Rybník'?'Kapr, amur, štika, okoun, lín':p==='Jezero'?'Amur, dravci, jeseter':'Bolen, okoun, sumec, candát, kapr'):'Odemkneš na úrovni '+placeRequiredLevel(p)}</small></div>`).join('')}</div>
- <h2>🪱 Návnada</h2><div class="choices">${['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'].map(b=>`<div class="choice bait-choice ${state.bait===b?'selected':''}" data-bait="${b}"><img src="${baitImages[b]}" alt="${b}" loading="lazy"><div class="bait-copy"><b>${b}</b><small>${['Boilies','Kukuřice'].includes(b)?'Kaprovité ryby':'Dravci a další druhy'}</small></div></div>`).join('')}</div>
+ <h2>🪱 Návnada</h2><div class="choices">${['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'].map(b=>`<div class="choice bait-choice ${state.bait===b?'selected':''}" data-bait="${b}"><img src="${baitImages[b]}" alt="${b}" loading="lazy"><div class="bait-copy"><b>${b}</b><small>${['Boilies','Kukuřice'].includes(b)?'Kaprovité ryby':'Dravci a další druhy'}</small><span class="bait-level-chip">ÚROVEŇ ${state.baitLevel}</span></div></div>`).join('')}</div>
  <div class="status" id="status">${state.message||'Připrav si vybavení a nahoď prut.'}</div>`;
  if(state.phase==='idle')inner+=`<button id="cast">🎯 Nahodit prut</button>`;
  if(state.phase==='waiting')inner+=`<div class="actions"><button id="bite">🔔 Zkontrolovat záběr</button><button class="secondary" id="cancel">Vytáhnout prut</button></div>`;
@@ -698,7 +698,7 @@ function finishCatch(release=false){
 }
 function renderShop(el){
  const items=[['Prut','rod',250,'🎣','Zvyšuje šanci na záběr a hodnotu úlovků.'],['Naviják','reel',220,'⚙️','Pomáhá při zdolávání ryb.'],['Návnady','baitLevel',180,'🪱','Zvyšují šanci na záběr.']];
- el.innerHTML=`<div class="card stack"><h2>🛒 Rybářský obchod</h2><p class="muted">Rozpočet: <b>${money(state.money)}</b>. Vylepšuj vybavení a vydej se na větší úlovky.</p>${items.map(([name,key,base,icon,desc])=>`<div class="item"><div class="artmini" style="display:grid;place-items:center;font-size:32px">${icon}</div><div class="grow"><b>${name} · úroveň ${state[key]}</b><div class="muted">${desc}</div><small>${money(state[key]*base)}</small></div><button data-buy="${key}" ${state.money<state[key]*base?'disabled':''}>Koupit</button></div>`).join('')}</div>`;
+ el.innerHTML=`<div class="card stack"><h2>🛒 Rybářský obchod</h2><p class="muted">Rozpočet: <b>${money(state.money)}</b>. Vylepšuj vybavení a vydej se na větší úlovky.</p>${items.map(([name,key,base,icon,desc])=>`<div class="item"><div class="artmini ${key==='baitLevel'?'upgrade-art':''}">${key==='baitLevel'?`<img src="${baitImages['Boilies']}" alt="Nástrahy">`:icon}</div><div class="grow"><b>${name} · úroveň ${state[key]}</b><div class="muted">${desc}</div>${key==='baitLevel'?`<div class="bait-upgrade-level"><span>LVL ${state.baitLevel}</span><i><em style="width:${Math.min(100,state.baitLevel*10)}%"></em></i><small>Silnější a účinnější nástrahy</small></div>`:''}<small>${money(state[key]*base)}</small></div><button data-buy="${key}" ${state.money<state[key]*base?'disabled':''}>Koupit</button></div>`).join('')}</div>`;
  el.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const key=b.dataset.buy,base={rod:250,reel:220,baitLevel:180}[key],cost=state[key]*base;if(state.money>=cost){state.money-=cost;state[key]++;save();render()}});
 }
 function renderLog(el){
@@ -783,3 +783,25 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 else{startGame();}
 </script>
 </body></html>
+/* Fishing Brothers – photo and bait presentation polish */
+body.fb-premium{background-image:linear-gradient(180deg,rgba(8,13,11,.48),rgba(9,11,9,.91)),url('header-scene.jpg');background-size:cover;background-position:center top;background-attachment:fixed}
+.fb-top{backdrop-filter:blur(9px);background:linear-gradient(180deg,rgba(8,12,10,.86),rgba(8,12,10,.58))}
+.dashboard-place-photo,.place-photo{overflow:hidden}
+.dashboard-place-photo img,.place-photo img{filter:saturate(1.12) contrast(1.06);transition:transform .35s ease,filter .35s ease}
+.dashboard-place:hover .dashboard-place-photo img,.place-choice:hover .place-photo img{transform:scale(1.045);filter:saturate(1.25) contrast(1.09)}
+#screen .bait-choice{position:relative;min-height:112px;padding:9px;background:linear-gradient(145deg,rgba(49,43,31,.97),rgba(14,17,14,.99));border:1px solid #927448;box-shadow:0 6px 16px #0008;align-items:center}
+#screen .bait-choice img{width:108px;height:84px;object-fit:cover;border-radius:9px;border:1px solid #b18a52;box-shadow:0 3px 9px #0009}
+.bait-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
+.bait-level-chip{display:inline-block;width:max-content;margin-top:3px;padding:3px 8px;border:1px solid #c49b50;border-radius:20px;color:#ffdf8c;background:#30210f;font-size:10px;font-weight:900;letter-spacing:.6px}
+.dashboard-bait{min-height:72px;justify-content:flex-start;gap:9px}
+.dashboard-bait img{width:60px;height:54px;object-fit:cover;border-radius:8px;border:1px solid #9b784a}
+.dashboard-bait span{display:grid;gap:3px;min-width:0;text-align:left}
+.dashboard-bait small{font-size:10px;color:#f0cf78;font-weight:800}
+.upgrade-art{display:grid;place-items:center;overflow:hidden;padding:0!important}
+.upgrade-art img{width:100%;height:100%;min-height:74px;object-fit:cover;border-radius:9px}
+.bait-upgrade-level{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:7px;margin:7px 0}
+.bait-upgrade-level>span{font-size:11px;font-weight:900;color:#f4d078}
+.bait-upgrade-level i{height:8px;border-radius:20px;background:#120f0b;border:1px solid #795b34;overflow:hidden}
+.bait-upgrade-level i em{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,#c68b37,#ffe18a);box-shadow:0 0 8px #f4c65e}
+.bait-upgrade-level small{grid-column:1/-1;color:#cdbb98;font-size:10px}
+@media(max-width:520px){#screen .bait-choice img{width:78px;height:68px}.dashboard-bait img{width:48px;height:44px}}
