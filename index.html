@@ -640,6 +640,16 @@ body.fb-premium{background:linear-gradient(180deg,rgba(2,12,10,.38),rgba(3,10,8,
 #screen .fishart-frame{background:linear-gradient(145deg,#173b2c,#0c1b14)!important;border:1px solid #8c7048;border-radius:12px;overflow:hidden}
 #screen .fishart{object-fit:contain!important;background:transparent!important}
 @media(max-width:680px){.home-latest .latest-catch{grid-template-columns:68px minmax(0,1fr)}.home-latest .latest-catch img{width:68px;height:60px}.home-leader-panel .leaderboard-row{grid-template-columns:20px 22px minmax(0,1fr) auto;gap:4px}}
+
+/* Home dashboard owns its own three-column layout; hide the legacy outer sidebars on Home. */
+.fb-layout:has(#screen .fb-home){display:block!important;max-width:1760px;padding:12px 18px 28px}
+.fb-layout:has(#screen .fb-home)>.fb-left,
+.fb-layout:has(#screen .fb-home)>.fb-right,
+.fb-layout:has(#screen .fb-home)>.fb-bottom,
+.fb-layout:has(#screen .fb-home)>footer{display:none!important}
+.fb-layout:has(#screen .fb-home)>.fb-center{width:100%;max-width:none;min-width:0}
+@media(max-width:900px){.fb-layout:has(#screen .fb-home){display:block!important;padding:8px 10px}}
+@media(max-width:620px){.fb-layout:has(#screen .fb-home){padding:6px}}
 </style></head>
 <body class="fb-premium">
 <header class="fb-top">
