@@ -548,6 +548,75 @@ body.fb-premium{min-height:100vh;background:linear-gradient(180deg,rgba(3,12,12,
 #screen .item .artmini{object-fit:contain;background:linear-gradient(180deg,rgba(6,24,18,.15),rgba(3,12,10,.5)),url('tackle-scene.jpg') center/cover!important;border:1px solid #987242}
 @media(max-width:620px){#screen .fish-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#screen .fish-card img{height:100px!important}#screen .record{grid-template-columns:27px 58px minmax(0,1fr);gap:7px}#screen .record .artmini{width:58px;height:54px}#screen .record> b:last-child{grid-column:3;text-align:left;font-size:12px}}
 
+
+/* FISHING BROTHERS – carefully matched visual finish */
+body.fb-premium{background:linear-gradient(180deg,rgba(2,12,10,.38),rgba(3,10,8,.96)),url('pond.jpg') center top/cover fixed;color:#fff3d7}
+.fb-top{position:relative;isolation:isolate;display:flex;align-items:flex-end;justify-content:center;flex-wrap:wrap;width:100%;max-width:none;height:208px;min-height:208px;margin:0;padding:0 12px 8px;border:0;border-bottom:2px solid #d0a24e;border-radius:0;background:linear-gradient(180deg,rgba(0,0,0,.03) 0%,rgba(1,8,7,.08) 58%,rgba(2,9,8,.93) 100%),url('header-scene.jpg') center center/cover no-repeat;box-shadow:0 9px 24px #000b}
+.fb-top:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(2,10,8,.2),transparent 23%,transparent 77%,rgba(2,10,8,.32))}
+.fb-top .brand{display:none!important}
+.fb-top .fb-nav{position:relative;z-index:2;width:min(1040px,calc(100% - 250px));max-width:none;display:flex;justify-content:center;gap:3px;margin:0 auto 0 0;padding:5px;border:1px solid #c59a50;border-radius:12px;background:linear-gradient(180deg,rgba(8,18,15,.97),rgba(2,8,7,.99));box-shadow:0 5px 16px #000c}
+.fb-top .fb-nav button{flex:1;min-width:0;padding:7px 6px;border:1px solid transparent;border-radius:8px;background:transparent;color:#f6e8c8;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:20px}
+.fb-top .fb-nav button span{font-size:10px;white-space:nowrap}
+.fb-top .fb-nav button.active,.fb-top .fb-nav button:hover{background:linear-gradient(#bd8a32,#513313);border-color:#f0cd77;color:#fff5d9}
+.fb-top .fb-header-hud{position:absolute;z-index:3;right:14px;top:9px;display:grid;gap:6px;min-width:135px}
+.fb-top .hud-coins,.fb-top .hud-level{padding:6px 9px;border:1px solid #d1a24f;border-radius:9px;background:rgba(3,12,10,.9);box-shadow:0 3px 10px #0009;color:#fff0c9}
+.fb-top .hud-level{display:grid;grid-template-columns:auto auto;gap:2px 8px}
+.fb-top .hud-level i{grid-column:1/-1;height:7px;border-radius:9px;background:#20382e;overflow:hidden}
+.fb-top .hud-level i em{display:block;height:100%;background:linear-gradient(90deg,#0787c5,#8be5ff)}
+.fb-layout{max-width:1800px;padding:10px 13px 26px}
+.fb-home{max-width:1760px;margin:0 auto}
+.fb-home-title{margin:4px 0 12px}
+.home-panel{border:1px solid #c0924c;border-radius:13px;background:linear-gradient(145deg,rgba(9,28,21,.96),rgba(3,13,10,.98));box-shadow:0 6px 18px #000b,inset 0 1px 0 rgba(255,224,164,.18)}
+.home-panel h2,.home-section-title h2{color:#f6d27e;text-shadow:0 2px 4px #000}
+.home-place{border:1px solid #c0924c;border-radius:12px;background:linear-gradient(180deg,#183b2d,#06130e);box-shadow:0 4px 12px #0009}
+.home-place h3{font-family:Georgia,serif;font-style:italic;font-size:clamp(19px,2vw,27px);text-shadow:0 2px 5px #000}
+.home-place-image{height:clamp(120px,13vw,174px);border-top:1px solid #b78b4c;border-bottom:1px solid #b78b4c}
+.home-place-image img{width:100%;height:100%;object-fit:cover;display:block}
+.home-place-content{padding:8px 9px 9px}
+.home-place-content p{font-size:11px;min-height:32px}
+.home-place-content button{border:1px solid #ffe083;border-radius:20px;background:linear-gradient(180deg,#36d817,#08751b 55%,#034a14);color:#fff;font:bold 14px Georgia,serif;text-shadow:0 2px 3px #0008;box-shadow:0 3px 9px #0009,inset 0 1px 2px #ffffff88}
+.home-bait-panel,.home-fish-panel{background:linear-gradient(180deg,rgba(8,28,20,.92),rgba(3,12,9,.98)),url('tackle-scene.jpg') center/cover}
+.home-baits-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.home-bait{position:relative;min-height:84px;padding:5px;border:1px solid #c1944d;border-radius:10px;background:#25170c;overflow:hidden;box-shadow:0 4px 10px #0009}
+.home-bait img{width:100%;height:68px;object-fit:cover;display:block;border-radius:6px;filter:saturate(1.08);box-shadow:inset 0 0 8px #000}
+.home-bait span{position:absolute;left:4px;right:4px;bottom:5px;padding:3px 2px;border-radius:5px;background:linear-gradient(90deg,rgba(0,0,0,.08),rgba(0,0,0,.9),rgba(0,0,0,.08));text-shadow:0 2px 4px #000}
+.home-bait b{font-size:11px;color:#fff5dd}
+.home-bait small{display:none}
+.home-bait.is-selected{border:2px solid #f0ca70;box-shadow:0 0 0 2px #f0ca7040,0 5px 13px #000}
+.home-fish-grid{grid-template-columns:repeat(10,minmax(0,1fr));gap:7px}
+.home-fish-card{overflow:hidden;border:1px solid #b98d4a;border-radius:9px;background:linear-gradient(180deg,#0c2a20,#03100d);box-shadow:0 4px 11px #0009}
+.home-fish-image{position:relative;height:clamp(70px,7.5vw,108px);overflow:hidden;background:linear-gradient(180deg,rgba(2,20,15,.12),rgba(1,8,7,.4)),url('pond.jpg') center/cover no-repeat;border-bottom:1px solid #a47b3e}
+.home-fish-image:after{content:"";position:absolute;inset:auto 0 0;height:22px;background:linear-gradient(0deg,rgba(2,9,7,.78),transparent);pointer-events:none}
+.home-fish-image img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;padding:3px;filter:drop-shadow(0 5px 4px #000d) drop-shadow(0 0 4px #e6d29a55)}
+.home-fish-card b{padding:5px 1px;color:#fff2d2;font:700 11px Georgia,serif}
+.home-main-actions button:first-child{background:linear-gradient(#4af02b,#0c8b1a 55%,#045113);border:1px solid #b8f47b;box-shadow:0 0 14px #24d53c66,0 4px 10px #0009}
+.home-main-actions .home-secondary{background:linear-gradient(#73502a,#24180d);border:1px solid #bd8d4b}
+.home-leader-panel{background:linear-gradient(145deg,rgba(18,34,26,.98),rgba(3,11,9,.99))}
+.fb-ranking .leaderboard-row{display:grid;grid-template-columns:22px 30px minmax(0,1fr) auto 54px;align-items:center;gap:5px;padding:6px 2px;border-bottom:1px solid #a87e432e}
+.fb-ranking .leader-rank{font-size:15px;color:#f6d27e;text-align:center}
+.fb-ranking .leader-avatar{width:27px;height:27px;display:grid;place-items:center;border-radius:50%;border:1px solid #d1a45a;background:radial-gradient(circle at 35% 25%,#557c58,#101c16 70%);color:#ffe2a2;font-weight:900;font-size:12px}
+.fb-ranking .leader-person{display:grid;gap:1px;min-width:0}
+.fb-ranking .leader-person strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff0d1;font-size:10px}
+.fb-ranking .leader-person small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#d4bd91;font-size:9px}
+.fb-ranking .leader-value{color:#f5d27c;font-size:9px;white-space:nowrap}
+.fb-ranking .leader-fish-thumb{width:52px;height:30px;object-fit:contain;filter:drop-shadow(0 2px 3px #000)}
+.home-latest .latest-catch img{height:120px;border:1px solid #bd914b;object-fit:contain;background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.35)),url('pond.jpg') center/cover}
+#screen .fishart-frame{background:linear-gradient(180deg,rgba(2,18,13,.18),rgba(2,9,7,.45)),url('pond.jpg') center/cover no-repeat;border:2px solid #bd914b;border-radius:12px;box-shadow:0 8px 20px #000c}
+#screen .fishart{object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 8px 6px #000d) drop-shadow(0 0 5px #e7d6a7aa)!important}
+#screen .fish-gallery{grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px}
+#screen .fish-card{overflow:hidden;border:1px solid #bd914b;border-radius:10px;background:linear-gradient(180deg,#0e2a20,#040e0b);box-shadow:0 4px 12px #0009}
+#screen .fish-card img{height:115px!important;object-fit:contain!important;padding:4px;background:linear-gradient(180deg,rgba(2,15,11,.05),rgba(1,8,6,.35)),url('pond.jpg') center/cover!important;filter:drop-shadow(0 5px 4px #000d)}
+#screen .bait-choice{min-height:112px;border:1px solid #bd914b;border-radius:10px;background:linear-gradient(145deg,#4a2b12,#1d1008)!important;box-shadow:0 4px 11px #0009}
+#screen .bait-choice img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;opacity:.9!important;z-index:0;border:0!important;border-radius:0!important}
+#screen .bait-choice .bait-copy{position:absolute;z-index:1;left:0;right:0;bottom:0;padding:7px;background:linear-gradient(0deg,rgba(0,0,0,.94),rgba(0,0,0,.05));text-shadow:0 2px 4px #000}
+#screen .bait-choice .bait-copy b{color:#fff2d2}
+#screen .bait-choice .bait-copy small{color:#ead8b4}
+#screen .record{grid-template-columns:30px 70px minmax(0,1fr) auto;gap:8px;border-bottom-color:#ad824733}
+#screen .record .artmini{width:70px;height:60px;object-fit:contain!important;padding:3px;border:1px solid #a77d43;border-radius:8px;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.35)),url('pond.jpg') center/cover!important}
+@media(max-width:1100px){.fb-top{height:190px;min-height:190px}.fb-top .fb-nav{width:calc(100% - 190px)}.fb-top .fb-nav button{padding:6px 3px}.fb-home-grid{grid-template-columns:170px minmax(0,1fr) 215px;gap:8px}.home-fish-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:760px){.fb-top{height:165px;min-height:165px;background-size:auto 165px;background-position:center top}.fb-top .fb-nav{width:100%;margin:0;gap:2px}.fb-top .fb-nav button{flex:1;min-width:0;font-size:17px;padding:6px 2px}.fb-top .fb-nav button span{font-size:8px}.fb-top .fb-header-hud{top:5px;right:5px;min-width:0}.fb-top .hud-coins,.fb-top .hud-level{padding:3px 5px;font-size:9px}.fb-layout{padding:7px}.fb-home-grid{display:flex;flex-direction:column}.home-side-left{order:1;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:7px}.home-side-left .profile-panel,.home-side-left>section:nth-child(2){grid-column:auto}.home-side-left .home-side-button{grid-column:1/-1}.home-main{order:2;width:100%}.home-side-right{order:3;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:7px}.home-places{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.home-place{display:block}.home-place h3{font-size:17px}.home-place-image{height:105px}.home-place-content{padding:6px}.home-place-content p{font-size:9px;min-height:37px}.home-place-content button{font-size:10px;padding:7px 3px}.home-baits-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.home-bait{min-height:74px}.home-bait img{height:59px}.home-fish-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.home-fish-image{height:65px}.home-fish-card b{font-size:9px}.home-main-actions{grid-template-columns:1.3fr 1fr 1fr 1fr;gap:5px}.home-main-actions button{font-size:10px;padding:9px 3px}.home-main-actions .home-secondary{font-size:9px}.fb-ranking .leaderboard-row{grid-template-columns:18px 25px minmax(0,1fr) auto 42px;gap:3px}.fb-ranking .leader-fish-thumb{width:40px;height:25px}.fb-ranking .leader-value{font-size:8px}}
+@media(max-width:480px){.fb-top{height:146px;min-height:146px;background-size:auto 146px}.fb-top .fb-nav button{font-size:14px}.fb-top .fb-nav button span{font-size:7px}.fb-home-title h1{font-size:18px}.home-places{grid-template-columns:1fr}.home-place{display:grid;grid-template-columns:39% minmax(0,1fr);grid-template-rows:auto 1fr}.home-place h3{grid-column:1/-1}.home-place-image{grid-column:1;grid-row:2;height:100%;min-height:105px}.home-place-content{grid-column:2;grid-row:2;display:flex;flex-direction:column;justify-content:center}.home-place-content p{min-height:0}.home-place-content button{margin-top:auto}.home-fish-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.home-fish-image{height:54px}.home-fish-card b{font-size:8px}.home-side-right{grid-template-columns:1fr}.home-main-actions{grid-template-columns:1fr 1fr}.fb-ranking .leaderboard-row{grid-template-columns:20px 27px minmax(0,1fr) auto 48px}.fb-ranking .leader-person strong{font-size:10px}.fb-ranking .leader-value{font-size:9px}}
+
 </style></head>
 <body class="fb-premium">
 <header class="fb-top">
@@ -561,8 +630,9 @@ body.fb-premium{min-height:100vh;background:linear-gradient(180deg,rgba(3,12,12,
   <button data-tab="fish"><i>♧</i><span>Hra</span></button>
   <button data-tab="log"><i>🏆</i><span>Kronika</span></button>
   <button data-tab="shop"><i>🛒</i><span>Obchod</span></button>
-  <button data-tab="leader"><i>▥</i><span>Žebříček</span></button>
-  <button data-tab="account"><i>♙</i><span>Profil</span></button>
+  <button data-tab="shop"><i>🎒</i><span>Vybavení</span></button>
+  <button data-tab="leader"><i>🏆</i><span>Žebříček</span></button>
+  <button data-tab="account"><i>👥</i><span>Přátelé</span></button>
   <button data-tab="settings"><i>⚙</i><span>Nastavení</span></button>
  </nav>
  <div class="fb-header-hud">
@@ -873,7 +943,7 @@ async function renderOnlineLeaderboard(){
  const longest=uniquePlayers(longestRows,'length_cm'),heaviest=uniquePlayers(heaviestRows,'weight_kg');
  const ids=[...new Set([...longest,...heaviest].map(r=>r.user_id))];let names={};
  if(ids.length){const {data:profiles,error:pe}=await sb.from('profiles').select('id,username').in('id',ids);if(!pe)(profiles||[]).forEach(p=>names[p.id]=p.username);}
- const list=(arr,key,unit)=>arr?.length?arr.map((r,i)=>{const metric=Number(r[key]);const fish=escapeHtml(r.fish_name||'Ryba');const username=escapeHtml(names[r.user_id]||'Rybář');const value=Number.isFinite(metric)?metric.toFixed(key==='weight_kg'?2:0):'—';return `<div class="leaderboard-row"><b class="leader-rank">${['🥇','🥈','🥉','4','5'][i]}</b><span class="leader-person"><strong>${username}</strong><small>${fish}</small></span><b class="leader-value">${value} ${unit}</b></div>`;}).join(''):'<p class="muted">Zatím žádné online trofeje.</p>';
+ const list=(arr,key,unit)=>arr?.length?arr.map((r,i)=>{const metric=Number(r[key]);const fishName=String(r.fish_name||'Ryba');const fish=escapeHtml(fishName);const username=escapeHtml(names[r.user_id]||'Rybář');const value=Number.isFinite(metric)?metric.toFixed(key==='weight_kg'?2:0):'—';const entry=fishData.find(f=>f.name===fishName||f.id===fishName.toLowerCase());const thumb=fishImages[entry?.id]||fishImages.kapr;const initials=(names[r.user_id]||'R').trim().slice(0,1).toUpperCase();return `<div class="leaderboard-row"><b class="leader-rank">${['🥇','🥈','🥉','4','5'][i]}</b><span class="leader-avatar">${escapeHtml(initials)}</span><span class="leader-person"><strong>${username}</strong><small>${fish}</small></span><b class="leader-value">${value} ${unit}</b><img class="leader-fish-thumb" src="${thumb}" alt="${fish}" loading="lazy"></div>`;}).join(''):'<p class="muted">Zatím žádné online trofeje.</p>';
  if(box)box.innerHTML=`<h2>🌍 TOP 5 – nejdelší úlovky</h2>${list(longest,'length_cm','cm')}<h2>⚖️ TOP 5 – nejtěžší úlovky</h2>${list(heaviest,'weight_kg','kg')}`;
  const sl=document.querySelector('#sideLongest'),sh=document.querySelector('#sideHeaviest');if(sl)sl.innerHTML=list(longest,'length_cm','cm');if(sh)sh.innerHTML=list(heaviest,'weight_kg','kg');
 }
