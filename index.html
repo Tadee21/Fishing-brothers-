@@ -988,6 +988,23 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .home-fish-card .home-fish-image{min-height:128px}
 }
 </style>
+<style id="fb-fish-catalog-habitats">
+#screen .fish-gallery .fish-card{padding:9px!important;border:1px solid #947044!important;border-radius:15px!important;background:linear-gradient(145deg,#14271d,#0c1712)!important;overflow:hidden}
+#screen .fish-gallery .fish-card .fish-image{height:clamp(130px,25vw,190px);display:grid;place-items:center;overflow:hidden;padding:8px;border-radius:11px;background-color:#102c20;background-image:radial-gradient(ellipse at 50% 0%,#8ebc7650,transparent 56%),linear-gradient(180deg,#164632,#0c261c 70%,#07170f)}
+#screen .fish-gallery .fish-card .fish-image img{width:100%;height:100%;object-fit:contain!important;padding:0!important;background:transparent!important;filter:drop-shadow(0 5px 7px #0009)}
+#screen .fish-gallery .fish-card b{display:block;margin-top:8px;font-size:15px!important}
+#screen .fish-gallery .fish-card small{display:block;margin-top:5px;color:#d9c59d;font-size:12px}
+#screen .fish-gallery .fish-card[data-fish="kapr"] .fish-image{background-image:radial-gradient(ellipse at 50% 5%,#c1bd6b55,transparent 50%),linear-gradient(180deg,#25563a,#183a2a 65%,#3b3922)}
+#screen .fish-gallery .fish-card[data-fish="amur"] .fish-image{background-image:radial-gradient(ellipse at 75% 10%,#a7d68b55,transparent 46%),linear-gradient(180deg,#246447,#10402f 62%,#173c2a)}
+#screen .fish-gallery .fish-card[data-fish="stika"] .fish-image{background-image:repeating-linear-gradient(82deg,transparent 0 28px,#a5c56a22 29px 32px,transparent 33px 49px),linear-gradient(180deg,#315b35,#193b27 58%,#14271a)}
+#screen .fish-gallery .fish-card[data-fish="candat"] .fish-image{background-image:radial-gradient(ellipse at 50% 100%,#9da58a35,transparent 40%),linear-gradient(180deg,#164b4c,#102c31 65%,#344337)}
+#screen .fish-gallery .fish-card[data-fish="sumec"] .fish-image{background-image:repeating-linear-gradient(145deg,transparent 0 52px,#987b4a20 53px 59px,transparent 60px 83px),linear-gradient(180deg,#233d30,#14261d 55%,#392f20)}
+#screen .fish-gallery .fish-card[data-fish="jeseter"] .fish-image{background-image:radial-gradient(ellipse at 55% 100%,#a5b9a733,transparent 38%),linear-gradient(180deg,#15505a,#12333a 66%,#35453e)}
+#screen .fish-gallery .fish-card[data-fish="lin"] .fish-image{background-image:repeating-linear-gradient(100deg,transparent 0 36px,#9bbd6425 37px 41px,transparent 42px 61px),linear-gradient(180deg,#42633b,#25432b 60%,#4b3d25)}
+#screen .fish-gallery .fish-card[data-fish="tolstolobik"] .fish-image{background-image:radial-gradient(ellipse at 50% 20%,#a8d4c444,transparent 50%),linear-gradient(180deg,#23605a,#16413b 65%,#18332c)}
+#screen .fish-gallery .fish-card[data-fish="bolen"] .fish-image{background-image:repeating-linear-gradient(0deg,transparent 0 38px,#b9e2dc16 39px 42px,transparent 43px 62px),linear-gradient(180deg,#1b6970,#16464c 62%,#243c3d)}
+#screen .fish-gallery .fish-card[data-fish="okoun"] .fish-image{background-image:repeating-linear-gradient(84deg,transparent 0 30px,#a4bd5d26 31px 35px,transparent 36px 53px),linear-gradient(180deg,#45613a,#26462c 62%,#51452a)}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
@@ -1166,7 +1183,7 @@ function renderFish(el){
  if(state.phase==='waiting')inner+=`<div class="actions"><button id="bite">🔔 Zkontrolovat záběr</button><button class="secondary" id="cancel">Vytáhnout prut</button></div>`;
  if(state.phase==='fight'&&f)inner+=`${fishImage(f)}<div class="status"><b>🐟 Ryba bojuje!</b><br><span id="fightPct">${Math.round(state.progress)}%</span> zdoláno · <span id="fightTime">90</span> s zbývá<div class="fight-track"><div id="fightBar" style="width:${state.progress}%"></div></div><small id="fightHint">Podrž tlačítko a navíjej. Při puštění ryba získává převahu.</small></div><button id="reel" class="hold-reel" style="touch-action:none;user-select:none;-webkit-user-select:none">💪 PODRŽ A NAVÍJEJ</button>`;
  if(state.phase==='caught'&&f)inner+=`${fishImage(f)}<div class="card stack"><span class="badge">🏆 NOVÝ ÚLOVEK</span><h2>${f.name}</h2><div class="metrics"><div class="metric"><small>DÉLKA</small><strong>${f.cm} cm</strong></div><div class="metric"><small>VÁHA</small><strong>${f.kg} kg</strong></div></div><p class="catch-xp">⭐ Za tento úlovek získáš +${f.xpReward||Math.round(35+f.cm*1.1+f.kg*3)} XP</p><p class="muted">Orientační výkupní cena: ${money(f.reward)}</p><button id="sell">💰 Prodat rybu</button><button class="secondary" id="release">💚 Pustit rybu zpět</button></div>`;
- inner+=`</div><div class="card stack" style="margin-top:10px"><h2>🎒 Tvoje vybavení</h2><div class="row"><span>Prut · úroveň ${state.rod}</span><span class="badge">Naviják ${state.reel}</span></div><div class="muted">Návnady úroveň ${state.baitLevel}</div><h2 class="fish-gallery-title">🐟 Ryby v tomto revíru</h2><div class="fish-gallery">${fishData.filter(x=>x.places.includes(state.place)).map(x=>`<div class="fish-card"><img class="${x.id==='bolen'?'fish-bolen':''}" src="${fishImages[x.id]||fishImages.kapr}" alt="${x.name}" loading="lazy"><b>${x.name}</b><small>${x.min}–${x.max} cm</small></div>`).join('')}</div></div>`;
+ inner+=`</div><div class="card stack" style="margin-top:10px"><h2>🎒 Tvoje vybavení</h2><div class="row"><span>Prut · úroveň ${state.rod}</span><span class="badge">Naviják ${state.reel}</span></div><div class="muted">Návnady úroveň ${state.baitLevel}</div><h2 class="fish-gallery-title">🐟 Ryby v tomto revíru</h2><div class="fish-gallery">${fishData.filter(x=>x.places.includes(state.place)).map(x=>`<div class="fish-card" data-fish="${x.id}"><div class="fish-image"><img class="${x.id==='bolen'?'fish-bolen':''}" src="${fishImages[x.id]||fishImages.kapr}" alt="${x.name}" loading="lazy"></div><b>${x.name}</b><small>${x.min}–${x.max} cm</small></div>`).join('')}</div></div>`;
  el.innerHTML=inner;
  el.querySelectorAll('[data-place]').forEach(x=>x.onclick=()=>{if(!placeUnlocked(x.dataset.place)){state.message='🔒 '+x.dataset.place+' se odemkne na úrovni '+placeRequiredLevel(x.dataset.place)+'.';render();return}state.place=x.dataset.place;render()});
  el.querySelectorAll('[data-bait]').forEach(x=>x.onclick=()=>{state.bait=x.dataset.bait;render()});
