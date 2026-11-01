@@ -1378,7 +1378,7 @@ function renderLog(el){
  const trophies=(state.records||[]).filter(r=>r.cm >= (fishData.find(f=>f.id===r.id)?.trophy||999));
  const longest=trophies.length?[...trophies].sort((a,b)=>b.cm-a.cm).slice(0,1):[];
  const heaviest=trophies.length?[...trophies].sort((a,b)=>b.kg-a.kg).slice(0,1):[];
- const row=(r,i,metric)=>`<div class="record"><span class="badge">#${i+1}</span><img class="artmini" src="${fishImages[r.id]||''}" alt="${r.name}"><div class="grow"><b>${r.name}</b><div class="muted">${r.cm} cm · ${Number(r.kg).toFixed(2)} kg · ${r.place}</div><small class="muted">Rybář: ${r.angler||'Ty'} · ${r.date}</small></div><b>${metric==='cm'?r.cm+' cm':Number(r.kg).toFixed(2)+' kg'}</b></div>`;
+ const row=(r,i,metric)=>`<div class="record"><span class="badge">#${i+1}</span><img class="artmini" src="${fishImages[fishIdForCatch(r)]}" alt="${r.name}" loading="lazy"><div class="grow"><b>${r.name}</b><div class="muted">${r.cm} cm · ${Number(r.kg).toFixed(2)} kg · ${r.place}</div><small class="muted">Rybář: ${r.angler||'Ty'} · ${r.date}</small></div><b>${metric==='cm'?r.cm+' cm':Number(r.kg).toFixed(2)+' kg'}</b></div>`;
  el.innerHTML=`<div class="card stack"><h2>🏆 Rybářská kronika</h2><div class="metrics"><div class="metric"><small>PRODÁNO</small><strong>${state.sold}</strong></div><div class="metric"><small>PUŠTĚNO</small><strong>${state.released}</strong></div><div class="metric"><small>NEJDELŠÍ RYBA</small><strong>${state.best} cm</strong></div><div class="metric"><small>CELKEM ÚLOVKŮ</small><strong>${state.count}</strong></div></div><h2>🥇 Žebříček nejdelších ryb</h2>${longest.length?longest.map((r,i)=>row(r,i,'cm')).join(''):'<p class="muted">Zatím žádný trofejní úlovek.</p>'}<h2>⚖️ Žebříček nejtěžších ryb</h2>${heaviest.length?heaviest.map((r,i)=>row(r,i,'kg')).join(''):'<p class="muted">Jakmile chytíš trofejní rybu, objeví se zde.</p>'}<h2>📸 Trofejní úlovky</h2>${trophies.length?trophies.map((r,i)=>row(r,i,'cm')).join(''):'<p class="muted">Kronika zaznamenává pouze trofejní ryby. Ostatní úlovky se do ní nepřidávají.</p>'}<div id="onlineLeaderboard" class="stack"><p class="muted">${currentUser?'Načítám online žebříček…':'Přihlas se a zobraz společný online žebříček.'}</p></div></div>`; if(currentUser)renderOnlineLeaderboard();
 }
 
@@ -1463,7 +1463,8 @@ else{startGame();}
   '\n.latest-catch img,.record img.artmini,.leader-fish-thumb{object-fit:contain!important;object-position:50% 50%!important;}'+
   '\n.home-fish-card .fish-habitat-scene,#screen .fish-gallery .fish-habitat-scene{background-size:100% 100%!important;background-position:50% 50%!important;}'+
   '\n.fish-catch-frame{height:clamp(230px,28vw,380px)!important;min-height:230px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;}'+
-  '\n.fish-catch-frame img.fishart{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center center!important;padding:0!important;margin:0!important;}';
+  '\n.fish-catch-frame img.fishart{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center center!important;padding:0!important;margin:0!important;}'+
+  '\n#screen .record img.artmini{background:linear-gradient(180deg,#174c3d,#071b18)!important;object-fit:contain!important;object-position:center!important;}';
  document.head.appendChild(style);
  document.documentElement.dataset.fishHabitatsLoaded=String(species.length);
 })();
