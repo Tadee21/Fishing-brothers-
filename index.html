@@ -887,6 +887,17 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  #screen .leaderboard-row .leader-fish-thumb{width:40px!important;height:30px!important}
 }
 </style>
+<style id="fb-video-final-tune">
+/* Keep the compact home TOP 5 distinct from the full leaderboard table. */
+#screen .home-leader-panel .leaderboard-row{grid-template-columns:20px 24px minmax(0,1fr) auto;gap:5px}
+#screen .home-leader-panel .leader-fish-thumb{display:none}
+#screen #onlineLeaderboard .leaderboard-row{grid-template-columns:24px 28px minmax(0,1fr) auto 56px}
+#screen #onlineLeaderboard .leaderboard-row .leader-fish-thumb{display:block}
+@media(max-width:760px){
+ #screen #onlineLeaderboard .leaderboard-row{grid-template-columns:21px 25px minmax(0,1fr) auto 44px}
+ #screen #onlineLeaderboard .leaderboard-row .leader-fish-thumb{width:42px!important;height:32px!important}
+}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
@@ -955,7 +966,15 @@ function placeRequiredLevel(place){return place==='Jezero'?25:place==='Řeka'?50
 function placeUnlocked(place){return playerLevel()>=placeRequiredLevel(place);}
 const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
 let cloudSaveTimer=null,cloudSaveBusy=false,cloudSaveAgain=false;
-function load(){try{const s=JSON.parse(window.localStorage.getItem('fb-save'));if(s)Object.assign(state,s)}catch(e){/* local storage may be unavailable */}if(!placeUnlocked(state.place))state.place='Rybník';}
+function load(){
+ try{const s=JSON.parse(window.localStorage.getItem('fb-save'));if(s)Object.assign(state,s)}catch(e){/* local storage may be unavailable */}
+ // Backfill the heaviest known trophy for saves created before this statistic existed.
+ if(!Number(state.bestWeight||0)){
+  const heaviest=(state.records||[]).reduce((best,r)=>!best||Number(r.kg)>Number(best.kg)?r:best,null);
+  if(heaviest){state.bestWeight=Number(heaviest.kg)||0;state.heaviestCatch=heaviest;}
+ }
+ if(!placeUnlocked(state.place))state.place='Rybník';
+}
 function save(){
  const snapshot={...state,phase:'idle',current:null,progress:0};
  try{window.localStorage.setItem('fb-save',JSON.stringify(snapshot))}catch(e){}
