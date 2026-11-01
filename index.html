@@ -1158,7 +1158,8 @@ const fishImages = {
  bolen:'/fish-habitat-bolen%202.webp',
  okoun:'/fish-habitat-okoun%202.webp'
 };
-function fishImage(f){return `<div class="fishart-frame fish-habitat-scene habitat-${f.id}" role="img" aria-label="${f.name}"></div>`;}
+function fishImage(f){const id=fishImages[f?.id]?f.id:(fishData.find(x=>x.name===f?.name)?.id||'kapr');return `<div class="fishart-frame fish-catch-frame"><img class="fishart" src="${fishImages[id]}" alt="${escapeHtml(f?.name||'Ryba')}" loading="eager"></div>`;}
+function fishIdForCatch(c){if(c?.id&&fishImages[c.id])return c.id;return fishData.find(x=>x.name===c?.name)?.id||'kapr';}
 function placeArt(place){
  const scenes={
   'Rybník':'https://images.pexels.com/photos/17786368/pexels-photo-17786368.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -1256,7 +1257,7 @@ function renderHome(el){
    </div>
    <aside class="home-side home-side-right">
     <section class="home-panel home-leader-panel"><h2>🏆 TOP RYBÁŘI</h2><div class="home-leader-subtitle">Pořadí podle nejdelší trofejní ryby</div><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section>
-    <section class="home-panel home-latest"><h2>📸 Poslední úlovek</h2>${(state.lastCatch||recent)?(()=>{const c=state.lastCatch||recent;return `<div class="latest-catch"><img src="${fishImages[c.id]||fishImages.kapr}" alt="${escapeHtml(c.name)}" loading="lazy"><div class="latest-catch-copy"><b>${escapeHtml(c.name)}</b><span>${c.cm} cm · ${Number(c.kg).toFixed(2)} kg</span><small>${escapeHtml(c.place||'Revír')} · ${escapeHtml(c.action||'Úlovek')}</small></div></div>`;})():'<div class="latest-empty">🎣<p>Zatím žádný úlovek.</p><small>Tvůj první úlovek čeká na hladině.</small></div>'}</section>
+    <section class="home-panel home-latest"><h2>📸 Poslední úlovek</h2>${(state.lastCatch||recent)?(()=>{const c=state.lastCatch||recent;return `<div class="latest-catch"><img src="${fishImages[fishIdForCatch(c)]}" alt="${escapeHtml(c.name)}" loading="eager"><div class="latest-catch-copy"><b>${escapeHtml(c.name)}</b><span>${c.cm} cm · ${Number(c.kg).toFixed(2)} kg</span><small>${escapeHtml(c.place||'Revír')} · ${escapeHtml(c.action||'Úlovek')}</small></div></div>`;})():'<div class="latest-empty">🎣<p>Zatím žádný úlovek.</p><small>Tvůj první úlovek čeká na hladině.</small></div>'}</section>
    </aside>
   </div>
  </section>`;
@@ -1459,8 +1460,10 @@ else{startGame();}
  const style=document.createElement('style');
  style.id='fb-fish-habitat-runtime';
  style.textContent=rules.join('\n')+
-  '\n.latest-catch img,.record img.artmini,.leader-fish-thumb{object-fit:cover!important;object-position:50% 50%!important;}'+
-  '\n.fishart-frame.fish-habitat-scene{background-size:cover!important;background-position:50% 50%!important;}';
+  '\n.latest-catch img,.record img.artmini,.leader-fish-thumb{object-fit:contain!important;object-position:50% 50%!important;}'+
+  '\n.home-fish-card .fish-habitat-scene,#screen .fish-gallery .fish-habitat-scene{background-size:100% 100%!important;background-position:50% 50%!important;}'+
+  '\n.fish-catch-frame{height:clamp(230px,28vw,380px)!important;min-height:230px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;}'+
+  '\n.fish-catch-frame img.fishart{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center center!important;padding:0!important;margin:0!important;}';
  document.head.appendChild(style);
  document.documentElement.dataset.fishHabitatsLoaded=String(species.length);
 })();
