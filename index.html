@@ -534,6 +534,20 @@ body.fb-premium{min-height:100vh;background:linear-gradient(180deg,rgba(3,12,12,
 @media(max-width:900px){.fb-top{min-height:176px;padding-bottom:8px}.fb-top .brand{top:4px;min-width:245px;grid-template-columns:46px auto}.fb-top .brand-mark{width:46px;height:46px}.fb-top .brand .logo{font-size:27px}.fb-top .fb-header-hud{right:8px;top:7px;min-width:112px}.fb-top .fb-nav{max-width:100%;width:100%;justify-content:center;margin:0;transform:none}.fb-top .fb-nav button{min-width:0;flex:1;padding:7px 4px;font-size:18px}}
 @media(max-width:620px){.fb-top{min-height:162px;padding:0 5px 6px;background-position:center 38%}.fb-top .brand{top:5px;left:50%;min-width:0;width:auto;grid-template-columns:38px auto;padding:4px 9px}.fb-top .brand-mark{width:38px;height:38px}.fb-top .brand .logo{font-size:22px}.fb-top .brand .tag{font-size:6px;letter-spacing:1px}.fb-top .fb-header-hud{top:5px;right:5px;min-width:0;gap:3px}.fb-top .hud-coins,.fb-top .hud-level{padding:3px 5px;font-size:9px}.fb-top .fb-nav{overflow-x:auto;justify-content:flex-start}.fb-top .fb-nav button{flex:1 0 13.5%;min-width:0;padding:6px 1px;font-size:15px}.fb-top .fb-nav button span{font-size:8px}.fb-ranking .leaderboard-row{grid-template-columns:20px minmax(0,1fr) auto;gap:4px;padding:5px 1px}.fb-ranking .leader-person strong{font-size:10px}.fb-ranking .leader-person small,.fb-ranking .leader-value{font-size:9px}}
 
+
+/* Consistent framed artwork throughout the game, not only on the home screen */
+#screen .fishart-frame{position:relative;isolation:isolate;background:linear-gradient(180deg,rgba(6,24,18,.24),rgba(3,12,10,.6)),url('river.jpg') center/cover no-repeat;border:2px solid #b18a50;box-shadow:0 8px 22px #000c,inset 0 0 24px rgba(0,0,0,.42)}
+#screen .fishart-frame:after{content:"";position:absolute;z-index:-1;left:0;right:0;bottom:0;height:34%;background:linear-gradient(0deg,rgba(5,11,9,.7),transparent)}
+#screen .fishart{object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 8px 7px #000c) drop-shadow(0 0 7px rgba(218,194,135,.25))!important}
+#screen .fish-gallery{grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}
+#screen .fish-card{overflow:hidden;border:1px solid #a9824b;background:linear-gradient(180deg,rgba(12,30,23,.94),rgba(5,14,11,.99));box-shadow:0 4px 12px #0009}
+#screen .fish-card img{height:112px!important;object-fit:contain!important;object-position:center!important;padding:5px;background:linear-gradient(180deg,rgba(6,24,18,.2),rgba(3,12,10,.48)),url('pond.jpg') center/cover!important;filter:drop-shadow(0 5px 5px #000b)}
+#screen .record{grid-template-columns:34px 72px minmax(0,1fr) auto;gap:9px;padding:10px 3px;border-bottom-color:rgba(205,166,94,.3)}
+#screen .record .artmini{width:72px;height:62px;object-fit:contain!important;padding:3px;border:1px solid #9c7845;border-radius:9px;background:linear-gradient(180deg,rgba(6,24,18,.2),rgba(3,12,10,.45)),url('river.jpg') center/cover!important;filter:drop-shadow(0 3px 4px #000)}
+#screen .latest-catch img{background:linear-gradient(180deg,rgba(6,24,18,.18),rgba(3,12,10,.45)),url('pond.jpg') center/cover!important;object-fit:contain!important;padding:5px;filter:drop-shadow(0 6px 5px #000b)}
+#screen .item .artmini{object-fit:contain;background:linear-gradient(180deg,rgba(6,24,18,.15),rgba(3,12,10,.5)),url('tackle-scene.jpg') center/cover!important;border:1px solid #987242}
+@media(max-width:620px){#screen .fish-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#screen .fish-card img{height:100px!important}#screen .record{grid-template-columns:27px 58px minmax(0,1fr);gap:7px}#screen .record .artmini{width:58px;height:54px}#screen .record> b:last-child{grid-column:3;text-align:left;font-size:12px}}
+
 </style></head>
 <body class="fb-premium">
 <header class="fb-top">
@@ -791,8 +805,8 @@ function renderShop(el){
 }
 function renderLog(el){
  const trophies=(state.records||[]).filter(r=>r.cm >= (fishData.find(f=>f.id===r.id)?.trophy||999));
- const longest=[...trophies].sort((a,b)=>b.cm-a.cm).slice(0,10);
- const heaviest=[...trophies].sort((a,b)=>b.kg-a.kg).slice(0,10);
+ const longest=trophies.length?[...trophies].sort((a,b)=>b.cm-a.cm).slice(0,1):[];
+ const heaviest=trophies.length?[...trophies].sort((a,b)=>b.kg-a.kg).slice(0,1):[];
  const row=(r,i,metric)=>`<div class="record"><span class="badge">#${i+1}</span><img class="artmini" src="${fishImages[r.id]||''}" alt="${r.name}"><div class="grow"><b>${r.name}</b><div class="muted">${r.cm} cm · ${Number(r.kg).toFixed(2)} kg · ${r.place}</div><small class="muted">Rybář: ${r.angler||'Ty'} · ${r.date}</small></div><b>${metric==='cm'?r.cm+' cm':Number(r.kg).toFixed(2)+' kg'}</b></div>`;
  el.innerHTML=`<div class="card stack"><h2>🏆 Rybářská kronika</h2><div class="metrics"><div class="metric"><small>PRODÁNO</small><strong>${state.sold}</strong></div><div class="metric"><small>PUŠTĚNO</small><strong>${state.released}</strong></div><div class="metric"><small>NEJDELŠÍ RYBA</small><strong>${state.best} cm</strong></div><div class="metric"><small>CELKEM ÚLOVKŮ</small><strong>${state.count}</strong></div></div><h2>🥇 Žebříček nejdelších ryb</h2>${longest.length?longest.map((r,i)=>row(r,i,'cm')).join(''):'<p class="muted">Zatím žádný trofejní úlovek.</p>'}<h2>⚖️ Žebříček nejtěžších ryb</h2>${heaviest.length?heaviest.map((r,i)=>row(r,i,'kg')).join(''):'<p class="muted">Jakmile chytíš trofejní rybu, objeví se zde.</p>'}<h2>📸 Trofejní úlovky</h2>${trophies.length?trophies.map((r,i)=>row(r,i,'cm')).join(''):'<p class="muted">Kronika zaznamenává pouze trofejní ryby. Ostatní úlovky se do ní nepřidávají.</p>'}<div id="onlineLeaderboard" class="stack"><p class="muted">${currentUser?'Načítám online žebříček…':'Přihlas se a zobraz společný online žebříček.'}</p></div></div>`; if(currentUser)renderOnlineLeaderboard();
 }
