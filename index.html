@@ -1235,12 +1235,77 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  #screen .fish-gallery{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 }
 </style>
-</head>
+<style id="fb-friends-brand-header">
+/* Fishing Friends – čistý typografický wordmark a obrazové záhlaví. */
+.fb-top{
+ background:
+  linear-gradient(90deg,rgba(3,14,11,.90),rgba(5,22,16,.70) 48%,rgba(3,14,11,.90)),
+  linear-gradient(180deg,rgba(3,10,8,.28),rgba(3,10,8,.60)),
+  url('header-scene.jpg') center 46%/cover!important;
+ border-bottom:2px solid #b28b50!important;
+ box-shadow:0 8px 28px #000b,inset 0 1px #f4d58a33!important;
+}
+.fb-top .brand-mark{display:none!important}
+.fb-top .brand .logo{
+ color:#fff0c9!important;
+ font-family:Georgia,"Times New Roman",serif!important;
+ font-weight:900!important;
+ font-size:clamp(25px,2.5vw,38px)!important;
+ letter-spacing:1.5px!important;
+ line-height:1!important;
+ white-space:nowrap!important;
+ text-align:center!important;
+ text-shadow:0 3px 12px #000,0 0 20px #e4c06a55!important;
+}
+.fb-top .brand .logo em{
+ color:#f0ce7d!important;
+ font-style:normal!important;
+}
+.fb-top .brand .tag{
+ margin-top:7px!important;text-align:center!important;
+ color:#ead7aa!important;font-size:9px!important;
+ letter-spacing:2.2px!important;text-shadow:0 2px 5px #000!important;
+}
+.fb-top .hud-coins strong,.fb-top .hud-level b,.fb-top .hud-level small{
+ font-family:"Roboto Mono","SFMono-Regular",Consolas,monospace!important;
+ font-variant-numeric:tabular-nums lining-nums!important;
+ font-feature-settings:"tnum" 1,"lnum" 1!important;
+ font-weight:700!important;
+ letter-spacing:0!important;
+}
+.fb-top .hud-coins strong{display:inline-block;min-width:8ch;text-align:right;font-size:13px!important}
+.fb-top .hud-level b{display:inline-block;min-width:5ch;font-size:12px!important}
+.fb-top .hud-level small{display:inline-block;min-width:9ch;text-align:right;font-size:11px!important}
+@media(min-width:901px){
+ .fb-top{
+  grid-template-columns:minmax(0,1fr) minmax(270px,auto) minmax(0,1fr)!important;
+  grid-template-areas:"nav brand hud"!important;
+  background-position:center 44%!important;
+  min-height:142px!important;
+ }
+ .fb-top>.fb-nav{justify-self:start!important}
+ .fb-top>.brand{
+  grid-area:brand!important;display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;
+  justify-self:center!important;width:max-content!important;max-width:100%!important;
+  padding:10px 24px!important;margin:0 auto!important;
+  border:1px solid #d1ad6c99!important;border-radius:14px!important;
+  background:linear-gradient(135deg,rgba(4,18,13,.72),rgba(15,39,27,.72))!important;
+  box-shadow:0 5px 18px #0008,inset 0 1px #fff2!important;
+ }
+ .fb-top>.brand .logo{font-size:clamp(29px,2.6vw,40px)!important}
+ .fb-top>.fb-header-hud{justify-self:end!important}
+}
+@media(max-width:900px){
+ .fb-top .brand{display:flex!important;flex-direction:column!important;align-items:center!important;justify-self:center!important;grid-template-columns:none!important}
+ .fb-top .brand .logo{font-size:clamp(22px,5vw,30px)!important}
+ .fb-top .brand .tag{font-size:7px!important;letter-spacing:1.5px!important}
+}
+</style></head>
 <body class="fb-premium">
 <header class="fb-top">
  <div class="brand">
-  <div class="brand-mark"><img src="fb-logo-header.jpg" alt="Fishing Brothers – kapr s prutem"></div>
-  <div class="logo">FISHING<br><em>BROTHERS</em></div>
+  <div class="logo">FISHING <em>FRIENDS</em></div>
   <div class="tag">FISH · CATCH · REPEAT</div>
  </div>
  <nav class="fb-nav">
