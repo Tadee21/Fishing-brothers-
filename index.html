@@ -1368,7 +1368,20 @@ body.fb-premium,body.fb-premium *{
  .fb-top>.fb-nav{order:2!important;flex:1 0 100%!important;width:100%!important;max-width:none!important}
  .fb-top .hud-coins strong{min-width:8ch!important;text-align:right!important}
 }
-</style></head>
+</style>
+<style id="ff-store-theme">
+.store-shell{color:#f5ecd8;background:linear-gradient(145deg,rgba(8,29,22,.97),rgba(13,19,14,.98)),url('tackle-scene.jpg') center/cover;border:1px solid #9b7848;border-radius:18px;overflow:hidden;box-shadow:0 12px 30px #0008}
+.store-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px;background:linear-gradient(90deg,rgba(4,24,17,.94),rgba(5,24,18,.7)),url('tackle-scene.jpg') center 48%/cover;border-bottom:1px solid #8b6c40}
+.store-hero small{letter-spacing:2px;color:#d8bd7c;font-size:10px;font-weight:800}.store-hero h2{font-family:Georgia,serif;font-size:clamp(25px,3vw,36px);color:#f3d17c;margin:5px 0}.store-hero p{margin:0;color:#d4c7aa;font-size:13px;max-width:620px}.store-balance{min-width:155px;padding:12px 15px;border:1px solid #a88750;border-radius:13px;background:rgba(12,18,13,.9);display:grid;gap:4px}.store-balance b{font-size:18px;color:#f4d27d;font-variant-numeric:tabular-nums}.store-balance span{font-size:12px;color:#b8d5bd}
+.store-layout{display:grid;grid-template-columns:190px minmax(0,1fr);gap:14px;padding:14px}.store-sidebar{display:grid;align-content:start;gap:7px}.store-sidebar button{display:flex;align-items:center;gap:10px;text-align:left;padding:12px;border:1px solid #66502f;border-radius:11px;background:linear-gradient(145deg,#1b2e22,#101811);color:#eee0c2;font-size:13px}.store-sidebar button span{font-size:19px}.store-sidebar button.active{background:linear-gradient(135deg,#b98a3f,#65451f);border-color:#f0ce80;color:#fff5dc;box-shadow:0 0 14px #c7963b55}.store-main{min-width:0}
+.store-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.store-card{min-width:0;border:1px solid #987543;border-radius:13px;background:linear-gradient(180deg,rgba(18,36,26,.98),rgba(14,18,13,.98));overflow:hidden;display:flex;flex-direction:column;box-shadow:0 5px 14px #0006}.store-card.is-active{border:2px solid #e4bd68;box-shadow:0 0 15px #d8a94b44}.store-art{height:112px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 80%,#496143,#10251b 72%);overflow:hidden}.store-art img{width:100%;height:100%;object-fit:cover;object-position:center}.store-product-icon{font-size:58px;filter:drop-shadow(0 5px 4px #0009)}.store-card-body{padding:10px;display:flex;flex-direction:column;gap:7px;flex:1}.store-card h3,.store-set-card h3,.loadout-card h3{font:700 15px Georgia,serif;color:#f1d17f;margin:0}.store-card p,.store-set-card p,.loadout-card p{font-size:11px;line-height:1.35;color:#c9c1a9;margin:0;min-height:30px}.store-specs{font-size:10px;line-height:1.45;color:#e3d5b6;min-height:30px}.store-price{display:flex;justify-content:space-between;align-items:center;gap:5px;margin-top:auto;border-top:1px solid #725631;padding-top:7px}.store-price b{font-size:12px;color:#f5d17b;font-variant-numeric:tabular-nums}.store-price small{font-size:10px;color:#d1c09a;white-space:nowrap}
+.store-card button,.store-set-card button,.loadout-actions button,.inventory-row button{padding:8px 7px;font-size:11px;border-radius:8px;min-height:34px}.store-buy{background:linear-gradient(#c79a4c,#81551e);color:#fff2d5;border:1px solid #f0cf80}.store-select{background:#234936;color:#e5f4e8;border:1px solid #6e9b72}.store-active{background:linear-gradient(#d5ad5b,#8c642c);color:#fff8e6;border:1px solid #f4d58b}.store-subnav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}.store-subnav button{padding:8px 12px;background:#182b20;color:#e8dec7;border:1px solid #775b35;font-size:12px}.store-subnav button.active{background:#a77a37;color:white;border-color:#e6c47b}
+.store-set-list{display:grid;gap:9px}.store-set-card{display:grid;grid-template-columns:70px minmax(0,1fr) 115px;align-items:center;gap:12px;padding:11px;border:1px solid #8e6e40;border-radius:12px;background:linear-gradient(100deg,#152c20,#19180f)}.store-set-icon{width:64px;height:64px;display:grid;place-items:center;border-radius:10px;background:radial-gradient(circle,#506447,#17251a);font-size:36px}.store-set-info{display:grid;gap:5px;min-width:0}.store-set-info small{font-size:10px;color:#b7c4ad}.store-set-card button{background:linear-gradient(#bd9148,#70481e);color:#fff0d1;border:1px solid #e6c17a}.store-set-card button:disabled{background:#393329;color:#b3a78e;border-color:#62533a}.store-tip{margin-top:10px;padding:10px;border:1px solid #66512f;border-radius:10px;background:#14271d;color:#cfc4a9;font-size:11px}
+.store-section-title{font:700 16px Georgia,serif;color:#f0d07d;margin:6px 0 10px;border-bottom:1px solid #765b36;padding-bottom:7px}.equipped-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:16px}.equipped-chip{padding:10px;border:1px solid #80623b;border-radius:9px;background:#172a20;min-width:0}.equipped-chip small{display:block;color:#b9c5b3;font-size:10px}.equipped-chip b{display:block;color:#f2d58f;font-size:12px;overflow-wrap:anywhere}.loadout-list{display:grid;gap:8px;margin-bottom:16px}.loadout-card{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:9px;align-items:center;padding:10px;border:1px solid #765a35;border-radius:10px;background:#17251c}.loadout-number{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#a47a39;color:white;font-weight:800}.loadout-copy p{min-height:0;margin-top:3px}.loadout-actions{display:flex;gap:5px}.loadout-actions button{background:#244a35;color:#e8f2e7;border:1px solid #63876a}.store-inventory{display:grid;gap:6px}.inventory-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:8px 10px;background:#17261c;border:1px solid #5f4a2d;border-radius:8px}.inventory-row span{font-size:12px}.inventory-row small,.inventory-row em{font-size:10px;color:#c4b797}.inventory-row em{font-style:normal}.store-sell{background:#5c3025;color:#ffe8d4;border:1px solid #a56a4e}.store-owned-baits{display:flex;flex-wrap:wrap;gap:6px}.store-owned-baits span{padding:6px 9px;background:#213b2b;border:1px solid #55734f;border-radius:20px;font-size:11px;color:#e9e0c8}
+@media(max-width:1050px){.store-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.store-layout{grid-template-columns:160px minmax(0,1fr)}}
+@media(max-width:680px){.store-hero{padding:14px;align-items:flex-start;flex-direction:column}.store-balance{width:100%;grid-template-columns:1fr auto;align-items:center}.store-balance small{grid-column:1/-1}.store-layout{display:flex;flex-direction:column;padding:9px;gap:10px}.store-sidebar{display:flex;overflow-x:auto;padding-bottom:4px}.store-sidebar button{flex:0 0 auto;white-space:nowrap;padding:9px 11px}.store-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.store-art{height:100px}.store-card-body{padding:8px;gap:6px}.store-card h3{font-size:14px}.store-card p{font-size:10px;min-height:34px}.store-specs{font-size:9px}.store-price{align-items:flex-start;flex-direction:column;gap:2px}.store-set-card{grid-template-columns:48px minmax(0,1fr);gap:8px}.store-set-icon{width:46px;height:46px;font-size:27px}.store-set-card button{grid-column:1/-1;width:100%}.equipped-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.loadout-card{grid-template-columns:30px minmax(0,1fr)}.loadout-actions{grid-column:1/-1}.loadout-actions button{flex:1}.inventory-row{grid-template-columns:minmax(0,1fr) auto}.inventory-row small,.inventory-row em{grid-column:1}.inventory-row button{grid-column:2;grid-row:1/3}.store-subnav{overflow-x:auto;flex-wrap:nowrap}.store-subnav button{white-space:nowrap}}
+</style>
+</head>
 <body class="fb-premium">
 <header class="fb-top">
  <div class="brand">
@@ -1401,6 +1414,7 @@ body.fb-premium,body.fb-premium *{
  <footer>Fishing Brothers · FISH · CATCH · REPEAT</footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="store.js"></script>
 <script>
 const SUPABASE_URL="https://buacrkmjunbgetlztwhg.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_f3sgRFk7QeJZcdk88B8Hgg_BTXyNPTI";
@@ -1447,7 +1461,7 @@ function placeUnlocked(place){return playerLevel()>=placeRequiredLevel(place);}
 const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
 let cloudSaveTimer=null,cloudSaveBusy=false,cloudSaveAgain=false;
 function load(){
- try{const s=JSON.parse(window.localStorage.getItem('fb-save'));if(s)Object.assign(state,s)}catch(e){/* local storage may be unavailable */}
+ try{const s=JSON.parse(window.localStorage.getItem('fb-save'));if(s)Object.assign(state,s);initStoreState()}catch(e){/* local storage may be unavailable */}
  // Backfill the heaviest known trophy for saves created before this statistic existed.
  if(!Number(state.bestWeight||0)){
   const heaviest=(state.records||[]).reduce((best,r)=>!best||Number(r.kg)>Number(best.kg)?r:best,null);
@@ -1554,17 +1568,19 @@ function renderFish(el){
  if(state.phase==='waiting')inner+=`<div class="actions"><button id="bite">🔔 Zkontrolovat záběr</button><button class="secondary" id="cancel">Vytáhnout prut</button></div>`;
  if(state.phase==='fight'&&f)inner+=`${fishImage(f)}<div class="status"><b>🐟 Ryba bojuje!</b><br><span id="fightPct">${Math.round(state.progress)}%</span> zdoláno · <span id="fightTime">90</span> s zbývá<div class="fight-track"><div id="fightBar" style="width:${state.progress}%"></div></div><small id="fightHint">Podrž tlačítko a navíjej. Při puštění ryba získává převahu.</small></div><button id="reel" class="hold-reel" style="touch-action:none;user-select:none;-webkit-user-select:none">💪 PODRŽ A NAVÍJEJ</button>`;
  if(state.phase==='caught'&&f)inner+=`${fishImage(f)}<div class="card stack"><span class="badge">🏆 NOVÝ ÚLOVEK</span><h2>${f.name}</h2><div class="metrics"><div class="metric"><small>DÉLKA</small><strong>${f.cm} cm</strong></div><div class="metric"><small>VÁHA</small><strong>${f.kg} kg</strong></div></div><p class="catch-xp">⭐ Za tento úlovek získáš +${f.xpReward||Math.round(35+f.cm*1.1+f.kg*3)} XP</p><p class="muted">Orientační výkupní cena: ${money(f.reward)}</p><button id="sell">💰 Prodat rybu</button><button class="secondary" id="release">💚 Pustit rybu zpět</button></div>`;
- inner+=`</div><div class="card stack" style="margin-top:10px"><h2>🎒 Tvoje vybavení</h2><div class="row"><span>Prut · úroveň ${state.rod}</span><span class="badge">Naviják ${state.reel}</span></div><div class="muted">Návnady úroveň ${state.baitLevel}</div><h2 class="fish-gallery-title">🐟 Ryby v tomto revíru</h2><div class="fish-gallery">${fishData.filter(x=>x.places.includes(state.place)).map(x=>`<div class="fish-card" data-fish="${x.id}"><div class="fish-image fish-habitat-scene habitat-${x.id}" role="img" aria-label="${x.name}"></div><b>${x.name}</b><small>${x.min}–${x.max} cm</small></div>`).join('')}</div></div>`;
+ inner+=`</div><div class="card stack" style="margin-top:10px"><h2>🎒 Tvoje vybavení</h2><div class="row"><span>🎣 ${escapeHtml(ffItem(state.selectedRod)?.[1]||'Basic Rod')}</span><span class="badge">${escapeHtml(ffItem(state.selectedReel)?.[1]||'Basic Reel')}</span></div><div class="muted">🧵 ${escapeHtml(ffItem(state.selectedLine)?.[1]||'Basic 0,20 mm')} · 🪱 ${escapeHtml(FF_STORE.baits.find(x=>x[0]===state.selectedBait)?.[2]||'Jahoda')}</div><button class="secondary" data-open-store>🛒 Upravit vybavení</button><h2 class="fish-gallery-title">🐟 Ryby v tomto revíru</h2><div class="fish-gallery">${fishData.filter(x=>x.places.includes(state.place)).map(x=>`<div class="fish-card" data-fish="${x.id}"><div class="fish-image fish-habitat-scene habitat-${x.id}" role="img" aria-label="${x.name}"></div><b>${x.name}</b><small>${x.min}–${x.max} cm</small></div>`).join('')}</div></div>`;
  el.innerHTML=inner;
  el.querySelectorAll('[data-place]').forEach(x=>x.onclick=()=>{if(!placeUnlocked(x.dataset.place)){state.message='🔒 '+x.dataset.place+' se odemkne na úrovni '+placeRequiredLevel(x.dataset.place)+'.';render();return}state.place=x.dataset.place;render()});
  el.querySelectorAll('[data-bait]').forEach(x=>x.onclick=()=>{state.bait=x.dataset.bait;render()});
  const byId=id=>el.querySelector('#'+id);
+ el.querySelector('[data-open-store]')?.addEventListener('click',()=>{state.tab='shop';state.shopCategory='inventory';render()});
  if(byId('cast'))byId('cast').onclick=()=>{state.phase='waiting';state.message='Prut je nahozený. Sleduj signalizátor!';render()};
  if(byId('cancel'))byId('cancel').onclick=()=>{state.phase='idle';state.message='Prut jsi vytáhl z vody.';render()};
  if(byId('bite'))byId('bite').onclick=()=>{
   const candidates=fishData.filter(f=>f.places.includes(state.place)&&f.baits.includes(state.bait));
-  if(Math.random()<Math.min(.91,.52+state.rod*.045+state.baitLevel*.055)){
-   const f=candidates[Math.floor(Math.random()*candidates.length)];
+  const baitChoice=currentBaitItem();const preferred=candidates.filter(x=>baitChoice[6].includes(x.id));const biteChance=Math.min(.95,.48+state.rod*.025+state.baitLevel*.025+baitChoice[5]/100);
+  if(candidates.length&&Math.random()<biteChance){
+   const pool=preferred.length&&Math.random()<.35?preferred:candidates;const f=pool[Math.floor(Math.random()*pool.length)];
    const cm=Math.round(f.min+Math.pow(Math.random(),3.0)*(f.max-f.min));
    const kg=weightFor(f,cm);state.current={...f,cm,kg,xpReward:Math.round(35+cm*1.1+kg*3),reward:Math.round(kg*f.price*(1+state.rod*.04))};state.phase='fight';state.progress=35;state.fightStarted=Date.now();state.message='ZÁBĚR! Ryba zabrala!'; 
   }else{state.message='Zatím bez záběru. Zkus to znovu.';state.phase='idle'}
@@ -1595,9 +1611,9 @@ function updateFight(){
  const remaining=Math.max(0,fightLimit-elapsed);
  // Heavier fish pull harder; upgraded rods and reels give a meaningful advantage.
  const weightFactor=Math.min(5.8,Math.max(.85,Math.pow(state.current.kg/2.5,.72)));
- const gearPower=1+(Math.max(0,state.rod-1)*.075)+(Math.max(0,state.reel-1)*.14);
- if(isReeling) state.progress += ((.92+state.reel*.30+state.rod*.12)*gearPower)/weightFactor;
- else state.progress -= (.42+weightFactor*.42)/(1+state.reel*.14+state.rod*.06);
+ const gear=equippedStats();const gearPower=1+(Math.max(0,state.rod-1)*.025)+(Math.max(0,state.reel-1)*.035)+(gear.rodPower*.10)+(gear.reelPower*.12);const lineStress=Number(state.current.kg||0)>gear.lineCapacity?1.35:1;
+ if(isReeling) state.progress += ((.92+state.reel*.12+state.rod*.08+gear.reelPower*.30+gear.rodPower*.18)*gearPower)/weightFactor;
+ else state.progress -= ((.42+weightFactor*.42)*lineStress)/(1+state.reel*.06+state.rod*.04+gear.reelPower*.14+gear.rodPower*.08);
  state.progress=Math.max(0,Math.min(100,state.progress));
  const bar=document.getElementById('fightBar');
  const pct=document.getElementById('fightPct');
@@ -1639,11 +1655,8 @@ function finishCatch(release=false){
  state.current=null;state.phase='idle';state.message=release?'Ryba je zpět ve vodě. Díky za šetrný lov!':`Ryba prodána za ${money(f.reward)}!`;
  save();render();if(isTrophy||state._levelUp)showTrophyCelebration(f,state._levelUp);state._levelUp=0;
 }
-function renderShop(el){
- const items=[['Prut','rod',250,'🎣','Zvyšuje šanci na záběr a hodnotu úlovků.'],['Naviják','reel',220,'⚙️','Pomáhá při zdolávání ryb.'],['Návnady','baitLevel',180,'🪱','Zvyšují šanci na záběr.']];
- el.innerHTML=`<div class="card stack"><h2>🛒 Rybářský obchod</h2><p class="muted">Rozpočet: <b>${money(state.money)}</b>. Vylepšuj vybavení a vydej se na větší úlovky.</p>${items.map(([name,key,base,icon,desc])=>`<div class="item"><div class="artmini ${key==='baitLevel'?'upgrade-art':''}">${key==='baitLevel'?`<img src="${baitImages['Boilies']}" alt="Nástrahy">`:icon}</div><div class="grow"><b>${name} · úroveň ${state[key]}</b><div class="muted">${desc}</div>${key==='baitLevel'?`<div class="bait-upgrade-level"><span>LVL ${state.baitLevel}</span><i><em style="width:${Math.min(100,state.baitLevel*10)}%"></em></i><small>Silnější a účinnější nástrahy</small></div>`:''}<small>${money(state[key]*base)}</small></div><button data-buy="${key}" ${state.money<state[key]*base?'disabled':''}>Koupit</button></div>`).join('')}</div>`;
- el.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const key=b.dataset.buy,base={rod:250,reel:220,baitLevel:180}[key],cost=state[key]*base;if(state.money>=cost){state.money-=cost;state[key]++;save();render()}});
-}
+function renderShop(el){renderFishingFriendsShop(el);}
+
 function renderLog(el){
  const trophies=(state.records||[]).filter(r=>r.cm >= (fishData.find(f=>f.id===r.id)?.trophy||999));
  const longest=trophies.length?[...trophies].sort((a,b)=>b.cm-a.cm).slice(0,1):[];
