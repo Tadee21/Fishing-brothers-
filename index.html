@@ -1302,24 +1302,19 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .fb-top .brand .tag{font-size:7px!important;letter-spacing:1.5px!important}
 }
 </style><style id="fb-header-centering-and-numerals">
-/* Sharp scenic header layer; content stays above the image. */
+/* Header background and wordmark refinement */
 .fb-top{
- position:relative!important;
- isolation:isolate!important;
- overflow:hidden!important;
- background:linear-gradient(180deg,rgba(5,15,11,.58),rgba(5,15,11,.76))!important;
+ position:relative!important;isolation:isolate!important;overflow:hidden!important;
+ background:linear-gradient(180deg,rgba(7,15,11,.56),rgba(7,12,9,.78))!important;
 }
 .fb-top::before{
  content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;
- background-image:url('river.jpg')!important;
- background-size:cover!important;background-position:center 48%!important;
- filter:contrast(1.24) saturate(1.2) brightness(.82)!important;
- transform:scale(1.015)!important;
+ background-image:url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=2400&q=92')!important;
+ background-size:cover!important;background-position:center 55%!important;
+ filter:brightness(.78) contrast(1.12) saturate(1.12)!important;
+ transform:none!important;
 }
-.fb-top>.brand,.fb-top>.fb-nav,.fb-top>.fb-header-hud{
- position:relative!important;z-index:2!important;min-width:0!important;
-}
-/* Equal-width, lining numerals across the whole game, including phones. */
+.fb-top>.brand,.fb-top>.fb-nav,.fb-top>.fb-header-hud{position:relative!important;z-index:2!important;min-width:0!important}
 body.fb-premium,body.fb-premium *{
  font-variant-numeric:tabular-nums lining-nums!important;
  font-feature-settings:"tnum" 1,"lnum" 1!important;
@@ -1329,45 +1324,49 @@ body.fb-premium,body.fb-premium *{
  font-variant-numeric:tabular-nums lining-nums!important;
  font-feature-settings:"tnum" 1,"lnum" 1!important;
 }
-/* Wide desktop: three truly equal columns keep the wordmark on the viewport centerline. */
+/* Wide desktop: centered logo, full wordmark contained inside its column. */
 @media(min-width:1181px){
  .fb-top{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(300px,380px) minmax(0,1fr)!important;
-  grid-template-areas:"nav brand hud"!important;
-  column-gap:24px!important;
-  align-items:center!important;
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(320px,400px) minmax(0,1fr)!important;
+  grid-template-areas:"nav brand hud"!important;column-gap:20px!important;align-items:center!important;
  }
  .fb-top>.fb-nav{grid-area:nav!important;justify-self:start!important;width:min(100%,440px)!important;max-width:440px!important}
- .fb-top>.brand{grid-area:brand!important;justify-self:center!important;align-self:center!important;margin:0 auto!important}
+ .fb-top>.brand{
+  grid-area:brand!important;display:block!important;justify-self:center!important;align-self:center!important;
+  width:100%!important;max-width:400px!important;min-width:0!important;margin:0 auto!important;
+  padding:13px 10px!important;text-align:center!important;box-sizing:border-box!important;
+  border:1px solid #a17a49!important;border-radius:16px!important;background:rgba(7,19,13,.55)!important;
+ }
+ .fb-top>.brand .logo{
+  display:block!important;width:100%!important;white-space:nowrap!important;
+  font-size:clamp(25px,2.15vw,37px)!important;letter-spacing:-.8px!important;
+  text-align:center!important;line-height:1.08!important;
+ }
+ .fb-top>.brand .tag{display:block!important;text-align:center!important;font-size:9px!important;letter-spacing:2px!important}
  .fb-top>.fb-header-hud{grid-area:hud!important;justify-self:end!important;width:100%!important;max-width:230px!important}
 }
-/* Smaller desktop/laptop: keep the logo centered on the first row, nav below it. */
+/* Laptop/tablet landscape */
 @media(min-width:901px) and (max-width:1180px){
- .fb-top{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(190px,230px)!important;
-  grid-template-areas:"brand hud" "nav nav"!important;
-  row-gap:10px!important;column-gap:12px!important;
-  padding:12px 16px!important;
- }
- .fb-top>.brand{grid-area:brand!important;justify-self:center!important;margin:0 auto!important}
+ .fb-top{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(200px,240px)!important;grid-template-areas:"brand hud" "nav nav"!important;row-gap:10px!important;column-gap:12px!important;padding:12px 16px!important}
+ .fb-top>.brand{grid-area:brand!important;justify-self:center!important;margin:0 auto!important;text-align:center!important}
+ .fb-top>.brand .logo{white-space:nowrap!important;font-size:clamp(24px,3vw,34px)!important}
  .fb-top>.fb-header-hud{grid-area:hud!important;justify-self:end!important;width:100%!important;max-width:230px!important}
  .fb-top>.fb-nav{grid-area:nav!important;justify-self:center!important;width:100%!important;max-width:600px!important}
 }
-/* Mobile: preserve the compact layout, with matching numeric typography. */
+/* Mobile: restore the original plain dark header; no photo or embedded image lettering. */
 @media(max-width:900px){
  .fb-top{
-  display:flex!important;flex-wrap:wrap!important;
-  align-items:center!important;justify-content:space-between!important;
-  gap:9px!important;
+  display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:space-between!important;
+  gap:9px!important;overflow:visible!important;
+  background:linear-gradient(145deg,#21180f,#100d09)!important;
  }
- .fb-top>.brand{order:1!important;flex:1 1 145px!important;min-width:0!important;justify-self:auto!important;margin:0!important}
+ .fb-top::before{display:none!important;content:none!important;background-image:none!important}
+ .fb-top>.brand{order:1!important;flex:1 1 145px!important;min-width:0!important;justify-self:auto!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;text-align:left!important}
+ .fb-top>.brand .logo{white-space:normal!important;font-size:clamp(21px,6vw,27px)!important;line-height:1!important;text-align:left!important}
+ .fb-top>.brand .tag{display:none!important}
  .fb-top>.fb-header-hud{order:2!important;flex:0 1 auto!important;max-width:none!important;min-width:0!important}
  .fb-top>.fb-nav{order:3!important;flex:1 0 100%!important;width:100%!important;max-width:none!important}
- .fb-top::before{background-position:center 52%!important;filter:contrast(1.2) saturate(1.16) brightness(.78)!important}
  .fb-top .hud-coins strong{min-width:8ch!important;text-align:right!important}
- .fb-top .hud-level b,.fb-top .hud-level small{font-variant-numeric:tabular-nums lining-nums!important}
 }
 </style></head>
 <body class="fb-premium">
