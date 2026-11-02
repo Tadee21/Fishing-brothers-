@@ -1152,7 +1152,90 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  #screen .bait-choice .bait-copy b{font-size:14px!important}
  #screen .bait-choice .bait-copy small{font-size:10px!important}
 }
-</style></head>
+</style><style id="fb-desktop-layout-v2">
+/* DESKTOP 901px+: samostatná kompozice, mobilní pravidla zůstávají beze změny. */
+@media(min-width:901px){
+ .fb-top{
+  display:grid!important;
+  grid-template-columns:minmax(300px,1fr) minmax(250px,auto) minmax(185px,230px)!important;
+  grid-template-areas:"nav brand hud"!important;
+  align-items:center!important;
+  gap:clamp(12px,2vw,28px)!important;
+  min-height:132px!important;
+  padding:12px clamp(16px,2.4vw,38px)!important;
+ }
+ .fb-top>.fb-nav{
+  grid-area:nav!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(58px,1fr))!important;
+  grid-auto-rows:minmax(48px,auto)!important;
+  gap:5px!important;
+  width:100%!important;
+  max-width:440px!important;
+  justify-content:start!important;
+  align-content:center!important;
+  justify-self:start!important;
+  flex-wrap:initial!important;
+ }
+ .fb-top>.fb-nav button{
+  width:100%!important;min-width:0!important;max-width:none!important;
+  min-height:46px!important;padding:5px 4px!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  gap:2px!important;font-size:18px!important;
+ }
+ .fb-top>.fb-nav button span{font-size:10px!important;line-height:1.1!important;white-space:nowrap!important}
+ .fb-top>.brand{
+  grid-area:brand!important;position:static!important;justify-self:center!important;
+  display:grid!important;grid-template-columns:66px auto!important;
+  width:max-content!important;max-width:100%!important;min-width:0!important;
+  column-gap:9px!important;text-align:left!important;
+ }
+ .fb-top>.brand .brand-mark{width:66px!important;height:66px!important}
+ .fb-top>.brand .logo{font-size:clamp(24px,2.1vw,34px)!important;line-height:.92!important}
+ .fb-top>.brand .tag{font-size:8px!important;letter-spacing:1.7px!important}
+ .fb-top>.fb-header-hud{
+  grid-area:hud!important;position:static!important;justify-self:end!important;
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;max-width:230px!important;min-width:0!important;gap:7px!important;
+ }
+ .fb-top>.fb-header-hud .hud-coins,.fb-top>.fb-header-hud .hud-level{width:100%!important;box-sizing:border-box!important}
+ .fb-layout:has(#screen .fb-home){max-width:1780px!important;padding:16px clamp(14px,2vw,30px) 32px!important}
+ .fb-home-grid{grid-template-columns:minmax(190px,225px) minmax(0,1fr) minmax(205px,250px)!important;gap:12px!important}
+ .home-panel{padding:11px!important}
+ .home-baits-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:7px!important}
+ .home-bait{min-height:0!important;padding:6px!important}
+ .home-bait img{height:58px!important;object-fit:contain!important}
+ .home-bait b{font-size:11px!important}
+ .home-fish-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:7px!important}
+ .home-fish-image{height:clamp(70px,6vw,92px)!important}
+ .home-fish-card b{font-size:10px!important}
+ /* Karty nástrah ve hře – kompaktní produktová mřížka na širokých displejích. */
+ #screen .choices:has([data-bait]){grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important}
+ #screen .bait-choice{min-height:0!important;height:auto!important}
+ #screen .bait-choice img{height:clamp(88px,8vw,118px)!important;object-fit:cover!important;object-position:center!important}
+ #screen .bait-choice .bait-copy{padding:8px 10px 10px!important}
+ #screen .bait-choice .bait-copy b{font-size:14px!important}
+ #screen .bait-choice .bait-copy small{font-size:10px!important}
+ #screen .bait-choice .bait-level-chip{font-size:9px!important;padding:3px 8px!important}
+ /* Galerie druhů – více menších karet, ryby zůstávají celé viditelné. */
+ #screen .fish-gallery{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important}
+ #screen .fish-card{min-width:0!important}
+ #screen .fish-card img{width:100%!important;height:clamp(112px,10vw,150px)!important;object-fit:contain!important;object-position:center!important}
+ #screen .fish-card .fish-image{background-size:84% auto!important;background-position:center!important}
+}
+@media(min-width:901px) and (max-width:1180px){
+ .fb-top{grid-template-columns:minmax(270px,1fr) minmax(205px,auto) minmax(165px,190px)!important;gap:10px!important;padding-inline:12px!important}
+ .fb-top>.brand{grid-template-columns:52px auto!important;column-gap:6px!important}
+ .fb-top>.brand .brand-mark{width:52px!important;height:52px!important}
+ .fb-top>.brand .logo{font-size:23px!important}
+ .fb-top>.brand .tag{font-size:7px!important}
+ .fb-home-grid{grid-template-columns:minmax(165px,190px) minmax(0,1fr)!important}
+ .home-side-right{grid-column:1/-1!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #screen .choices:has([data-bait]){grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #screen .fish-gallery{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+</style>
+</head>
 <body class="fb-premium">
 <header class="fb-top">
  <div class="brand">
