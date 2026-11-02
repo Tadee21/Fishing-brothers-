@@ -27,7 +27,8 @@ function equippedStats(){
  const r=ffItem(state.selectedRod)||FF_STORE.rods[0],n=ffItem(state.selectedReel)||FF_STORE.reels[0],l=ffItem(state.selectedLine)||FF_STORE.lines[0];
  return {rodPower:Math.max(0,(Number((r[5].match(/Síla (\d+)/)||[])[1]||30)-30)/40),reelPower:Math.max(0,(Number((n[5].match(/Brzda (\d+)/)||[])[1]||4)-4)/4),lineCapacity:Number(((l[5].match(/Nosnost ([\d,]+)/)||[])[1]||'4').replace(',','.'))};
 }
-function ffAsset(id){return id+'%202.jpg';}
+const FF_IMAGE_MAP={'rod-basic':'prut_01','rod-river':'prut_02','rod-predator':'prut_03','rod-carp':'prut_04','rod-legend':'prut_05','reel-basic':'navijak_01','reel-spin':'navijak_02','reel-power':'navijak_03','reel-bigfish':'navijak_04','reel-titan':'navijak_05','line-basic':'vlasec_01','line-strong':'vlasec_02','line-power':'vlasec_03','line-monster':'vlasec_04','line-extreme':'vlasec_05','bait-strawberry':'boilies_01','bait-krill':'boilies_02','bait-pineapple':'boilies_03','bait-scopex':'boilies_04','bait-tiger':'boilies_05','corn-yellow':'kukurice_01','corn-red':'kukurice_02','corn-tiger':'kukurice_03','corn-honey':'kukurice_04','corn-pineapple':'kukurice_05','lure-kopyto':'guma_01','lure-ripper':'guma_02','lure-twister':'guma_03','lure-smacek':'guma_04','lure-frog':'guma_05','wob-minnow':'wobbler_01','wob-crank':'wobbler_02','wob-popper':'wobbler_03','wob-swimbait':'wobbler_04','wob-jointed':'wobbler_05','live-worm':'zive_nastrahy_01','live-rousnice':'zive_nastrahy_02','live-maggots':'zive_nastrahy_03','live-minnow':'zive_nastrahy_04','live-leech':'zive_nastrahy_05'};
+function ffAsset(id){const base=FF_IMAGE_MAP[id];return (base||id)+'%202.jpg';}
 function ffBaitImage(id){return ffAsset(id);}
 function ffBuy(id,group){
  const x=group==='baits'?FF_STORE.baits.find(y=>y[0]===id):FF_STORE[group].find(y=>y[0]===id);if(!x)return;
