@@ -1112,7 +1112,47 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  #screen .latest-fish-art{width:82px!important;height:74px!important}
 }
 </style>
-</head>
+<style id="fb-new-bait-artwork">
+/* Nové podvodní 3D ilustrace nástrah – jednotný vzhled napříč hrou. */
+#screen .bait-choice{
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ justify-content:flex-start!important;gap:0!important;min-height:0!important;height:auto!important;
+ padding:0!important;overflow:hidden!important;position:relative!important;isolation:isolate!important;
+ border:1px solid #b58b4e!important;border-radius:14px!important;
+ background:linear-gradient(180deg,#10291f,#07150f)!important;
+ box-shadow:0 7px 18px #0009,inset 0 0 0 1px #e9c77a22!important;
+}
+#screen .bait-choice img{
+ position:relative!important;inset:auto!important;z-index:1!important;display:block!important;
+ width:100%!important;height:clamp(104px,30vw,156px)!important;max-width:none!important;
+ flex:none!important;object-fit:cover!important;object-position:center center!important;
+ opacity:1!important;filter:saturate(1.08) contrast(1.03)!important;
+ border:0!important;border-radius:0!important;background:#0b2118!important;
+ box-shadow:none!important;margin:0!important;padding:0!important;
+}
+#screen .bait-choice .bait-copy{
+ position:relative!important;inset:auto!important;z-index:2!important;display:flex!important;
+ flex-direction:column!important;align-items:flex-start!important;gap:5px!important;
+ width:100%!important;min-width:0!important;padding:10px 12px 12px!important;
+ background:linear-gradient(180deg,#10271d,#09170f)!important;
+ text-shadow:none!important;box-sizing:border-box!important;
+}
+#screen .bait-choice .bait-copy b{font-size:16px!important;color:#f6d98f!important;line-height:1.2!important}
+#screen .bait-choice .bait-copy small{font-size:12px!important;color:#d8c7a5!important}
+#screen .bait-choice .bait-level-chip{
+ display:inline-flex!important;align-items:center!important;width:max-content!important;
+ margin-top:2px!important;padding:4px 9px!important;border:1px solid #b58b4e!important;
+ border-radius:999px!important;background:#302315!important;color:#f6d98f!important;
+ font-size:10px!important;font-weight:700!important;letter-spacing:.04em!important;
+}
+#screen .bait-choice.selected{border:2px solid #f2cf78!important;box-shadow:0 0 0 2px #eac36a44,0 8px 20px #000b!important}
+@media(max-width:520px){
+ #screen .bait-choice img{height:clamp(92px,28vw,126px)!important}
+ #screen .bait-choice .bait-copy{padding:8px 9px 10px!important}
+ #screen .bait-choice .bait-copy b{font-size:14px!important}
+ #screen .bait-choice .bait-copy small{font-size:10px!important}
+}
+</style></head>
 <body class="fb-premium">
 <header class="fb-top">
  <div class="brand">
@@ -1255,7 +1295,7 @@ function renderHome(el){
  ];
  const recent=(state.records||[]).slice(0,1)[0];
  const fishHere=fishData.filter(f=>f.places.includes(state.place));
- const baitList=['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha','Pelety'];
+ const baitList=['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'];
  const shortName=n=>n.replace(' obecný','').replace(' obecná','').replace(' bílý','');
  el.innerHTML=`<section class="fb-home">
   <section class="fb-friends-hero"><div class="fb-friends-kicker">RYBÁŘSKÁ KOMUNITA</div><h1>FISHING FRIENDS</h1><p>Každý úlovek má svůj příběh. Ten další začíná právě tady.</p><div class="fb-hero-line"><span>🎣</span><i></i><span>🌊</span></div></section>
@@ -1289,7 +1329,7 @@ function renderSettings(el){
  el.innerHTML=`<div class="card stack"><h2>⚙️ Nastavení hry</h2><p class="muted">Herní postup se ukládá do účtu a synchronizuje mezi zařízeními.</p><div class="status">${currentUser?'☁️ Online účet připojen – postup se ukládá do cloudu.':'📱 Hraješ bez přihlášení – postup je uložen pouze v tomto zařízení.'}</div><button data-tab="account">👤 Správa účtu</button><button class="secondary" data-tab="home">Zpět na hlavní obrazovku</button></div>`;
  el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;render()});
 }
-const baitImages={"Boilies":"bait-boilies.jpg","Kukuřice":"bait-corn.jpg","Guma":"bait-rubber.jpg","Wobbler":"bait-wobbler.jpg","Živá nástraha":"bait-live.jpg","Pelety":"bait-pellets.jpg"};
+const baitImages={"Boilies":"bait-boilies%202.webp","Kukuřice":"bait-corn%202.webp","Guma":"bait-rubber%202.webp","Wobbler":"bait-wobbler%202.webp","Živá nástraha":"bait-live%202.webp"};
 function renderFish(el){
  const f=state.current;
  let inner=`<div class="card stack"><h2>📍 Vyber revír</h2><div class="choices">${['Rybník','Jezero','Řeka'].map(p=>`<div class="choice place-choice ${state.place===p?'selected':''} ${placeUnlocked(p)?'':'place-locked'}" data-place="${p}" aria-disabled="${!placeUnlocked(p)}">${placeArt(p)}<b>${p==='Rybník'?'🌿':p==='Jezero'?'🌊':'🏞️'} ${p} ${placeUnlocked(p)?'':'🔒'}</b><small>${placeUnlocked(p)?(p==='Rybník'?'Kapr, amur, štika, okoun, lín':p==='Jezero'?'Amur, dravci, jeseter':'Bolen, okoun, sumec, candát, kapr'):'Odemkneš na úrovni '+placeRequiredLevel(p)}</small></div>`).join('')}</div>
