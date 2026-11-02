@@ -1434,7 +1434,7 @@ body.fb-premium,body.fb-premium *{
  <div class="fb-side-actions"><button data-tab="shop">🎒　Výbava a obchod</button><button data-tab="account">👥　Kamarádi a účet</button><button data-tab="log">🏆　Úspěchy a odznáčky</button><button data-tab="fish">🎣　Zpět k lovu</button></div>
  <div class="fb-upgrade"><b>AKTIVNÍ VYBAVENÍ</b><p>🎣 Prut a naviják</p><small>Vylepšuj výbavu v obchodě a zdolávej větší ryby.</small></div></aside>
  <section class="fb-center"><div class="fb-slogan">Lov, který nikdy nekončí...</div><section id="screen"><div class="card">Načítám Fishing Brothers…</div></section></section>
- <aside class="fb-right"><section class="fb-leader"><h2>🏆 TOP 5 RYBÁŘŮ</h2><h3>📏 Nejdelší trofejní úlovky</h3><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section><section class="fb-promo"><div>🌅</div><b>Každý záběr může být rekordní!</b><small>Vyber revír a vydej se za trofejí.</small></section></aside>
+ <aside class="fb-right"><section class="fb-leader"><h2>🏆 TOP 5 RYBÁŘŮ</h2><h3>📏 Nejdelší a ⚖️ nejtěžší úlovky</h3><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section><section class="fb-promo"><div>🌅</div><b>Každý záběr může být rekordní!</b><small>Vyber revír a vydej se za trofejí.</small></section></aside>
  <section class="fb-bottom"><div class="fb-statbox"><b>Tvoje statistiky</b><div>🐟 Celkem úlovků: <strong id="bottomCount">0</strong></div><div>📏 Nejdelší ryba: <strong id="bottomRecord">—</strong></div></div><div class="fb-statbox"><b>Fishing Brothers</b><div>🎣 Rybník · Jezero · Řeka</div><div>🤝 Lov s kamarády</div></div></section>
  <footer>Fishing Brothers · FISH · CATCH · REPEAT</footer>
 </main>
@@ -1565,7 +1565,7 @@ function renderHome(el){
     <div class="home-main-actions"><button data-tab="fish">🐟 Začít lovit</button><button class="home-secondary" data-tab="shop">🛒 Obchod</button><button class="home-secondary" data-tab="shop">🎒 Výbava</button><button class="home-secondary" data-tab="log">🏆 Úspěchy</button></div>
    </div>
    <aside class="home-side home-side-right">
-    <section class="home-panel home-leader-panel"><h2>🏆 TOP RYBÁŘI</h2><div class="home-leader-subtitle">Pořadí podle nejdelší trofejní ryby</div><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section>
+    <section class="home-panel home-leader-panel"><h2>🏆 TOP RYBÁŘI</h2><div class="home-leader-subtitle">Pořadí podle délky a hmotnosti trofejních ryb</div><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section>
     <section class="home-panel home-latest"><h2>📸 Poslední úlovek</h2>${(state.lastCatch||recent)?(()=>{const c=state.lastCatch||recent;return `<div class="latest-catch"><div class="latest-fish-art"><img src="${fishImages[fishIdForCatch(c)]}" alt="${escapeHtml(c.name)}" loading="eager"></div><div class="latest-catch-copy"><b>${escapeHtml(c.name)}</b><span>${c.cm} cm · ${Number(c.kg).toFixed(2)} kg</span><small>${escapeHtml(c.place||'Revír')} · ${escapeHtml(c.action||'Úlovek')}</small></div></div>`;})():'<div class="latest-empty">🎣<p>Zatím žádný úlovek.</p><small>Tvůj první úlovek čeká na hladině.</small></div>'}</section>
    </aside>
   </div>
@@ -1575,10 +1575,7 @@ function renderHome(el){
  el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;render();});
  if(currentUser)renderOnlineLeaderboard();
 }
-function renderLeader(el){
- el.innerHTML=`<div class="card stack"><h2>🏆 Online žebříček rybářů</h2><p class="muted">Největší a nejtěžší trofejní úlovky všech hráčů Fishing Brothers.</p><div id="onlineLeaderboard" class="stack"><p class="muted">Načítám online výsledky…</p></div><button class="secondary" data-tab="account">👥 Můj účet a kamarádi</button></div>`;
- el.querySelector('[data-tab]').onclick=()=>{state.tab='account';render()};if(currentUser)renderOnlineLeaderboard();
-}
+function renderLeader(el){renderLog(el);}
 function renderSettings(el){
  el.innerHTML=`<div class="card stack"><h2>⚙️ Nastavení hry</h2><p class="muted">Herní postup se ukládá do účtu a synchronizuje mezi zařízeními.</p><div class="status">${currentUser?'☁️ Online účet připojen – postup se ukládá do cloudu.':'📱 Hraješ bez přihlášení – postup je uložen pouze v tomto zařízení.'}</div><button data-tab="account">👤 Správa účtu</button><button class="secondary" data-tab="home">Zpět na hlavní obrazovku</button></div>`;
  el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;render()});
