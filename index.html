@@ -1587,7 +1587,7 @@ const baitImages={"Boilies":"bait-boilies%202.webp","Kukuřice":"bait-corn%202.w
 function renderFish(el){
  const f=state.current;
  let inner=`<div class="card stack"><h2>📍 Vyber revír</h2><div class="choices">${['Rybník','Jezero','Řeka'].map(p=>`<div class="choice place-choice ${state.place===p?'selected':''} ${placeUnlocked(p)?'':'place-locked'}" data-place="${p}" aria-disabled="${!placeUnlocked(p)}">${placeArt(p)}<b>${p==='Rybník'?'🌿':p==='Jezero'?'🌊':'🏞️'} ${p} ${placeUnlocked(p)?'':'🔒'}</b><small>${placeUnlocked(p)?(p==='Rybník'?'Kapr, amur, štika, okoun, lín':p==='Jezero'?'Amur, dravci, jeseter':'Bolen, okoun, sumec, candát, kapr'):'Odemkneš na úrovni '+placeRequiredLevel(p)}</small></div>`).join('')}</div>
- <h2>🪱 Návnada</h2><div class="ff-current-bait"><img src="${ffAsset(state.selectedBait)}" alt="${escapeHtml(currentBaitItem()[2])}"><div><small>PRÁVĚ NASAZENO</small><b>${escapeHtml(currentBaitItem()[2])}</b><span>${escapeHtml(currentBaitItem()[1])}</span></div></div><div class="choices">${['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'].map(b=>`<div class="choice bait-choice ${state.bait===b?'selected':''}" data-bait="${b}"><img src="${ffBaitImage(ffBaitPreviewForCategory(b)[0])}" alt="${escapeHtml(ffBaitPreviewForCategory(b)[2])}" loading="lazy"><div class="bait-copy"><b>${b}</b><small>${['Boilies','Kukuřice'].includes(b)?'Kaprovité ryby':'Dravci a další druhy'}</small><span class="bait-level-chip">ÚROVEŇ ${state.baitLevel}</span></div></div>`).join('')}</div>
+ <h2>🪱 Vyber nástrahu</h2><div class="choices">${['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'].map(b=>{const preview=ffBaitPreviewForCategory(b);return `<div class="choice bait-choice ${state.bait===b?'selected':''}" data-bait="${b}"><img src="${ffBaitImage(preview[0])}" alt="${escapeHtml(preview[2])}" loading="lazy"><div class="bait-copy"><b>${b}</b><small>${state.bait===b?'Nasazeno: '+escapeHtml(preview[2]):['Boilies','Kukuřice'].includes(b)?'Kaprovité ryby':'Dravci a další druhy ryb'}</small><span class="bait-level-chip">${state.bait===b?'✓ AKTIVNÍ':'ÚROVEŇ '+state.baitLevel}</span></div></div>`}).join('')}</div>
  <div class="status" id="status">${state.message||'Připrav si vybavení a nahoď prut.'}</div>`;
  if(state.phase==='idle')inner+=`<button id="cast">🎯 Nahodit prut</button>`;
  if(state.phase==='waiting')inner+=`<div class="actions"><button id="bite">🔔 Zkontrolovat záběr</button><button class="secondary" id="cancel">Vytáhnout prut</button></div>`;
@@ -1774,6 +1774,30 @@ else{startGame();}
   '\n.fish-catch-frame img.fishart{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center center!important;padding:0!important;margin:0!important;}'+
   '\n#screen .record img.artmini{background:linear-gradient(180deg,#174c3d,#071b18)!important;object-fit:contain!important;object-position:center!important;}';
  document.head.appendChild(style);
+ const gearStyle=document.createElement('style');
+ gearStyle.id='fb-large-uncropped-gear-art';
+ gearStyle.textContent=`
+ .store-grid{grid-template-columns:repeat(auto-fit,minmax(175px,1fr))!important;gap:12px!important}
+ .store-art{height:148px!important;min-height:148px!important;padding:10px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:radial-gradient(ellipse at center,#294a36 0%,#101c15 76%)!important}
+ .store-art img{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;padding:0!important;border:0!important;filter:drop-shadow(0 4px 5px #0008)!important}
+ #screen .choices:has([data-bait]){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+ #screen .bait-choice{display:grid!important;grid-template-columns:minmax(105px,38%) minmax(0,1fr)!important;align-items:center!important;gap:12px!important;min-height:142px!important;height:auto!important;padding:10px!important;overflow:hidden!important;background:linear-gradient(145deg,#203a2a,#0d1912)!important;border:1px solid #987345!important;border-radius:13px!important}
+ #screen .bait-choice img{position:static!important;inset:auto!important;display:block!important;width:100%!important;max-width:none!important;height:116px!important;min-height:116px!important;object-fit:contain!important;object-position:center!important;opacity:1!important;z-index:auto!important;padding:5px!important;border:0!important;border-radius:9px!important;background:radial-gradient(ellipse,#36563d,#102117)!important;box-shadow:none!important;filter:drop-shadow(0 3px 4px #0008)!important}
+ #screen .bait-choice .bait-copy{position:static!important;display:grid!important;align-content:center!important;gap:7px!important;min-width:0!important;padding:0!important;text-shadow:none!important}
+ #screen .bait-choice .bait-copy b{font-size:18px!important;color:#f4d58b!important;line-height:1.15!important}
+ #screen .bait-choice .bait-copy small{font-size:12px!important;line-height:1.35!important;color:#e1d2b4!important}
+ #screen .bait-choice .bait-level-chip{display:inline-flex!important;width:max-content!important;max-width:100%!important;padding:5px 8px!important;border-radius:20px!important;background:#5b4426!important;color:#f6dfaa!important;font-size:10px!important}
+ #screen .bait-choice.selected{border:2px solid #f1cd75!important;background:linear-gradient(145deg,#3c4228,#142017)!important;box-shadow:0 0 0 2px #eac36a33,0 6px 15px #0008!important}
+ #screen .ff-equipped-visuals{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+ #screen .ff-equipped-visuals>div{display:grid!important;grid-template-columns:112px minmax(0,1fr)!important;grid-template-rows:auto auto!important;align-items:center!important;column-gap:12px!important;row-gap:5px!important;padding:10px!important;border:1px solid #87663d!important;border-radius:12px!important;background:linear-gradient(145deg,#203a2a,#0d1912)!important}
+ #screen .ff-equipped-visuals img{grid-column:1;grid-row:1/4!important;width:100%!important;height:94px!important;object-fit:contain!important;object-position:center!important;padding:5px!important;border:0!important;border-radius:8px!important;background:radial-gradient(ellipse,#36563d,#102117)!important}
+ #screen .ff-equipped-visuals small{grid-column:2;grid-row:1;font-size:10px!important}
+ #screen .ff-equipped-visuals b{grid-column:2;grid-row:2;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;font-size:13px!important;line-height:1.3!important}
+ #screen .ff-current-bait{display:none!important}
+ @media(max-width:620px){#screen .choices:has([data-bait]){grid-template-columns:1fr!important}#screen .bait-choice{grid-template-columns:104px minmax(0,1fr)!important;min-height:126px!important}#screen .bait-choice img{height:104px!important;min-height:104px!important}#screen .ff-equipped-visuals{grid-template-columns:1fr!important}#screen .ff-equipped-visuals>div{grid-template-columns:96px minmax(0,1fr)!important}#screen .ff-equipped-visuals img{height:84px!important}}
+ `;
+ document.head.appendChild(gearStyle);
+
  document.documentElement.dataset.fishHabitatsLoaded=String(species.length);
 })();
 </script>
