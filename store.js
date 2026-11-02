@@ -22,6 +22,7 @@ function initStoreState(){
 }
 function ffItem(id){return [...FF_STORE.rods,...FF_STORE.reels,...FF_STORE.lines].find(x=>x[0]===id);}
 function currentBaitItem(){return FF_STORE.baits.find(x=>x[0]===state.selectedBait)||FF_STORE.baits[0];}
+function ffBaitPreviewForCategory(category){return FF_STORE.baits.find(x=>x[1]===category&&x[0]===state.selectedBait)||FF_STORE.baits.find(x=>x[1]===category&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category)||FF_STORE.baits[0];}
 function equippedStats(){
  const r=ffItem(state.selectedRod)||FF_STORE.rods[0],n=ffItem(state.selectedReel)||FF_STORE.reels[0],l=ffItem(state.selectedLine)||FF_STORE.lines[0];
  return {rodPower:Math.max(0,(Number((r[5].match(/Síla (\d+)/)||[])[1]||30)-30)/40),reelPower:Math.max(0,(Number((n[5].match(/Brzda (\d+)/)||[])[1]||4)-4)/4),lineCapacity:Number(((l[5].match(/Nosnost ([\d,]+)/)||[])[1]||'4').replace(',','.'))};
