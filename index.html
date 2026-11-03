@@ -1461,6 +1461,17 @@ body.fb-premium,body.fb-premium *{
   background:radial-gradient(ellipse,#294a36,#0b1711)!important;
 }
 </style>
+<style id="fb-shop-image-centering-nov2026">
+/* All bait and line photos: consistent full-photo framing without cropping. */
+#screen .store-grid .store-card .store-art:has(img[src*="boilies-"],img[src*="kukurice_"],img[src*="gumy_"],img[src*="woblery_"],img[src*="zive_nastrahy_"],img[src*="vlasce_"]){
+height:auto!important;min-height:0!important;aspect-ratio:16/9!important;padding:5px!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#12251b!important;
+}
+#screen .store-grid .store-card .store-art:has(img[src*="boilies-"],img[src*="kukurice_"],img[src*="gumy_"],img[src*="woblery_"],img[src*="zive_nastrahy_"],img[src*="vlasce_"]) img{
+display:block!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center center!important;transform:none!important;margin:0!important;padding:0!important;filter:none!important;
+}
+#screen .store-set-icon{display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;background:#15291e!important;border-radius:10px!important}
+#screen .store-set-icon img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;transform:none!important}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
