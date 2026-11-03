@@ -1472,7 +1472,18 @@ display:block!important;width:100%!important;height:100%!important;min-width:0!i
 #screen .store-set-icon{display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;background:#15291e!important;border-radius:10px!important}
 #screen .store-set-icon img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;transform:none!important}
 </style>
-</head>
+<style id="fb-shop-tabs-and-leader-level">
+/* Compact level chip beside each angler in the leaderboard */
+.fb-ranking .leader-person strong{display:flex!important;align-items:center!important;gap:6px!important;min-width:0!important}
+.fb-ranking .leader-level{display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;padding:2px 5px!important;border:1px solid #94703e!important;border-radius:10px!important;background:#302417!important;color:#f5d27d!important;font:700 9px Georgia,serif!important;letter-spacing:.2px!important;font-style:normal!important}
+/* Five lure-category buttons in a clean, centered two-column layout on phones */
+#screen .store-subnav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;align-items:stretch!important}
+#screen .store-subnav button{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere!important;min-width:0!important;min-height:44px!important;padding:8px 7px!important;line-height:1.2!important;font-size:12px!important}
+#screen .store-subnav button:last-child:nth-child(odd){grid-column:1/-1!important}
+#screen .store-grid .store-card{height:100%!important;display:flex!important;flex-direction:column!important}
+#screen .store-grid .store-card .store-card-body{flex:1!important;display:flex!important;flex-direction:column!important}
+#screen .store-grid .store-card h3{display:flex!important;align-items:center!important;min-height:2.5em!important;line-height:1.2!important;margin:0!important;overflow-wrap:anywhere!important}
+</style></head>
 <body class="fb-premium">
 <header class="fb-top">
  <div class="brand">
@@ -1843,10 +1854,10 @@ async function renderOnlineLeaderboard(place=window.fbAchievementPlace||'Rybník
  if(!sb){const msg='<p class="muted">Pro online žebříček se přihlas ke svému účtu.</p>';if(box)box.innerHTML=msg;if(side)side.innerHTML=msg;return;}
  const {data:rows,error}=await sb.from('trophy_catches').select('user_id,length_cm,weight_kg,fish_name,fish_id,place').limit(3000);
  if(error){console.warn('Online žebříček:',error);const msg='<p class="muted">Online žebříček se nepodařilo načíst.</p>';if(box)box.innerHTML=msg;if(side)side.innerHTML=msg;return;}
- const profilesIds=[...new Set((rows||[]).map(r=>r.user_id).filter(Boolean))];let names={};
- if(profilesIds.length){const {data:profiles,error:pe}=await sb.from('profiles').select('id,username').in('id',profilesIds);if(!pe)(profiles||[]).forEach(p=>names[p.id]=p.username);}
+ const profilesIds=[...new Set((rows||[]).map(r=>r.user_id).filter(Boolean))];let names={},levels={};
+ if(profilesIds.length){const {data:profiles,error:pe}=await sb.from('profiles').select('id,username,game_state').in('id',profilesIds);if(!pe)(profiles||[]).forEach(p=>{names[p.id]=p.username;const xp=Number(p.game_state?.xp||0);levels[p.id]=Math.floor(xp/500)+1;});}
  const makeTop=(source,key)=>{const sorted=[...source].filter(r=>r.user_id&&Number(r[key])>0).sort((a,b)=>Number(b[key])-Number(a[key]));const bestByPlayer=new Map();for(const r of sorted)if(!bestByPlayer.has(r.user_id))bestByPlayer.set(r.user_id,r);return [...bestByPlayer.values()].slice(0,5);};
- const draw=(list,key,unit)=>list.length?list.map((r,i)=>{const fishName=String(r.fish_name||'Ryba'),fish=escapeHtml(fishName),rawName=names[r.user_id]||'Rybář',username=escapeHtml(rawName),value=Number(r[key]),entry=fishData.find(f=>f.name===fishName||f.id===r.fish_id),thumb=fishImages[entry?.id]||fishImages.kapr,initials=escapeHtml(rawName.trim().slice(0,1).toUpperCase());return `<div class="leaderboard-row"><b class="leader-rank">${['🥇','🥈','🥉','4','5'][i]}</b><span class="leader-avatar">${initials}</span><span class="leader-person"><strong>${username}</strong><small>${fish} · ${escapeHtml(r.place||'Revír')}</small></span><b class="leader-value">${value.toFixed(unit==='kg'?2:0)} ${unit}</b><img class="leader-fish-thumb" src="${thumb}" alt="${fish}" loading="lazy"></div>`;}).join(''):'<p class="muted">Zatím zde nejsou žádné trofejní úlovky.</p>';
+ const draw=(list,key,unit)=>list.length?list.map((r,i)=>{const fishName=String(r.fish_name||'Ryba'),fish=escapeHtml(fishName),rawName=names[r.user_id]||'Rybář',username=escapeHtml(rawName),value=Number(r[key]),entry=fishData.find(f=>f.name===fishName||f.id===r.fish_id),thumb=fishImages[entry?.id]||fishImages.kapr,initials=escapeHtml(rawName.trim().slice(0,1).toUpperCase());return `<div class="leaderboard-row"><b class="leader-rank">${['🥇','🥈','🥉','4','5'][i]}</b><span class="leader-avatar">${initials}</span><span class="leader-person"><strong>${username}<em class="leader-level">LVL ${levels[r.user_id]||1}</em></strong><small>${fish} · ${escapeHtml(r.place||'Revír')}</small></span><b class="leader-value">${value.toFixed(unit==='kg'?2:0)} ${unit}</b><img class="leader-fish-thumb" src="${thumb}" alt="${fish}" loading="lazy"></div>`;}).join(''):'<p class="muted">Zatím zde nejsou žádné trofejní úlovky.</p>';
  const filtered=(rows||[]).filter(r=>r.place===place);
  if(box){const key=metric==='weight'?'weight_kg':'length_cm',unit=metric==='weight'?'kg':'cm',top=makeTop(filtered,key);box.innerHTML=`<h3>TOP 5 · ${escapeHtml(place)} · ${metric==='weight'?'nejtěžší ryby':'nejdelší ryby'}</h3>${draw(top,key,unit)}`;}
  if(side){const longest=makeTop(rows||[],'length_cm'),heaviest=makeTop(rows||[],'weight_kg');side.innerHTML=`<div class="side-top-title">📏 Nejdelší</div>${draw(longest,'length_cm','cm')}<div class="side-top-title">⚖️ Nejtěžší</div>${draw(heaviest,'weight_kg','kg')}`;}
