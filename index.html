@@ -1419,6 +1419,32 @@ body.fb-premium,body.fb-premium *{
 #screen .bait-square-card .bait-art-frame img{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;min-width:0!important;min-height:0!important;object-fit:cover!important;object-position:center!important;transform:scale(1.3)!important;transform-origin:center!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important}
 @media(max-width:480px){#screen .fish-gallery .fish-card .fish-gallery-photo{height:clamp(145px,42vw,180px)!important}#screen .bait-square-card .bait-art-frame img{transform:scale(1.38)!important}}
 </style>
+
+<style id="fb-visible-fixes-2026">
+/* Static overrides: these styles load before the game renders. */
+#screen .fish-gallery{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+#screen .fish-gallery .fish-card{min-width:0!important;overflow:hidden!important}
+#screen .fish-gallery .fish-card .fish-gallery-photo{display:block!important;width:100%!important;height:118px!important;max-height:118px!important;object-fit:contain!important;object-position:center!important;padding:6px!important;background:radial-gradient(ellipse,#173b2c,#071710)!important}
+#screen .achievement-grid{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}
+#screen .achievement-medal{display:flex!important;align-items:center!important;gap:12px!important;min-width:0!important;padding:12px!important;border:1px solid #987344!important;border-radius:14px!important;background:linear-gradient(145deg,#183629,#0b1912)!important;box-shadow:0 5px 13px #0007!important;opacity:1!important;filter:none!important}
+#screen .achievement-medal.is-locked{opacity:.72!important;filter:saturate(.72)!important}
+#screen .medal-icon{width:52px!important;height:52px!important;min-width:52px!important;display:grid!important;place-items:center!important;border-radius:50%!important;font-size:26px!important;line-height:1!important;border:2px solid #c49a53!important;background:radial-gradient(circle at 35% 25%,#f5df9d,#936326 72%,#302014)!important;box-shadow:inset 0 2px 5px #fff5,0 4px 9px #0009!important}
+#screen .medal-copy{display:flex!important;flex:1!important;flex-direction:column!important;gap:5px!important;min-width:0!important}
+#screen .medal-top{display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:wrap!important;gap:4px 8px!important}
+#screen .medal-top b{font-size:15px!important;line-height:1.25!important;color:#ffe4a5!important}
+#screen .medal-tier{display:inline-flex!important;padding:3px 8px!important;border:1px solid #b58c4c!important;border-radius:20px!important;background:#392a17!important;color:#f5d58b!important;font-size:9px!important;font-weight:800!important}
+#screen .medal-copy p{margin:0!important;color:#d8c9aa!important;font-size:12px!important;line-height:1.4!important}
+#screen .achievement-progress{height:7px!important;margin-top:2px!important;border-radius:20px!important;background:#06110c!important;overflow:hidden!important}
+#screen .achievement-progress i{display:block!important;height:100%!important;border-radius:20px!important;background:linear-gradient(90deg,#94703b,#f5d782)!important}
+#screen .medal-copy small{font-size:10px!important;color:#e8d4a8!important}
+#screen .record{display:grid!important;grid-template-columns:28px 62px minmax(0,1fr)!important;align-items:center!important;gap:9px!important;overflow:hidden!important;background:linear-gradient(145deg,#142a20,#091710)!important;border:1px solid #927044!important;border-radius:14px!important;padding:11px!important;margin:9px 0!important;box-shadow:0 4px 12px #0007!important}
+#screen .record img.artmini{width:62px!important;height:56px!important;object-fit:cover!important;object-position:center 68%!important;padding:0!important;border:1px solid #987344!important;border-radius:9px!important;background:#0b1912!important;filter:none!important}
+#screen .record .grow{min-width:0!important}
+#screen .record .grow>b{display:block!important;color:#f5d994!important;font-size:15px!important;margin-bottom:4px!important}
+#screen .record .grow .muted,#screen .record .grow small{display:block!important;line-height:1.4!important;color:#d8c8a8!important}
+#screen .record> b:last-child{grid-column:3!important;justify-self:start!important;font-size:13px!important}
+@media(min-width:681px){#screen .achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
