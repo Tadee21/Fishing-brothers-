@@ -1597,7 +1597,15 @@ body.fb-premium .fb-number,
  #screen .achievement-page .record img.artmini{width:48px!important;height:42px!important;max-width:48px!important}
 }
 </style>
-</head>
+<style id="fb-header-level-match-money">
+.fb-top>.fb-header-hud{align-items:stretch!important}
+.fb-top>.fb-header-hud .hud-coins,.fb-top>.fb-header-hud .hud-level{box-sizing:border-box!important;min-height:78px!important;height:78px!important}
+.fb-top>.fb-header-hud .hud-level{align-content:space-between!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto 7px!important;gap:4px 6px!important;padding:8px 10px!important}
+.fb-top>.fb-header-hud .hud-level>span{align-self:center!important;white-space:nowrap!important}
+.fb-top>.fb-header-hud .hud-level>small{align-self:center!important;white-space:nowrap!important;text-align:right!important}
+.fb-top>.fb-header-hud .hud-level>i{grid-column:1/-1!important;align-self:end!important;height:6px!important;margin:0!important}
+@media(max-width:620px){.fb-top>.fb-header-hud .hud-coins,.fb-top>.fb-header-hud .hud-level{height:72px!important;min-height:72px!important;padding:7px 8px!important}}
+</style></head>
 <body class="fb-premium">
 <header class="fb-top">
  <div class="brand">
