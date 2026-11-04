@@ -2231,4 +2231,47 @@ else{startGame();}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
-</script></body></html>
+</script>
+<style id="fb-cast-splash-animation">
+#screen.fb-cast-stage{position:relative!important;isolation:isolate}
+.fb-cast-splash{position:absolute;z-index:40;left:50%;top:48%;width:190px;height:150px;transform:translate(-50%,-50%);pointer-events:none;overflow:visible;animation:fbCastFade 1.45s ease-out forwards}
+.fb-cast-splash .ripple{position:absolute;left:50%;top:54%;width:18px;height:10px;border:2px solid rgba(191,226,221,.9);border-radius:50%;transform:translate(-50%,-50%) scale(.2);box-shadow:0 0 12px #9ce5db66;animation:fbCastRipple 1.15s ease-out forwards}
+.fb-cast-splash .ripple.r2{animation-delay:.16s}
+.fb-cast-splash .ripple.r3{animation-delay:.32s}
+.fb-cast-splash .spray{position:absolute;left:50%;top:48%;width:7px;height:13px;border-radius:90% 10% 80% 20%;background:linear-gradient(180deg,#e1f8ec,#69b8ad);box-shadow:0 0 8px #a5e9d9;opacity:0;animation:fbCastSpray .72s ease-out forwards}
+.fb-cast-splash .spray:nth-child(4){--dx:-57px;--dy:-37px;animation-delay:.02s}
+.fb-cast-splash .spray:nth-child(5){--dx:-36px;--dy:-59px;animation-delay:.05s}
+.fb-cast-splash .spray:nth-child(6){--dx:-12px;--dy:-68px;animation-delay:.08s}
+.fb-cast-splash .spray:nth-child(7){--dx:19px;--dy:-62px;animation-delay:.04s}
+.fb-cast-splash .spray:nth-child(8){--dx:48px;--dy:-43px;animation-delay:.1s}
+.fb-cast-splash .spray:nth-child(9){--dx:65px;--dy:-15px;animation-delay:.06s}
+.fb-cast-splash .spray:nth-child(10){--dx:34px;--dy:-32px;animation-delay:.12s}
+.fb-cast-splash .spray:nth-child(11){--dx:-31px;--dy:-27px;animation-delay:.09s}
+@keyframes fbCastRipple{0%{opacity:.95;transform:translate(-50%,-50%) scale(.25);width:18px;height:9px}75%{opacity:.55}100%{opacity:0;transform:translate(-50%,-50%) scale(5.8);width:60px;height:30px}}
+@keyframes fbCastSpray{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}18%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx,0px)),calc(-50% + var(--dy,0px))) scale(.45) rotate(35deg)}}
+@keyframes fbCastFade{0%{opacity:1}78%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.fb-cast-splash,.fb-cast-splash *{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+</style>
+<script id="fb-cast-splash-controller">
+(function(){
+  if(window.__fbCastSplashInstalled)return;
+  window.__fbCastSplashInstalled=true;
+  document.addEventListener('click',function(event){
+    const target=event.target instanceof Element?event.target:null;
+    if(!target||!target.closest('#cast'))return;
+    window.setTimeout(function(){
+      const screen=document.querySelector('#screen');
+      if(!screen||!screen.querySelector('.bite-wait'))return;
+      screen.classList.add('fb-cast-stage');
+      screen.querySelector('.fb-cast-splash')?.remove();
+      const effect=document.createElement('div');
+      effect.className='fb-cast-splash';
+      effect.setAttribute('aria-hidden','true');
+      effect.innerHTML='<i class="ripple"></i><i class="ripple r2"></i><i class="ripple r3"></i><i class="spray"></i><i class="spray"></i><i class="spray"></i><i class="spray"></i><i class="spray"></i><i class="spray"></i><i class="spray"></i><i class="spray"></i>';
+      screen.appendChild(effect);
+      window.setTimeout(function(){effect.remove();screen.classList.remove('fb-cast-stage');},1550);
+    },40);
+  });
+})();
+</script>
+</body></html>
