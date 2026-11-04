@@ -2016,6 +2016,7 @@ function getFishingAchievements(){
   {id:'pond',category:'Průzkumníci revírů',icon:'🌿',name:'Rybář rybníků',desc:'Ulov alespoň jednu rybu na rybníku.',progress:Math.min(Number(places['Rybník'])||0,1),goal:1,tier:'Bronz'},
   {id:'lake',category:'Průzkumníci revírů',icon:'🌊',name:'Jezerní dobrodruh',desc:'Ulov alespoň jednu rybu na jezeře.',progress:Math.min(Number(places['Jezero'])||0,1),goal:1,tier:'Stříbro'},
   {id:'river',category:'Průzkumníci revírů',icon:'🏞️',name:'Říční dobrodruh',desc:'Ulov alespoň jednu rybu na řece.',progress:Math.min(Number(places['Řeka'])||0,1),goal:1,tier:'Zlato'},
+  {id:'waters',category:'Průzkumníci revírů',icon:'🧭',name:'Rybářský cestovatel',desc:'Ulov alespoň jednu rybu na každém ze tří revírů.',progress:['Rybník','Jezero','Řeka'].filter(p=>(Number(places[p])||0)>0).length,goal:3,unit:'revíry',tier:'Stříbro'},
   {id:'all-waters',category:'Průzkumníci revírů',icon:'🗺️',name:'Mistr všech revírů',desc:'Ulov alespoň 10 ryb na každém ze tří revírů.',progress:['Rybník','Jezero','Řeka'].filter(p=>(Number(places[p])||0)>=10).length,goal:3,unit:'revíry',tier:'Legendární'},
   {id:'level10',category:'Postup a vybavení',icon:'⭐',name:'Úroveň 10',desc:'Dosáhni hráčské úrovně 10.',progress:Math.min(level,10),goal:10,tier:'Bronz'},
   {id:'level25',category:'Postup a vybavení',icon:'🥈',name:'Úroveň 25',desc:'Dosáhni hráčské úrovně 25.',progress:Math.min(level,25),goal:25,tier:'Stříbro'},
