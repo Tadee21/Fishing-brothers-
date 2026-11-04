@@ -1861,7 +1861,7 @@ function updateFight(){
  if(now>=q.surgeAt){q.surgeUntil=now+1300+Math.random()*1100;q.surgeAt=now+5200+Math.random()*4800;q.event=p.style;}
  const pulling=pull*surge;
  // Tight brake and active reeling increase line tension; easing off lets the rod absorb the run.
- q.tension+=(pulling*(brake/48)*2.15)+(isReeling?2.2:0)-(isReeling?0:3.0)-gear.reelPower*.35;
+ q.tension+=(pulling*(brake/48)*0.55)+(isReeling ? 0.45 : 0)-(isReeling ? 0 : 0.7)-gear.reelPower*0.05;
  q.tension=Math.max(0,Math.min(115,q.tension));
  const safe=q.tension>=22&&q.tension<=79;
  if(q.tension>91)q.overTension+=dt;else q.overTension=Math.max(0,q.overTension-dt*1.8);
