@@ -1605,6 +1605,26 @@ body.fb-premium .fb-number,
 .fb-top>.fb-header-hud .hud-level>small{align-self:center!important;white-space:nowrap!important;text-align:right!important}
 .fb-top>.fb-header-hud .hud-level>i{grid-column:1/-1!important;align-self:end!important;height:6px!important;margin:0!important}
 @media(max-width:620px){.fb-top>.fb-header-hud .hud-coins,.fb-top>.fb-header-hud .hud-level{height:72px!important;min-height:72px!important;padding:7px 8px!important}}
+</style><style id="fb-realistic-fight-system">
+.fb-real-fight{display:grid!important;gap:12px!important}
+.fb-real-fight .fight-dashboard{display:grid!important;gap:11px!important;padding:14px!important;border:1px solid #a17a49!important;border-radius:14px!important;background:linear-gradient(145deg,#1b2d21,#100f0b)!important;box-shadow:inset 0 1px #f4d99a22,0 5px 14px #0008!important}
+.fb-real-fight .fight-title,.fb-real-fight .fight-meter-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}
+.fb-real-fight .fight-title{color:#f4d37d!important;font-size:15px!important}
+.fb-real-fight .fight-title span,.fb-real-fight .fight-meter-head strong{font-variant-numeric:tabular-nums!important;color:#ffe2a0!important;white-space:nowrap!important}
+.fb-real-fight .fight-meter{display:grid!important;gap:4px!important}
+.fb-real-fight .fight-meter-head{font-size:13px!important}
+.fb-real-fight .fight-track{height:11px!important;margin:0!important;background:#090e0b!important;border-color:#655137!important}
+.fb-real-fight .fight-track>div{height:100%!important;transition:width .18s linear!important}
+.fb-real-fight .energy-fill{background:linear-gradient(90deg,#4c9a63,#a7d47a)!important}
+.fb-real-fight .tension-fill{background:linear-gradient(90deg,#54a96a 0%,#e6c45b 72%,#d94c35 90%)!important}
+.fb-real-fight .distance-fill{background:linear-gradient(90deg,#6ea8c8,#e4c06c)!important}
+.fb-real-fight .fight-meter small,.fb-real-fight .fight-tip,.fb-real-fight .fight-brake small{color:#d2c09d!important;font-size:11px!important;line-height:1.4!important}
+.fb-real-fight .fight-event{padding:10px 12px!important;border:1px solid #80603b!important;border-radius:10px!important;background:linear-gradient(120deg,#392a19,#1c1710)!important;color:#ffe2a0!important;font-size:13px!important;font-weight:700!important;min-height:42px!important;display:flex!important;align-items:center!important}
+.fb-real-fight .fight-brake{display:grid!important;gap:6px!important;padding:10px!important;border-radius:10px!important;background:#0d1b14!important;border:1px solid #496047!important}
+.fb-real-fight input[type=range]{width:100%!important;accent-color:#e6bd65!important;min-height:24px!important;touch-action:pan-y!important}
+.fb-real-fight .hold-reel{min-height:58px!important;font-size:17px!important;touch-action:none!important}
+.fb-real-fight .fight-tip{text-align:center!important}
+@media(min-width:761px){#screen .fight-panel-desktop.fb-real-fight{max-width:820px!important;margin:14px auto!important}}
 </style></head>
 <body class="fb-premium">
 <header class="fb-top">
@@ -1786,7 +1806,7 @@ function renderFish(el){
  <div class="status" id="status">${state.message||'Připrav si vybavení a nahoď prut.'}</div>`;
  if(state.phase==='idle')inner+=`<button id="cast">🎯 Nahodit prut</button>`;
  if(state.phase==='waiting')inner+=`<div class="actions"><button id="bite">🔔 Zkontrolovat záběr</button><button class="secondary" id="cancel">Vytáhnout prut</button></div>`;
- if(state.phase==='fight'&&f)inner+=`<section class="fight-panel-desktop fight-active">${fishImage(f)}<div class="status"><b>🐟 Ryba bojuje!</b><br><span id="fightPct">${Math.round(state.progress)}%</span> zdoláno · <span id="fightTime">90</span> s zbývá<div class="fight-track"><div id="fightBar" style="width:${state.progress}%"></div></div><small id="fightHint">Podrž tlačítko a navíjej. Při puštění ryba získává převahu.</small></div><button id="reel" class="hold-reel" style="touch-action:none;user-select:none;-webkit-user-select:none">💪 PODRŽ A NAVÍJEJ</button></section>`;
+ if(state.phase==='fight'&&f){const q=state.fight||{energy:100,tension:25,distance:35,brake:45,event:'Ryba zabrala!'};inner+=`<section class="fight-panel-desktop fight-active fb-real-fight">${fishImage(f)}<div class="fight-dashboard"><div class="fight-title"><b>🐟 ZDOLÁVÁNÍ · ${escapeHtml(f.name)}</b><span id="fightTime">180 s</span></div><div class="fight-meter"><div class="fight-meter-head"><b>⚡ Energie ryby</b><strong id="fightEnergyText">${Math.round(q.energy)} %</strong></div><div class="fight-track"><div id="fightEnergyBar" class="energy-fill" style="width:${q.energy}%"></div></div></div><div class="fight-meter"><div class="fight-meter-head"><b>🧵 Napětí vlasce</b><strong id="fightTensionText">${Math.round(q.tension)} %</strong></div><div class="fight-track tension-track"><div id="fightTensionBar" class="tension-fill" style="width:${q.tension}%"></div></div><small id="fightTensionHint">Udržuj napětí přibližně mezi 25–80 %.</small></div><div class="fight-meter"><div class="fight-meter-head"><b>📏 Vzdálenost ryby</b><strong id="fightDistanceText">${Math.round(q.distance)} m</strong></div><div class="fight-track"><div id="fightDistanceBar" class="distance-fill" style="width:${Math.min(100,q.distance)}%"></div></div></div><div class="fight-event" id="fightEvent">${escapeHtml(q.event||'Ryba bojuje!')}</div><div class="fight-brake"><div class="fight-meter-head"><b>⚙️ Brzda navijáku</b><strong id="fightBrakeText">${Math.round(q.brake)} %</strong></div><input id="fightBrake" type="range" min="5" max="95" step="1" value="${q.brake}" aria-label="Nastavení brzdy navijáku"><small>Posuvníkem povol nebo utáhni brzdu podle výpadu ryby.</small></div><button id="reel" class="hold-reel" style="touch-action:none;user-select:none;-webkit-user-select:none">💪 PODRŽ A NAVÍJEJ</button><small class="fight-tip">Drž navíjení při bezpečném napětí. Při prudkém výpadu povol brzdu a na chvíli přestaň navíjet.</small></div></section>`;}
  if(state.phase==='caught'&&f)inner+=`<section class="fight-panel-desktop fight-caught">${fishImage(f)}<div class="card stack"><span class="badge">🏆 NOVÝ ÚLOVEK</span><h2>${f.name}</h2><div class="metrics"><div class="metric"><small>DÉLKA</small><strong>${f.cm} cm</strong></div><div class="metric"><small>VÁHA</small><strong>${f.kg} kg</strong></div></div><p class="catch-xp">⭐ Za tento úlovek získáš +${f.xpReward||Math.round(35+f.cm*1.1+f.kg*3)} XP</p><p class="muted">Orientační výkupní cena: ${money(f.reward)}</p><button id="sell">💰 Prodat rybu</button><button class="secondary" id="release">💚 Pustit rybu zpět</button></div></section>`;
  inner+=`</div><div class="card stack" style="margin-top:10px"><h2>🎒 Tvoje vybavení</h2><div class="ff-equipped-visuals"><div><img src="${ffAsset(state.selectedRod)}" alt="Prut"><small>Prut</small><b>${escapeHtml(ffItem(state.selectedRod)?.[1]||'Basic Rod')}</b></div><div><img src="${ffAsset(state.selectedReel)}" alt="Naviják"><small>Naviják</small><b>${escapeHtml(ffItem(state.selectedReel)?.[1]||'Basic Reel')}</b></div><div><img src="${ffAsset(state.selectedLine)}" alt="Vlasec"><small>Vlasec</small><b>${escapeHtml(ffItem(state.selectedLine)?.[1]||'Basic 0,20 mm')}</b></div><div><img src="${ffAsset(state.selectedBait)}" alt="Nástraha"><small>Nástraha</small><b>${escapeHtml(currentBaitItem()[2])}</b></div></div><button class="secondary" data-open-store>🛒 Upravit vybavení</button><h2 class="fish-gallery-title">🐟 Ryby v tomto revíru</h2><div class="fish-gallery">${fishData.filter(x=>x.places.includes(state.place)).map(x=>`<div class="fish-card" data-fish="${x.id}"><img class="fish-gallery-photo" src="${fishImages[x.id]}" alt="${escapeHtml(x.name)}" loading="lazy"><b>${x.name}</b><small>${x.min}–${x.max} cm</small></div>`).join('')}</div></div>`;
  el.innerHTML=inner;
@@ -1802,15 +1822,18 @@ function renderFish(el){
   if(candidates.length&&Math.random()<biteChance){
    const pool=preferred.length&&Math.random()<.35?preferred:candidates;const f=pool[Math.floor(Math.random()*pool.length)];
    const cm=Math.round(f.min+Math.pow(Math.random(),3.0)*(f.max-f.min));
-   const kg=weightFor(f,cm);state.current={...f,cm,kg,xpReward:Math.round(35+cm*1.1+kg*3),reward:Math.round(kg*f.price*(1+state.rod*.04))};state.phase='fight';state.progress=35;state.fightStarted=Date.now();state.message='ZÁBĚR! Ryba zabrala!'; 
+   const kg=weightFor(f,cm);state.current={...f,cm,kg,xpReward:Math.round(35+cm*1.1+kg*3),reward:Math.round(kg*f.price*(1+state.rod*.04))};state.phase='fight';state.progress=35;state.fightStarted=Date.now();state.fight={energy:100,tension:27,distance:Math.round(27+Math.random()*13),brake:45,event:'Záběr! Ryba se rozjíždí.',surgeAt:Date.now()+3500+Math.random()*3500,surgeUntil:0,overTension:0,slackTime:0};state.message='ZÁBĚR! Ryba zabrala!'; 
   }else{state.message='Zatím bez záběru. Zkus to znovu.';state.phase='idle'}
   render();
  };
  if(byId('reel')){
   const hold=byId('reel');
-  hold.onpointerdown=e=>{e.preventDefault();isReeling=true;hold.classList.add('holding');hold.textContent='💪 NAVÍJÍŠ…';};
+  hold.onpointerdown=e=>{e.preventDefault();isReeling=true;hold.classList.add('holding');hold.textContent='💪 NAVÍJÍŠ…';try{hold.setPointerCapture(e.pointerId)}catch(err){}};
+  hold.onpointerup=e=>{e.preventDefault();isReeling=false;hold.classList.remove('holding');hold.textContent='💪 PODRŽ A NAVÍJEJ';};
+  hold.onpointercancel=()=>{isReeling=false;hold.classList.remove('holding');hold.textContent='💪 PODRŽ A NAVÍJEJ';};
   hold.oncontextmenu=e=>e.preventDefault();
  }
+ const brake=byId('fightBrake');if(brake)brake.oninput=()=>{if(state.fight)state.fight.brake=Number(brake.value);const t=byId('fightBrakeText');if(t)t.textContent=brake.value+' %';};
  if(state.phase==='fight'&&byId('reel'))startFightTimer();
  if(byId('sell'))byId('sell').onclick=()=>finishCatch(false);
  if(byId('release'))byId('release').onclick=()=>finishCatch(true);
@@ -1826,26 +1849,53 @@ function endFight(won){
 }
 function updateFight(){
  if(state.phase!=='fight'||!state.current)return;
- const elapsed=(Date.now()-(state.fightStarted||Date.now()))/1000;
- const fightLimit=90+Math.min(60,Number(state.current.kg||1)*.35);
- const remaining=Math.max(0,fightLimit-elapsed);
- // Heavier fish pull harder; upgraded rods and reels give a meaningful advantage.
- const weightFactor=Math.min(5.8,Math.max(.85,Math.pow(state.current.kg/2.5,.72)));
- const gear=equippedStats();const gearPower=1+(Math.max(0,state.rod-1)*.025)+(Math.max(0,state.reel-1)*.035)+(gear.rodPower*.10)+(gear.reelPower*.12);const lineStress=Number(state.current.kg||0)>gear.lineCapacity?1.35:1;
- if(isReeling) state.progress += ((.92+state.reel*.12+state.rod*.08+gear.reelPower*.30+gear.rodPower*.18)*gearPower)/weightFactor;
- else state.progress -= ((.42+weightFactor*.42)*lineStress)/(1+state.reel*.06+state.rod*.04+gear.reelPower*.14+gear.rodPower*.08);
- state.progress=Math.max(0,Math.min(100,state.progress));
- const bar=document.getElementById('fightBar');
- const pct=document.getElementById('fightPct');
- const time=document.getElementById('fightTime');
+ const f=state.current,q=state.fight||(state.fight={energy:100,tension:27,distance:35,brake:45,event:'Ryba bojuje!',surgeAt:Date.now()+4000,surgeUntil:0,overTension:0,slackTime:0});
+ const now=Date.now(),dt=.2,elapsed=(now-(state.fightStarted||now))/1000;
+ const gear=equippedStats(),kg=Math.max(.2,Number(f.kg)||1);
+ const profile={kapr:{pull:1.08,burst:1.15,stamina:1.08,style:'Kapr se drží u dna a táhne do strany.'},amur:{pull:1.18,burst:1.35,stamina:1.3,style:'Amur vyráží do dlouhé rychlé jízdy!'},stika:{pull:.95,burst:1.65,stamina:.78,style:'Štika prudce mění směr a skáče!'},candat:{pull:1.02,burst:1.05,stamina:.92,style:'Candát se drží u dna a cuká hlavou.'},sumec:{pull:1.55,burst:1.2,stamina:1.5,style:'Sumec se opírá do prutu obrovskou silou!'},jeseter:{pull:1.22,burst:1.12,stamina:1.28,style:'Jeseter se snaží dostat zpět ke dnu.'},lin:{pull:.62,burst:.8,stamina:.7,style:'Lín se pomalu stáčí do strany.'},tolstolobik:{pull:1.25,burst:1.25,stamina:1.2,style:'Tolstolobik vyráží do prudkého tahu!'},bolen:{pull:.9,burst:1.7,stamina:.82,style:'Bolen vystřelil k hladině!'},okoun:{pull:.48,burst:1.0,stamina:.55,style:'Okoun prudce cuká a snaží se setřást háček.'}};
+ const p=profile[f.id]||{pull:1,burst:1,stamina:1,style:'Ryba bojuje ze všech sil.'};
+ const mass=Math.min(2.4,Math.max(.55,Math.pow(kg/3,.28)));
+ const pull=p.pull*mass*(1+Math.max(0,gear.rodPower)*.08);
+ const brake=Math.max(5,Math.min(95,Number(q.brake)||45));
+ const surge=now<q.surgeUntil?1.9:1;
+ if(now>=q.surgeAt){q.surgeUntil=now+1300+Math.random()*1100;q.surgeAt=now+5200+Math.random()*4800;q.event=p.style;}
+ const pulling=pull*surge;
+ // Tight brake and active reeling increase line tension; easing off lets the rod absorb the run.
+ q.tension+=(pulling*(brake/48)*2.15)+(isReeling?2.2:0)-(isReeling?0:3.0)-gear.reelPower*.35;
+ q.tension=Math.max(0,Math.min(115,q.tension));
+ const safe=q.tension>=22&&q.tension<=79;
+ if(q.tension>91)q.overTension+=dt;else q.overTension=Math.max(0,q.overTension-dt*1.8);
+ if(q.tension<10)q.slackTime+=dt;else q.slackTime=Math.max(0,q.slackTime-dt*1.5);
+ // The fish tires fastest when the angler reels under controlled, safe pressure.
+ if(isReeling&&safe)q.energy-=((.48+gear.reelPower*.17+gear.rodPower*.13)/p.stamina)*dt*5;
+ else q.energy-=.025*dt;
+ q.energy=Math.max(0,Math.min(100,q.energy));
+ const tired=1+(100-q.energy)/100*.85;
+ if(isReeling&&safe)q.distance-=(.23+gear.reelPower*.09+gear.rodPower*.06)*tired*dt*3.1;
+ else q.distance+=pulling*(brake<24?1.15:.28)*dt;
+ if(now<q.surgeUntil)q.distance+=pulling*.72*dt;
+ q.distance=Math.max(0,Math.min(100,q.distance));
+ const limit=180+Math.min(100,kg*1.3);
+ const remaining=Math.max(0,limit-elapsed);
+ state.progress=Math.max(0,Math.min(100,100-q.distance));
+ const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+ const width=(id,value)=>{const el=document.getElementById(id);if(el)el.style.width=Math.max(0,Math.min(100,value))+'%';};
+ set('fightTime',Math.ceil(remaining)+' s');
+ set('fightEnergyText',Math.round(q.energy)+' %');width('fightEnergyBar',q.energy);
+ set('fightTensionText',Math.round(q.tension)+' %');width('fightTensionBar',q.tension);
+ set('fightDistanceText',Math.round(q.distance)+' m');width('fightDistanceBar',q.distance);
+ set('fightBrakeText',Math.round(brake)+' %');
+ const hint=document.getElementById('fightTensionHint');
+ if(hint)hint.textContent=q.tension>85?'⚠️ Povol brzdu! Vlasec je extrémně napnutý.':q.tension<15?'⚠️ Pozor na volný vlasec, ryba může setřást háček.':'Udržuj napětí přibližně mezi 25–80 %.';
+ const event=document.getElementById('fightEvent');
+ if(event&&q.event)event.textContent=q.event;
  const button=document.getElementById('reel');
- if(bar)bar.style.width=state.progress+'%';
- if(pct)pct.textContent=Math.round(state.progress)+'%';
- if(time)time.textContent=Math.ceil(remaining);
  if(button&&!isReeling){button.classList.remove('holding');button.textContent='💪 PODRŽ A NAVÍJEJ';}
- if(state.progress<=0){endFight(false);return;}
- if(state.progress>=100){endFight(true);return;}
- if(remaining<=0){endFight(false);return;}
+ if(q.overTension>=1.6){endFight(false);state.message='Vlasec nevydržel prudký tah ryby a přetrhl se!';return;}
+ if(q.slackTime>=4){endFight(false);state.message='Vlasec příliš povolil a ryba se setřásla z háčku!';return;}
+ if(q.distance<=0.5){endFight(true);return;}
+ if(q.distance>=99.5){endFight(false);state.message='Ryba odjela příliš daleko a unikla!';return;}
+ if(remaining<=0){endFight(false);state.message='Souboj trval příliš dlouho a ryba unikla!';return;}
 }
 function startFightTimer(){
  if(fightTimer)clearInterval(fightTimer);
