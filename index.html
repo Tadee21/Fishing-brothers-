@@ -1533,6 +1533,15 @@ body.fb-premium .fb-number,
 #screen #onlineLeaderboard .leaderboard-row .leader-person strong{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:9px!important;min-width:0!important;overflow:visible!important;white-space:normal!important}
 #screen #onlineLeaderboard .leaderboard-row .leader-person strong .leader-level{display:inline-flex!important;flex:0 0 auto!important;margin-left:2px!important;padding:3px 9px!important;border:2px solid #e8bd62!important;border-radius:999px!important;background:linear-gradient(145deg,#6b4b20,#281b0d)!important;color:#ffe6a5!important;box-shadow:0 0 0 1px #f8dfa044 inset,0 2px 6px #0009!important;font:700 11px Georgia,serif!important;letter-spacing:.4px!important;white-space:nowrap!important}
 </style>
+
+<style id="fb-home-latest-inline-units">
+/* Homepage sidebar is outside #screen: keep number and unit together on each line. */
+.home-latest .latest-catch{grid-template-columns:88px minmax(0,1fr)!important;align-items:center!important}
+.home-latest .latest-catch-copy{display:flex!important;flex-direction:column!important;align-items:flex-start!important;min-width:0!important;width:100%!important;gap:5px!important}
+.home-latest .latest-catch-measure{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:3px!important;width:100%!important;margin:0!important;line-height:1.3!important}
+.home-latest .latest-catch-measure b{display:block!important;width:auto!important;max-width:100%!important;white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;line-height:1.3!important;font-size:14px!important}
+@media(max-width:480px){.home-latest .latest-catch{grid-template-columns:82px minmax(0,1fr)!important;gap:10px!important}.home-latest .latest-catch-measure b{font-size:14px!important}}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
