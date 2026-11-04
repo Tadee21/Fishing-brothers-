@@ -1625,6 +1625,19 @@ body.fb-premium .fb-number,
 .fb-real-fight .hold-reel{min-height:58px!important;font-size:17px!important;touch-action:none!important}
 .fb-real-fight .fight-tip{text-align:center!important}
 @media(min-width:761px){#screen .fight-panel-desktop.fb-real-fight{max-width:820px!important;margin:14px auto!important}}
+</style><style>
+.bite-wait{display:grid;gap:5px;text-align:center;padding:18px!important}
+.bite-wait b{font-size:18px;color:#f4d37d}
+.bite-wait small,.bite-nibble small{color:#d8c8a8}
+.bite-nibble,.bite-strike{margin:10px 0;padding:20px 14px;text-align:center;border:1px solid #b38a4d;border-radius:14px;background:linear-gradient(145deg,#3a2a18,#17120c);box-shadow:0 5px 15px #0008}
+.bite-nibble{display:grid;justify-items:center;gap:7px}
+.bite-light{width:15px;height:15px;border-radius:50%;background:#e6bd56;box-shadow:0 0 16px #f3c85c;animation:bitePulse .8s infinite alternate}
+.bite-strike{border:2px solid #e4b95e;background:linear-gradient(145deg,#5b3517,#21150b)}
+.bite-alarm{font-size:clamp(28px,7vw,42px);font-weight:900;color:#ffe18a;text-shadow:0 0 14px #f59e0b;animation:bitePulse .35s infinite alternate}
+.bite-strike p{margin:6px 0 14px;color:#f8e8c5}
+.bite-strike button{width:100%;min-height:66px!important;font-size:21px!important;background:linear-gradient(#d49a38,#7d3f12)!important;border:2px solid #ffe08a!important;box-shadow:0 0 18px #e49c35aa!important}
+.bite-strike small{display:block;margin-top:10px;color:#f5dca7}
+@keyframes bitePulse{from{opacity:.65;transform:scale(.97)}to{opacity:1;transform:scale(1.04)}}
 </style></head>
 <body class="fb-premium">
 <header class="fb-top">
@@ -1805,7 +1818,9 @@ function renderFish(el){
  <h2>🪱 Vyber nástrahu</h2><div class="choices bait-square-grid">${['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'].map(b=>{const preview=ffBaitPreviewForCategory(b);const recommended=(preview[6]||[]).map(id=>fishData.find(f=>f.id===id)?.name).filter(Boolean);return `<div class="choice bait-choice bait-square-card ${state.bait===b?'selected':''}" data-bait="${b}"><div class="bait-art-frame"><img src="${ffBaitImage(preview[0])}" alt="${escapeHtml(preview[2])}" loading="lazy"></div><div class="bait-copy"><b>${escapeHtml(preview[2])}</b><small>🐟 ${recommended.length?recommended.map(escapeHtml).join(', '):'Univerzální použití'}</small></div></div>`}).join('')}</div>
  <div class="status" id="status">${state.message||'Připrav si vybavení a nahoď prut.'}</div>`;
  if(state.phase==='idle')inner+=`<button id="cast">🎯 Nahodit prut</button>`;
- if(state.phase==='waiting')inner+=`<div class="actions"><button id="bite">🔔 Zkontrolovat záběr</button><button class="secondary" id="cancel">Vytáhnout prut</button></div>`;
+ if(state.phase==='waiting')inner+=`<div class="status bite-wait"><b>🎣 Čekáš na záběr…</b><small>Všímej si signalizátoru. Záběr může přijít každou chvíli.</small></div><button class="secondary" id="cancel">Vytáhnout prut</button>`;
+ if(state.phase==='nibble')inner+=`<div class="bite-nibble"><div class="bite-light"></div><b>👀 Něco se děje u nástrahy…</b><small>Jemné potahování. Připrav se!</small></div><button class="secondary" id="cancel">Vytáhnout prut</button>`;
+ if(state.phase==='strike')inner+=`<div class="bite-strike"><div class="bite-alarm">🔔 ZÁBĚR!</div><p>Ryba zabrala – zasekni včas!</p><button id="strike">⚡ ZASEKNOUT!</button><small id="strikeCountdown">Reaguj rychle, než ryba nástrahu pustí.</small></div><button class="secondary" id="cancel">Vytáhnout prut</button>`;
  if(state.phase==='fight'&&f){const q=state.fight||{energy:100,tension:25,distance:35,brake:45,event:'Ryba zabrala!'};inner+=`<section class="fight-panel-desktop fight-active fb-real-fight">${fishImage(f)}<div class="fight-dashboard"><div class="fight-title"><b>🐟 ZDOLÁVÁNÍ · ${escapeHtml(f.name)}</b><span id="fightTime">180 s</span></div><div class="fight-meter"><div class="fight-meter-head"><b>⚡ Energie ryby</b><strong id="fightEnergyText">${Math.round(q.energy)} %</strong></div><div class="fight-track"><div id="fightEnergyBar" class="energy-fill" style="width:${q.energy}%"></div></div></div><div class="fight-meter"><div class="fight-meter-head"><b>🧵 Napětí vlasce</b><strong id="fightTensionText">${Math.round(q.tension)} %</strong></div><div class="fight-track tension-track"><div id="fightTensionBar" class="tension-fill" style="width:${q.tension}%"></div></div><small id="fightTensionHint">Udržuj napětí přibližně mezi 25–80 %.</small></div><div class="fight-meter"><div class="fight-meter-head"><b>📏 Vzdálenost ryby</b><strong id="fightDistanceText">${Math.round(q.distance)} m</strong></div><div class="fight-track"><div id="fightDistanceBar" class="distance-fill" style="width:${Math.min(100,q.distance)}%"></div></div></div><div class="fight-event" id="fightEvent">${escapeHtml(q.event||'Ryba bojuje!')}</div><div class="fight-brake"><div class="fight-meter-head"><b>⚙️ Brzda navijáku</b><strong id="fightBrakeText">${Math.round(q.brake)} %</strong></div><input id="fightBrake" type="range" min="5" max="95" step="1" value="${q.brake}" aria-label="Nastavení brzdy navijáku"><small>Posuvníkem povol nebo utáhni brzdu podle výpadu ryby.</small></div><button id="reel" class="hold-reel" style="touch-action:none;user-select:none;-webkit-user-select:none">💪 PODRŽ A NAVÍJEJ</button><small class="fight-tip">Drž navíjení při bezpečném napětí. Při prudkém výpadu povol brzdu a na chvíli přestaň navíjet.</small></div></section>`;}
  if(state.phase==='caught'&&f)inner+=`<section class="fight-panel-desktop fight-caught">${fishImage(f)}<div class="card stack"><span class="badge">🏆 NOVÝ ÚLOVEK</span><h2>${f.name}</h2><div class="metrics"><div class="metric"><small>DÉLKA</small><strong>${f.cm} cm</strong></div><div class="metric"><small>VÁHA</small><strong>${f.kg} kg</strong></div></div><p class="catch-xp">⭐ Za tento úlovek získáš +${f.xpReward||Math.round(35+f.cm*1.1+f.kg*3)} XP</p><p class="muted">Orientační výkupní cena: ${money(f.reward)}</p><button id="sell">💰 Prodat rybu</button><button class="secondary" id="release">💚 Pustit rybu zpět</button></div></section>`;
  inner+=`</div><div class="card stack" style="margin-top:10px"><h2>🎒 Tvoje vybavení</h2><div class="ff-equipped-visuals"><div><img src="${ffAsset(state.selectedRod)}" alt="Prut"><small>Prut</small><b>${escapeHtml(ffItem(state.selectedRod)?.[1]||'Basic Rod')}</b></div><div><img src="${ffAsset(state.selectedReel)}" alt="Naviják"><small>Naviják</small><b>${escapeHtml(ffItem(state.selectedReel)?.[1]||'Basic Reel')}</b></div><div><img src="${ffAsset(state.selectedLine)}" alt="Vlasec"><small>Vlasec</small><b>${escapeHtml(ffItem(state.selectedLine)?.[1]||'Basic 0,20 mm')}</b></div><div><img src="${ffAsset(state.selectedBait)}" alt="Nástraha"><small>Nástraha</small><b>${escapeHtml(currentBaitItem()[2])}</b></div></div><button class="secondary" data-open-store>🛒 Upravit vybavení</button><h2 class="fish-gallery-title">🐟 Ryby v tomto revíru</h2><div class="fish-gallery">${fishData.filter(x=>x.places.includes(state.place)).map(x=>`<div class="fish-card" data-fish="${x.id}"><img class="fish-gallery-photo" src="${fishImages[x.id]}" alt="${escapeHtml(x.name)}" loading="lazy"><b>${x.name}</b><small>${x.min}–${x.max} cm</small></div>`).join('')}</div></div>`;
@@ -1814,18 +1829,10 @@ function renderFish(el){
  el.querySelectorAll('[data-bait]').forEach(x=>x.onclick=()=>{state.bait=x.dataset.bait;const selected=ffBaitPreviewForCategory(state.bait);if(selected)state.selectedBait=selected[0];render()});
  const byId=id=>el.querySelector('#'+id);
  el.querySelector('[data-open-store]')?.addEventListener('click',()=>{state.tab='shop';state.shopCategory='inventory';render()});
- if(byId('cast'))byId('cast').onclick=()=>{state.phase='waiting';state.message='Prut je nahozený. Sleduj signalizátor!';render()};
- if(byId('cancel'))byId('cancel').onclick=()=>{state.phase='idle';state.message='Prut jsi vytáhl z vody.';render()};
- if(byId('bite'))byId('bite').onclick=()=>{
-  const candidates=fishData.filter(f=>f.places.includes(state.place)&&f.baits.includes(state.bait));
-  const baitChoice=currentBaitItem();const preferred=candidates.filter(x=>baitChoice[6].includes(x.id));const biteChance=Math.min(.95,.48+state.rod*.025+state.baitLevel*.025+baitChoice[5]/100);
-  if(candidates.length&&Math.random()<biteChance){
-   const pool=preferred.length&&Math.random()<.35?preferred:candidates;const f=pool[Math.floor(Math.random()*pool.length)];
-   const cm=Math.round(f.min+Math.pow(Math.random(),3.0)*(f.max-f.min));
-   const kg=weightFor(f,cm);state.current={...f,cm,kg,xpReward:Math.round(35+cm*1.1+kg*3),reward:Math.round(kg*f.price*(1+state.rod*.04))};state.phase='fight';state.progress=35;state.fightStarted=Date.now();state.fight={energy:100,tension:27,distance:Math.round(24+Math.random()*10),brake:45,event:'Záběr! Ryba se rozjíždí.',surgeAt:Date.now()+3500+Math.random()*3500,surgeUntil:0,overTension:0,slackTime:0};state.message='ZÁBĚR! Ryba zabrala!'; 
-  }else{state.message='Zatím bez záběru. Zkus to znovu.';state.phase='idle'}
-  render();
- };
+ if(byId('cast'))byId('cast').onclick=()=>{state.phase='waiting';state.message='Prut je nahozený. Sleduj signalizátor!';render();startBiteSequence()};
+ if(byId('cancel'))byId('cancel').onclick=()=>{clearBiteTimers();state.phase='idle';state.current=null;state.message='Prut jsi vytáhl z vody.';render()};
+ if(byId('strike'))byId('strike').onclick=()=>{if(state.phase!=='strike')return;clearBiteTimers();beginFishFight(true)};
+
  if(byId('reel')){
   const hold=byId('reel');
   hold.onpointerdown=e=>{e.preventDefault();isReeling=true;hold.classList.add('holding');hold.textContent='💪 NAVÍJÍŠ…';try{hold.setPointerCapture(e.pointerId)}catch(err){}};
@@ -1837,6 +1844,47 @@ function renderFish(el){
  if(state.phase==='fight'&&byId('reel'))startFightTimer();
  if(byId('sell'))byId('sell').onclick=()=>finishCatch(false);
  if(byId('release'))byId('release').onclick=()=>finishCatch(true);
+}
+let biteWaitTimer=null,biteStageTimer=null,biteMissTimer=null;
+function clearBiteTimers(){
+ if(biteWaitTimer)clearTimeout(biteWaitTimer);
+ if(biteStageTimer)clearTimeout(biteStageTimer);
+ if(biteMissTimer)clearTimeout(biteMissTimer);
+ biteWaitTimer=biteStageTimer=biteMissTimer=null;
+}
+function startBiteSequence(){
+ clearBiteTimers();
+ const waitMs=6500+Math.random()*11500;
+ biteWaitTimer=setTimeout(()=>{
+  if(state.phase!=='waiting')return;
+  state.phase='nibble';state.message='Signalizátor se lehce ozývá…';render();
+  biteStageTimer=setTimeout(()=>{
+   if(state.phase!=='nibble')return;
+   state.phase='strike';state.message='ZÁBĚR! ZASEKNI!';render();
+   let remaining=3.2;
+   const label=document.getElementById('strikeCountdown');
+   const tick=()=>{if(state.phase!=='strike')return;remaining-=.2;if(label)label.textContent='Zbývá přibližně '+Math.max(0,remaining).toFixed(1)+' s';if(remaining>0)biteMissTimer=setTimeout(tick,200);else{clearBiteTimers();state.phase='idle';state.current=null;state.message='Pozdě! Ryba nástrahu pustila. Zkus znovu nahodit.';render();}};
+   biteMissTimer=setTimeout(tick,200);
+  },1800+Math.random()*1500);
+ },waitMs);
+}
+function beginFishFight(quickStrike){
+ const candidates=fishData.filter(f=>f.places.includes(state.place)&&f.baits.includes(state.bait));
+ const baitChoice=currentBaitItem();
+ const preferred=candidates.filter(x=>baitChoice[6].includes(x.id));
+ const biteChance=Math.min(.95,.48+state.rod*.025+state.baitLevel*.025+baitChoice[5]/100);
+ if(!candidates.length||Math.random()>=biteChance){
+  state.phase='idle';state.current=null;state.message='Ryba nástrahu jen ochutnala a odplula. Zkus znovu nahodit.';render();return;
+ }
+ const pool=preferred.length&&Math.random()<.35?preferred:candidates;
+ const f=pool[Math.floor(Math.random()*pool.length)];
+ const cm=Math.round(f.min+Math.pow(Math.random(),3.0)*(f.max-f.min));
+ const kg=weightFor(f,cm);
+ state.current={...f,cm,kg,xpReward:Math.round(35+cm*1.1+kg*3),reward:Math.round(kg*f.price*(1+state.rod*.04))};
+ state.phase='fight';state.progress=35;state.fightStarted=Date.now();
+ state.fight={energy:100,tension:quickStrike?27:39,distance:Math.round(24+Math.random()*10),brake:45,event:quickStrike?'Zasekl jsi včas! Ryba se rozjíždí.':'Pozdní zásek! Ryba je opatrná.',surgeAt:Date.now()+3500+Math.random()*3500,surgeUntil:0,overTension:0,slackTime:0};
+ state.message=quickStrike?'Skvělý zásek! Ryba zabrala!':'Ryba zabrala!';
+ render();
 }
 let isReeling=false, fightTimer=null;
 function endFight(won){
