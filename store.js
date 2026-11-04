@@ -17,12 +17,22 @@ function initStoreState(){
  state.ownedBaits=Array.isArray(state.ownedBaits)?state.ownedBaits:['bait-strawberry','corn-yellow','lure-kopyto','wob-minnow','live-worm'];
  state.selectedRod=state.selectedRod||'rod-basic';state.selectedReel=state.selectedReel||'reel-basic';state.selectedLine=state.selectedLine||'line-basic';state.selectedBait=state.selectedBait||'bait-strawberry';
  state.gearPurchases=state.gearPurchases||{};state.loadouts=Array.isArray(state.loadouts)?state.loadouts.slice(0,3):[null,null,null];while(state.loadouts.length<3)state.loadouts.push(null);
- state.shopCategory=state.shopCategory||'sets';state.activeLoadout=Math.max(0,Math.min(2,Number(state.activeLoadout)||0));
+ state.shopCategory=state.shopCategory||'sets';state.shopBaitCategory=state.shopBaitCategory||'Boilies';state.activeLoadout=Math.max(0,Math.min(2,Number(state.activeLoadout)||0));
  if(!state.ownedGear.includes(state.selectedRod))state.selectedRod='rod-basic';if(!state.ownedGear.includes(state.selectedReel))state.selectedReel='reel-basic';if(!state.ownedGear.includes(state.selectedLine))state.selectedLine='line-basic';if(!state.ownedBaits.includes(state.selectedBait))state.selectedBait=state.ownedBaits[0];
+ state.baitSelections=state.baitSelections&&typeof state.baitSelections==='object'?state.baitSelections:{};
+ const selected=FF_STORE.baits.find(x=>x[0]===state.selectedBait);
+ if(selected&&state.ownedBaits.includes(selected[0]))state.baitSelections[selected[1]]=selected[0];
+ for(const category of ['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha']){
+  const remembered=state.baitSelections[category];
+  if(!state.ownedBaits.includes(remembered)||!FF_STORE.baits.some(x=>x[0]===remembered&&x[1]===category)){
+   const firstOwned=FF_STORE.baits.find(x=>x[1]===category&&state.ownedBaits.includes(x[0]));
+   if(firstOwned)state.baitSelections[category]=firstOwned[0];else delete state.baitSelections[category];
+  }
+ }
 }
 function ffItem(id){return [...FF_STORE.rods,...FF_STORE.reels,...FF_STORE.lines].find(x=>x[0]===id);}
 function currentBaitItem(){return FF_STORE.baits.find(x=>x[0]===state.selectedBait)||FF_STORE.baits[0];}
-function ffBaitPreviewForCategory(category){return FF_STORE.baits.find(x=>x[1]===category&&x[0]===state.selectedBait)||FF_STORE.baits.find(x=>x[1]===category&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category)||FF_STORE.baits[0];}
+function ffBaitPreviewForCategory(category){const remembered=state.baitSelections?.[category];return FF_STORE.baits.find(x=>x[0]===remembered&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category&&x[0]===state.selectedBait&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category)||FF_STORE.baits[0];}
 function equippedStats(){
  const r=ffItem(state.selectedRod)||FF_STORE.rods[0],n=ffItem(state.selectedReel)||FF_STORE.reels[0],l=ffItem(state.selectedLine)||FF_STORE.lines[0];
  return {rodPower:Math.max(0,(Number((r[5].match(/Síla (\d+)/)||[])[1]||30)-30)/40),reelPower:Math.max(0,(Number((n[5].match(/Brzda (\d+)/)||[])[1]||4)-4)/4),lineCapacity:Number(((l[5].match(/Nosnost ([\d,]+)/)||[])[1]||'4').replace(',','.'))};
@@ -34,11 +44,11 @@ function ffBuy(id,group){
  const x=group==='baits'?FF_STORE.baits.find(y=>y[0]===id):FF_STORE[group].find(y=>y[0]===id);if(!x)return;
  const price=group==='baits'?x[3]:x[2],req=group==='baits'?x[4]:x[3],owned=group==='baits'?state.ownedBaits:state.ownedGear;
  if(owned.includes(id)||playerLevel()<req||state.money<price)return;state.money-=price;owned.push(id);
- if(group==='baits'){state.selectedBait=id;state.bait=x[1];}else{state.gearPurchases[id]=price;if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines')state.selectedLine=id;}
+ if(group==='baits'){state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}else{state.gearPurchases[id]=price;if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines')state.selectedLine=id;}
  save();render();
 }
 function ffEquip(id,group){
- if(group==='baits'){const x=FF_STORE.baits.find(y=>y[0]===id);if(!x||!state.ownedBaits.includes(id))return;state.selectedBait=id;state.bait=x[1];}
+ if(group==='baits'){const x=FF_STORE.baits.find(y=>y[0]===id);if(!x||!state.ownedBaits.includes(id))return;state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}
  else{if(!state.ownedGear.includes(id))return;if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines')state.selectedLine=id;}
  save();render();
 }
@@ -51,7 +61,7 @@ function ffSell(id){
  state.loadouts=state.loadouts.map(s=>s?{...s,rod:s.rod===id?'rod-basic':s.rod,reel:s.reel===id?'reel-basic':s.reel,line:s.line===id?'line-basic':s.line}:null);save();render();
 }
 function ffSaveLoadout(i){state.loadouts[i]={name:'Moje sestava '+(i+1),rod:state.selectedRod,reel:state.selectedReel,line:state.selectedLine,bait:state.selectedBait};state.activeLoadout=i;save();render();}
-function ffUseLoadout(i){const s=state.loadouts[i];if(!s||![s.rod,s.reel,s.line].every(x=>state.ownedGear.includes(x))||!state.ownedBaits.includes(s.bait))return;state.selectedRod=s.rod;state.selectedReel=s.reel;state.selectedLine=s.line;state.selectedBait=s.bait;state.bait=FF_STORE.baits.find(x=>x[0]===s.bait)?.[1]||state.bait;state.activeLoadout=i;save();render();}
+function ffUseLoadout(i){const s=state.loadouts[i];if(!s||![s.rod,s.reel,s.line].every(x=>state.ownedGear.includes(x))||!state.ownedBaits.includes(s.bait))return;state.selectedRod=s.rod;state.selectedReel=s.reel;state.selectedLine=s.line;state.selectedBait=s.bait;state.bait=FF_STORE.baits.find(x=>x[0]===s.bait)?.[1]||state.bait;state.baitSelections=state.baitSelections||{};const loadoutBait=FF_STORE.baits.find(x=>x[0]===s.bait);if(loadoutBait)state.baitSelections[loadoutBait[1]]=s.bait;state.activeLoadout=i;save();render();}
 function renderFishingFriendsShop(el){
  initStoreState();const cat=state.shopCategory,tab=FF_TABS.find(x=>x[0]===cat)||FF_TABS[0],lvl=playerLevel();
  function card(x,g){
@@ -62,7 +72,7 @@ function renderFishingFriendsShop(el){
  }
  let content='';
  if(['rods','reels','lines'].includes(cat))content='<div class="store-grid">'+FF_STORE[cat].map(x=>card(x,cat)).join('')+'</div>';
- else if(cat==='baits'){const cats=['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'];content='<div class="store-subnav">'+cats.map(c=>'<button data-bcat="'+c+'" class="'+(state.bait===c?'active':'')+'">'+c+'</button>').join('')+'</div><div class="store-grid">'+FF_STORE.baits.filter(x=>x[1]===state.bait).map(x=>card(x,'baits')).join('')+'</div>';}
+ else if(cat==='baits'){const cats=['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'];content='<div class="store-subnav">'+cats.map(c=>'<button data-bcat="'+c+'" class="'+(state.shopBaitCategory===c?'active':'')+'">'+c+'</button>').join('')+'</div><div class="store-grid">'+FF_STORE.baits.filter(x=>x[1]===state.shopBaitCategory).map(x=>card(x,'baits')).join('')+'</div>';}
  else if(cat==='sets'){content='<div class="store-set-list">'+FF_STORE.sets.map(s=>{const owned=[s[4],s[5],s[6]].every(id=>state.ownedGear.includes(id)),locked=lvl<s[3];return '<article class="store-set-card"><div class="store-set-icon"><img src="'+ffAsset(s[0])+'" alt="'+s[1]+'" loading="lazy"></div><div class="store-set-info"><h3>'+s[1]+'</h3><p>'+s[7]+'</p><small>'+[s[4],s[5],s[6]].map(id=>ffItem(id)[1]).join(' · ')+'</small><div class="store-price"><b>'+(s[2]?money(s[2]):'Zdarma')+'</b><small>Úroveň '+s[3]+'</small></div></div><button data-act="set" data-id="'+s[0]+'" '+(owned||locked||state.money<s[2]?'disabled':'')+'>'+(owned?'Vlastníš sestavu':locked?'🔒 Úroveň '+s[3]:s[2]?'Koupit':'Získat')+'</button></article>';}).join('')+'</div><div class="store-tip">Hotová sestava přidá do inventáře prut, naviják a vlasec. Každou součást můžeš později samostatně vyměnit.</div>';}
  else{
   const slots=state.loadouts.map((s,i)=>'<article class="loadout-card"><div class="loadout-number">'+(i+1)+'</div><div class="loadout-copy"><h3>'+(s?s.name:'Prázdná sestava')+'</h3><p>'+(s?[ffItem(s.rod)?.[1],ffItem(s.reel)?.[1],ffItem(s.line)?.[1],FF_STORE.baits.find(x=>x[0]===s.bait)?.[2]].filter(Boolean).join(' · '):'Ulož si aktuálně vybrané vybavení.')+'</p></div><div class="loadout-actions">'+(s?'<button data-act="use" data-slot="'+i+'">Použít</button>':'')+'<button class="store-select" data-act="save" data-slot="'+i+'">'+(s?'Přepsat':'Uložit')+'</button></div></article>').join('');
@@ -71,6 +81,6 @@ function renderFishingFriendsShop(el){
  }
  el.innerHTML='<section class="store-shell"><div class="store-hero"><div><small>FISHING FRIENDS · RYBÁŘSKÝ OBCHOD</small><h2>'+tab[2]+' '+tab[1]+'</h2><p>Vybav se podle svého stylu lovu. Každý detail může rozhodnout o trofejním úlovku.</p></div><div class="store-balance"><small>TVŮJ ROZPOČET</small><b>🪙 '+money(state.money)+'</b><span>⭐ Úroveň '+lvl+'</span></div></div><div class="store-layout"><aside class="store-sidebar">'+FF_TABS.map(x=>'<button data-ff-cat="'+x[0]+'" class="'+(cat===x[0]?'active':'')+'"><span>'+x[2]+'</span>'+x[1]+'</button>').join('')+'</aside><main class="store-main">'+content+'</main></div></section>';
  el.querySelectorAll('[data-ff-cat]').forEach(b=>b.onclick=()=>{state.shopCategory=b.dataset.ffCat;save();render();});
- el.querySelectorAll('[data-bcat]').forEach(b=>b.onclick=()=>{state.bait=b.dataset.bcat;render();});
+ el.querySelectorAll('[data-bcat]').forEach(b=>b.onclick=()=>{state.shopBaitCategory=b.dataset.bcat;save();render();});
  el.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{const a=b.dataset.act,id=b.dataset.id,g=b.dataset.group,i=Number(b.dataset.slot);if(a==='buy')ffBuy(id,g);if(a==='equip')ffEquip(id,g);if(a==='sell')ffSell(id);if(a==='save')ffSaveLoadout(i);if(a==='use')ffUseLoadout(i);if(a==='set'){const s=FF_STORE.sets.find(x=>x[0]===id);if(!s||lvl<s[3])return;const parts=s.slice(4,7),missing=parts.filter(x=>!state.ownedGear.includes(x));if(!missing.length)return;const total=parts.reduce((n,x)=>n+(ffItem(x)[2]||0),0),owned=parts.filter(x=>state.ownedGear.includes(x)).reduce((n,x)=>n+ffItem(x)[2],0),charge=Math.round(s[2]*(total?(total-owned)/total:1));if(state.money<charge)return;state.money-=charge;missing.forEach(x=>{state.ownedGear.push(x);state.gearPurchases[x]=Math.round(charge*(ffItem(x)[2]/(missing.reduce((n,y)=>n+ffItem(y)[2],0)||1)));});state.selectedRod=s[4];state.selectedReel=s[5];state.selectedLine=s[6];save();render();}});
 }
