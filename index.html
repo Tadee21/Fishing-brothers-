@@ -1542,6 +1542,14 @@ body.fb-premium .fb-number,
 .home-latest .latest-catch-measure b{display:block!important;width:auto!important;max-width:100%!important;white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;line-height:1.3!important;font-size:14px!important}
 @media(max-width:480px){.home-latest .latest-catch{grid-template-columns:82px minmax(0,1fr)!important;gap:10px!important}.home-latest .latest-catch-measure b{font-size:14px!important}}
 </style>
+
+<style id="fb-catch-measure-no-wrap-final">
+/* Force each measurement to be a single unbreakable inline unit (value + unit). */
+.home-latest .latest-catch-measure{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:4px!important;width:auto!important;max-width:none!important;overflow:visible!important}
+.home-latest .latest-catch-measure>b{display:inline-flex!important;flex:0 0 auto!important;flex-wrap:nowrap!important;align-items:baseline!important;justify-content:flex-start!important;white-space:pre!important;word-break:normal!important;overflow-wrap:normal!important;min-width:max-content!important;width:max-content!important;max-width:none!important}
+.home-latest .latest-catch-measure>b .fb-number{display:inline!important;white-space:pre!important;flex:0 0 auto!important}
+.home-latest .latest-catch-copy{min-width:0!important;overflow:visible!important}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
