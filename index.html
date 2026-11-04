@@ -1822,7 +1822,7 @@ function renderFish(el){
   if(candidates.length&&Math.random()<biteChance){
    const pool=preferred.length&&Math.random()<.35?preferred:candidates;const f=pool[Math.floor(Math.random()*pool.length)];
    const cm=Math.round(f.min+Math.pow(Math.random(),3.0)*(f.max-f.min));
-   const kg=weightFor(f,cm);state.current={...f,cm,kg,xpReward:Math.round(35+cm*1.1+kg*3),reward:Math.round(kg*f.price*(1+state.rod*.04))};state.phase='fight';state.progress=35;state.fightStarted=Date.now();state.fight={energy:100,tension:27,distance:Math.round(27+Math.random()*13),brake:45,event:'Záběr! Ryba se rozjíždí.',surgeAt:Date.now()+3500+Math.random()*3500,surgeUntil:0,overTension:0,slackTime:0};state.message='ZÁBĚR! Ryba zabrala!'; 
+   const kg=weightFor(f,cm);state.current={...f,cm,kg,xpReward:Math.round(35+cm*1.1+kg*3),reward:Math.round(kg*f.price*(1+state.rod*.04))};state.phase='fight';state.progress=35;state.fightStarted=Date.now();state.fight={energy:100,tension:27,distance:Math.round(24+Math.random()*10),brake:45,event:'Záběr! Ryba se rozjíždí.',surgeAt:Date.now()+3500+Math.random()*3500,surgeUntil:0,overTension:0,slackTime:0};state.message='ZÁBĚR! Ryba zabrala!'; 
   }else{state.message='Zatím bez záběru. Zkus to znovu.';state.phase='idle'}
   render();
  };
@@ -1861,17 +1861,17 @@ function updateFight(){
  if(now>=q.surgeAt){q.surgeUntil=now+1300+Math.random()*1100;q.surgeAt=now+5200+Math.random()*4800;q.event=p.style;}
  const pulling=pull*surge;
  // Tight brake and active reeling increase line tension; easing off lets the rod absorb the run.
- q.tension+=(pulling*(brake/48)*0.55)+(isReeling ? 0.45 : 0)-(isReeling ? 0 : 0.7)-gear.reelPower*0.05;
+ q.tension+=(pulling*(brake/48)*0.22)+(isReeling ? 0.18 : 0)-(isReeling ? 0 : 0.7)-gear.reelPower*0.05;
  q.tension=Math.max(0,Math.min(115,q.tension));
  const safe=q.tension>=22&&q.tension<=79;
  if(q.tension>91)q.overTension+=dt;else q.overTension=Math.max(0,q.overTension-dt*1.8);
  if(q.tension<10)q.slackTime+=dt;else q.slackTime=Math.max(0,q.slackTime-dt*1.5);
  // The fish tires fastest when the angler reels under controlled, safe pressure.
- if(isReeling&&safe)q.energy-=((.48+gear.reelPower*.17+gear.rodPower*.13)/p.stamina)*dt*5;
+ if(isReeling&&safe)q.energy-=((.48+gear.reelPower*.17+gear.rodPower*.13)/p.stamina)*dt*7.5;
  else q.energy-=.025*dt;
  q.energy=Math.max(0,Math.min(100,q.energy));
  const tired=1+(100-q.energy)/100*.85;
- if(isReeling&&safe)q.distance-=(.23+gear.reelPower*.09+gear.rodPower*.06)*tired*dt*3.1;
+ if(isReeling&&safe)q.distance-=(.38+gear.reelPower*.09+gear.rodPower*.06)*tired*dt*4.0;
  else q.distance+=pulling*(brake<24?1.15:.28)*dt;
  if(now<q.surgeUntil)q.distance+=pulling*.72*dt;
  q.distance=Math.max(0,Math.min(100,q.distance));
