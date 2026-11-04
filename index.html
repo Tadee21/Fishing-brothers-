@@ -1475,7 +1475,7 @@ display:block!important;width:100%!important;height:100%!important;min-width:0!i
 <style id="fb-shop-tabs-and-leader-level">
 /* Compact level chip beside each angler in the leaderboard */
 .fb-ranking .leader-person strong{display:flex!important;align-items:center!important;gap:6px!important;min-width:0!important}
-.fb-ranking .leader-level{display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;padding:2px 5px!important;border:1px solid #94703e!important;border-radius:10px!important;background:#302417!important;color:#f5d27d!important;font:700 9px Georgia,serif!important;letter-spacing:.2px!important;font-style:normal!important}
+.fb-ranking .leader-level{display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;padding:3px 8px!important;border:1.5px solid #e5b95e!important;border-radius:999px!important;background:linear-gradient(145deg,#59401f,#24190e)!important;color:#ffe19a!important;box-shadow:inset 0 0 0 1px #f5d98b33,0 2px 5px #0008!important;font:700 10px Georgia,serif!important;letter-spacing:.35px!important;font-style:normal!important;white-space:nowrap!important}
 /* Five lure-category buttons in a clean, centered two-column layout on phones */
 #screen .store-subnav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;align-items:stretch!important}
 #screen .store-subnav button{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere!important;min-width:0!important;min-height:44px!important;padding:8px 7px!important;line-height:1.2!important;font-size:12px!important}
@@ -1501,7 +1501,26 @@ body.fb-premium .fb-number,
   letter-spacing:0!important;
   white-space:nowrap!important;
 }
-</style></head>
+</style>
+<style id="fb-profile-and-catch-polish">
+/* Poslední úlovek: dvě jasně oddělené hodnoty pod sebou. */
+#screen .latest-catch-copy{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important;min-width:0!important}
+#screen .latest-catch-measure{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:2px!important;margin:0!important;font-size:14px!important;line-height:1.35!important;color:#f4d58a!important}
+#screen .latest-catch-measure b{display:block!important;margin:0!important;font-size:14px!important;font-weight:800!important}
+#screen .latest-catch-copy>small{display:block!important;margin-top:3px!important;line-height:1.4!important}
+/* Menší čísla v horním HUD, ale stále dobře čitelná. */
+.fb-header-hud .hud-coins strong{font-size:clamp(15px,3.6vw,20px)!important;letter-spacing:.3px!important}
+.fb-header-hud .hud-level>span{font-size:clamp(14px,3.4vw,18px)!important}
+.fb-header-hud .hud-level small{font-size:11px!important;letter-spacing:0!important}
+.fb-header-hud .hud-coins,.fb-header-hud .hud-level{gap:6px!important}
+/* Profil hráče: tři vyvážené metriky. */
+#screen .account-profile-metrics{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+#screen .account-profile-metrics .metric{min-width:0!important;padding:10px!important}
+#screen .account-profile-metrics .metric small{font-size:10px!important;line-height:1.25!important}
+#screen .account-profile-metrics .metric strong{font-size:clamp(17px,4.6vw,23px)!important;line-height:1.2!important;overflow-wrap:anywhere!important}
+@media(max-width:390px){#screen .account-profile-metrics{gap:5px!important}#screen .account-profile-metrics .metric{padding:8px 5px!important}#screen .account-profile-metrics .metric strong{font-size:16px!important}}
+</style>
+</head>
 <body class="fb-premium">
 <header class="fb-top">
  <div class="brand">
@@ -1660,7 +1679,7 @@ function renderHome(el){
    </div>
    <aside class="home-side home-side-right">
     <section class="home-panel home-leader-panel"><h2>🏆 TOP RYBÁŘI</h2><div class="home-leader-subtitle">Pořadí podle délky a hmotnosti trofejních ryb</div><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section>
-    <section class="home-panel home-latest"><h2>📸 Poslední úlovek</h2>${(state.lastCatch||recent)?(()=>{const c=state.lastCatch||recent;return `<div class="latest-catch"><div class="latest-fish-art"><img src="${fishImages[fishIdForCatch(c)]}" alt="${escapeHtml(c.name)}" loading="eager"></div><div class="latest-catch-copy"><b>${escapeHtml(c.name)}</b><span>${c.cm} cm · ${Number(c.kg).toFixed(2)} kg</span><small>${escapeHtml(c.place||'Revír')} · ${escapeHtml(c.action||'Úlovek')}</small></div></div>`;})():'<div class="latest-empty">🎣<p>Zatím žádný úlovek.</p><small>Tvůj první úlovek čeká na hladině.</small></div>'}</section>
+    <section class="home-panel home-latest"><h2>📸 Poslední úlovek</h2>${(state.lastCatch||recent)?(()=>{const c=state.lastCatch||recent;return `<div class="latest-catch"><div class="latest-fish-art"><img src="${fishImages[fishIdForCatch(c)]}" alt="${escapeHtml(c.name)}" loading="eager"></div><div class="latest-catch-copy"><b>${escapeHtml(c.name)}</b><span class="latest-catch-measure"><b>${c.cm} cm</b><b>${Number(c.kg).toFixed(2)} kg</b></span><small>${escapeHtml(c.place||'Revír')} · ${escapeHtml(c.action||'Úlovek')}</small></div></div>`;})():'<div class="latest-empty">🎣<p>Zatím žádný úlovek.</p><small>Tvůj první úlovek čeká na hladině.</small></div>'}</section>
    </aside>
   </div>
  </section>`;
@@ -1857,7 +1876,7 @@ async function renderAccount(el){
   document.querySelector('#login').onclick=async()=>{const email=document.querySelector('#authEmail').value.trim(),password=document.querySelector('#authPassword').value;const {error}=await sb.auth.signInWithPassword({email,password});accountMessage(error?error.message:'Přihlášení proběhlo.');};return;
  }
  const username=currentProfile?.username||currentUser.user_metadata?.username||currentUser.email;
- el.innerHTML=`<div class="card stack"><div class="row"><div><h2>👤 ${escapeHtml(username)}</h2><small class="muted">${escapeHtml(currentUser.email||'')}</small></div><button class="secondary" id="logout">Odhlásit</button></div><div class="metrics"><div class="metric"><small>ÚROVEŇ PRUTU</small><strong>${state.rod}</strong></div><div class="metric"><small>ÚLOVKY</small><strong>${state.count}</strong></div></div><h2>🤝 Kamarádi</h2><div class="account-grid"><input class="wide" id="friendSearch" placeholder="Najít hráče podle přezdívky"><button id="searchPlayers" class="wide">Vyhledat hráče</button></div><div id="playerResults" class="account-list"></div><h3>📨 Žádosti o přátelství</h3><div id="friendRequests" class="account-list">Načítám…</div><h3>🟢 Moji kamarádi</h3><div id="friendList" class="account-list">Načítám…</div><p id="accountMsg" class="auth-note"></p></div>`;
+ el.innerHTML=`<div class="card stack"><div class="row"><div><h2>👤 ${escapeHtml(username)}</h2><small class="muted">${escapeHtml(currentUser.email||'')}</small></div><button class="secondary" id="logout">Odhlásit</button></div><div class="metrics account-profile-metrics"><div class="metric"><small>ÚROVEŇ HRÁČE</small><strong>LVL ${playerLevel()}</strong></div><div class="metric"><small>ÚLOVKY</small><strong>${state.count}</strong></div><div class="metric"><small>KAMARÁDI</small><strong id="friendCount">—</strong></div></div><h2>🤝 Kamarádi</h2><div class="account-grid"><input class="wide" id="friendSearch" placeholder="Najít hráče podle přezdívky"><button id="searchPlayers" class="wide">Vyhledat hráče</button></div><div id="playerResults" class="account-list"></div><h3>📨 Žádosti o přátelství</h3><div id="friendRequests" class="account-list">Načítám…</div><h3>🟢 Moji kamarádi</h3><div id="friendList" class="account-list">Načítám…</div><p id="accountMsg" class="auth-note"></p></div>`;
  document.querySelector('#logout').onclick=async()=>{await sb.auth.signOut();};
  document.querySelector('#searchPlayers').onclick=searchPlayers;await loadFriends();
 }
@@ -1866,7 +1885,7 @@ async function searchPlayers(){const q=document.querySelector('#friendSearch').v
 function presenceLabel(ts){if(!ts)return 'Naposledy neznámá aktivita';const mins=Math.floor((Date.now()-new Date(ts).getTime())/60000);return mins<5?'Pravděpodobně online':mins<60?`Aktivní před ${mins} min`: `Naposledy ${new Date(ts).toLocaleString('cs-CZ')}`;}
 async function sendFriendRequest(id){const {error}=await sb.from('friendships').insert({requester_id:currentUser.id,addressee_id:id,status:'pending'});accountMessage(error?error.message:'Žádost o přátelství odeslána.');await loadFriends();}
 async function loadFriends(){if(!currentUser)return;const req=document.querySelector('#friendRequests'),list=document.querySelector('#friendList');if(!req||!list)return;const {data:incoming,error}=await sb.from('friendships').select('id,requester_id,profiles!friendships_requester_id_fkey(username)').eq('addressee_id',currentUser.id).eq('status','pending');req.innerHTML=error?escapeHtml(error.message):(incoming?.length?incoming.map(r=>`<div class="account-row"><span>${escapeHtml(r.profiles?.username||'Rybář')}</span><button data-accept="${r.id}">Přijmout</button></div>`).join(''):'Žádné nové žádosti.');req.querySelectorAll('[data-accept]').forEach(b=>b.onclick=async()=>{const {error}=await sb.from('friendships').update({status:'accepted'}).eq('id',b.dataset.accept);accountMessage(error?error.message:'Kamarád přidán.');loadFriends();});
- const {data:friends,error:e2}=await sb.from('friendships').select('id,requester_id,addressee_id,requester:profiles!friendships_requester_id_fkey(username,last_seen),addressee:profiles!friendships_addressee_id_fkey(username,last_seen)').eq('status','accepted').or(`requester_id.eq.${currentUser.id},addressee_id.eq.${currentUser.id}`);list.innerHTML=e2?escapeHtml(e2.message):(friends?.length?friends.map(f=>{const p=f.requester_id===currentUser.id?f.addressee:f.requester;return `<div class="account-row"><span><i class="${new Date(p?.last_seen||0)>new Date(Date.now()-5*60000)?'online-dot':'offline-dot'}"></i>${escapeHtml(p?.username||'Rybář')}<small>${presenceLabel(p?.last_seen)}</small></span><button class="secondary" data-removefriend="${f.id}">Odebrat</button></div>`}).join(''):'Zatím nemáš žádné kamarády.');list.querySelectorAll('[data-removefriend]').forEach(b=>b.onclick=async()=>{await sb.from('friendships').delete().eq('id',b.dataset.removefriend);loadFriends();});}
+ const {data:friends,error:e2}=await sb.from('friendships').select('id,requester_id,addressee_id,requester:profiles!friendships_requester_id_fkey(username,last_seen),addressee:profiles!friendships_addressee_id_fkey(username,last_seen)').eq('status','accepted').or(`requester_id.eq.${currentUser.id},addressee_id.eq.${currentUser.id}`);list.innerHTML=e2?escapeHtml(e2.message):(friends?.length?friends.map(f=>{const p=f.requester_id===currentUser.id?f.addressee:f.requester;return `<div class="account-row"><span><i class="${new Date(p?.last_seen||0)>new Date(Date.now()-5*60000)?'online-dot':'offline-dot'}"></i>${escapeHtml(p?.username||'Rybář')}<small>${presenceLabel(p?.last_seen)}</small></span><button class="secondary" data-removefriend="${f.id}">Odebrat</button></div>`}).join(''):'Zatím nemáš žádné kamarády.');const countEl=document.querySelector('#friendCount');if(countEl)countEl.textContent=String(friends?.length||0);list.querySelectorAll('[data-removefriend]').forEach(b=>b.onclick=async()=>{await sb.from('friendships').delete().eq('id',b.dataset.removefriend);loadFriends();});}
 async function renderOnlineLeaderboard(place=window.fbAchievementPlace||'Rybník',metric=window.fbAchievementMetric||'length'){
  const box=document.querySelector('#onlineLeaderboard'),side=document.querySelector('#sideLeaderboard');
  if(!sb){const msg='<p class="muted">Pro online žebříček se přihlas ke svému účtu.</p>';if(box)box.innerHTML=msg;if(side)side.innerHTML=msg;return;}
