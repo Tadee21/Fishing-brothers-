@@ -1520,6 +1520,19 @@ body.fb-premium .fb-number,
 #screen .account-profile-metrics .metric strong{font-size:clamp(17px,4.6vw,23px)!important;line-height:1.2!important;overflow-wrap:anywhere!important}
 @media(max-width:390px){#screen .account-profile-metrics{gap:5px!important}#screen .account-profile-metrics .metric{padding:8px 5px!important}#screen .account-profile-metrics .metric strong{font-size:16px!important}}
 </style>
+
+<style id="fb-fix-catch-wrap-and-level-spacing">
+/* Keep each measurement (including its unit) on one clean line. */
+#screen .latest-catch{grid-template-columns:88px minmax(0,1fr)!important;align-items:center!important}
+#screen .latest-catch-copy{min-width:0!important;width:100%!important;align-items:flex-start!important}
+#screen .latest-catch-measure{display:grid!important;grid-template-columns:1fr!important;gap:3px!important;width:max-content!important;max-width:100%!important}
+#screen .latest-catch-measure b{display:block!important;width:max-content!important;max-width:100%!important;white-space:nowrap!important;overflow-wrap:normal!important;word-break:keep-all!important;line-height:1.25!important}
+@media(max-width:480px){#screen .latest-catch{grid-template-columns:82px minmax(0,1fr)!important;gap:10px!important}}
+/* Separate the player name and gold level badge in the achievement TOP 5 list. */
+#screen #onlineLeaderboard .leaderboard-row .leader-person{min-width:0!important}
+#screen #onlineLeaderboard .leaderboard-row .leader-person strong{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:9px!important;min-width:0!important;overflow:visible!important;white-space:normal!important}
+#screen #onlineLeaderboard .leaderboard-row .leader-person strong .leader-level{display:inline-flex!important;flex:0 0 auto!important;margin-left:2px!important;padding:3px 9px!important;border:2px solid #e8bd62!important;border-radius:999px!important;background:linear-gradient(145deg,#6b4b20,#281b0d)!important;color:#ffe6a5!important;box-shadow:0 0 0 1px #f8dfa044 inset,0 2px 6px #0009!important;font:700 11px Georgia,serif!important;letter-spacing:.4px!important;white-space:nowrap!important}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
