@@ -1490,12 +1490,15 @@ display:block!important;width:100%!important;height:100%!important;min-width:0!i
 #screen input,#screen select,#screen textarea,#screen button{font:inherit!important;font-variant-numeric:lining-nums tabular-nums!important}
 </style><style id="fb-number-font-final">
 /* Dedicated consistent font for every numeric token, independent of surrounding typography. */
-body.fb-premium .fb-number{
-  font-family:Arial,Helvetica,sans-serif!important;
+/* Higher specificity than the game's general #screen typography. */
+body.fb-premium .fb-number,
+#screen .fb-number,
+.fb-top .fb-number{
+  font-family:Verdana,Geneva,sans-serif!important;
   font-variant-numeric:lining-nums tabular-nums!important;
   font-feature-settings:"lnum" 1,"tnum" 1!important;
-  font-weight:inherit!important;
-  letter-spacing:.01em!important;
+  font-weight:600!important;
+  letter-spacing:0!important;
   white-space:nowrap!important;
 }
 </style></head>
