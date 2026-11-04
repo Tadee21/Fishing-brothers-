@@ -1560,6 +1560,15 @@ body.fb-premium .fb-number,
 #screen .ff-equipped-visuals b{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.3!important}
 @media(max-width:520px){#screen .ff-equipped-visuals{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}#screen .ff-equipped-visuals>div{padding:8px!important}#screen .ff-equipped-visuals img{height:92px!important;max-height:92px!important}}
 </style>
+
+<style id="fb-game-bait-art-centered">
+/* In-game lure tiles: center each complete bait image inside its own frame. */
+#screen .bait-square-grid .bait-square-card{display:flex!important;flex-direction:column!important;align-items:stretch!important;min-width:0!important}
+#screen .bait-square-grid .bait-square-card .bait-art-frame{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:136px!important;min-height:136px!important;box-sizing:border-box!important;padding:9px!important;overflow:hidden!important;border-radius:12px!important;background:radial-gradient(ellipse at center,#244633,#0b1b13 78%)!important}
+#screen .bait-square-grid .bait-square-card .bait-art-frame img{display:block!important;position:static!important;inset:auto!important;flex:0 1 auto!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:100%!important;max-height:100%!important;margin:auto!important;padding:0!important;object-fit:contain!important;object-position:center center!important;transform:none!important;border:0!important;border-radius:7px!important;background:transparent!important;box-shadow:none!important}
+#screen .bait-square-grid .bait-square-card .bait-copy{width:100%!important;min-width:0!important;box-sizing:border-box!important}
+@media(max-width:620px){#screen .bait-square-grid .bait-square-card .bait-art-frame{height:126px!important;min-height:126px!important;padding:8px!important}}
+</style>
 </head>
 <body class="fb-premium">
 <header class="fb-top">
