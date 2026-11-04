@@ -1989,30 +1989,47 @@ function renderShop(el){renderFishingFriendsShop(el);}
 
 function getFishingAchievements(){
  const stats=state.achievementStats||{},species=stats.species||{},places=stats.places||{};
- const carp=species.kapr||{};
+ const records=state.records||[];
+ const level=playerLevel();
+ const speciesBadges=[
+  ['kapr','Kapří král','👑'],['amur','Amuří specialista','🌿'],['stika','Král štik','🦈'],
+  ['candat','Candátí specialista','🌙'],['sumec','Sumčí legenda','🐋'],['jeseter','Jeseteří lovec','🛡️']
+ ].map(([id,name,icon])=>({id:'species-'+id,category:'Mistři jednotlivých druhů',icon,name,desc:'Chyť 10 kusů: '+(fishData.find(f=>f.id===id)?.name||name)+'.',progress:Math.min(Number(species[id]?.count)||0,10),goal:10,tier:'Zlato'}));
  const items=[
-  {id:'first',icon:'🎣',name:'První úlovek',desc:'Chyť svou první rybu.',progress:Math.min(state.count,1),goal:1,tier:'Bronz'},
-  {id:'ten',icon:'🐟',name:'Rybářský začátečník',desc:'Dostaň se na 10 úlovků.',progress:Math.min(state.count,10),goal:10,tier:'Bronz'},
-  {id:'hundred',icon:'🏅',name:'Zkušený rybář',desc:'Dostaň se na 100 úlovků.',progress:Math.min(state.count,100),goal:100,tier:'Zlato'},
-  {id:'predator',icon:'🦈',name:'Lovec dravců',desc:'Chyť 25 dravých ryb.',progress:Math.min(Number(stats.predators)||0,25),goal:25,tier:'Stříbro'},
-  {id:'carp',icon:'🐠',name:'Kapr mistr',desc:'Chyť kapra dlouhého alespoň 90 cm.',progress:Math.min(Number(carp.maxCm)||0,90),goal:90,unit:'cm',tier:'Zlato'},
-  {id:'heavy',icon:'⚖️',name:'Těžká váha',desc:'Ulov rybu těžší než 20 kg.',progress:Math.min(Number(state.bestWeight)||0,20),goal:20,unit:'kg',tier:'Zlato'},
-  {id:'long',icon:'📏',name:'Dlouhá trofej',desc:'Ulov rybu delší než 120 cm.',progress:Math.min(Number(state.best)||0,120),goal:120,unit:'cm',tier:'Legendární'},
-  {id:'waters',icon:'🗺️',name:'Rybářský cestovatel',desc:'Ulov rybu na všech třech revírech.',progress:['Rybník','Jezero','Řeka'].filter(p=>(Number(places[p])||0)>0).length,goal:3,tier:'Stříbro'},
-  {id:'morning',icon:'🌅',name:'Ranní rybář',desc:'Chyť 10 ryb mezi 5:00 a 10:00.',progress:Math.min(Number(stats.morning)||0,10),goal:10,tier:'Bronz'},
-  {id:'night',icon:'🌙',name:'Noční lovec',desc:'Chyť 10 ryb mezi 22:00 a 5:00.',progress:Math.min(Number(stats.night)||0,10),goal:10,tier:'Stříbro'},
-  {id:'trophies',icon:'💎',name:'Sběratel trofejí',desc:'Získej 25 trofejních úlovků.',progress:Math.min((state.records||[]).length,25),goal:25,tier:'Legendární'}
+  {id:'first',category:'Rybářské úspěchy',icon:'🎣',name:'První úlovek',desc:'Chyť svou první rybu.',progress:Math.min(Number(state.count)||0,1),goal:1,tier:'Bronz'},
+  {id:'ten',category:'Rybářské úspěchy',icon:'🐟',name:'10 ulovených ryb',desc:'Dostaň se na 10 úlovků.',progress:Math.min(Number(state.count)||0,10),goal:10,tier:'Bronz'},
+  {id:'fifty',category:'Rybářské úspěchy',icon:'🏅',name:'50 ulovených ryb',desc:'Dostaň se na 50 úlovků.',progress:Math.min(Number(state.count)||0,50),goal:50,tier:'Stříbro'},
+  {id:'hundred',category:'Rybářské úspěchy',icon:'🏆',name:'100 ulovených ryb',desc:'Dostaň se na 100 úlovků.',progress:Math.min(Number(state.count)||0,100),goal:100,tier:'Zlato'},
+  {id:'fivehundred',category:'Rybářské úspěchy',icon:'💯',name:'500 ulovených ryb',desc:'Dostaň se na 500 úlovků.',progress:Math.min(Number(state.count)||0,500),goal:500,tier:'Legendární'},
+  ...speciesBadges,
+  {id:'trophy-first',category:'Vzácné úlovky',icon:'💎',name:'První trofejní ryba',desc:'Ulov první rybu nad trofejní hranicí jejího druhu.',progress:Math.min(records.filter(r=>r.cm >= (fishData.find(f=>f.id===r.id)?.trophy||999)).length,1),goal:1,tier:'Bronz'},
+  {id:'length100',category:'Vzácné úlovky',icon:'📏',name:'Ryba nad 100 cm',desc:'Ulov rybu dlouhou alespoň 100 cm.',progress:Math.min(Number(state.best)||0,100),goal:100,unit:'cm',tier:'Stříbro'},
+  {id:'length120',category:'Vzácné úlovky',icon:'📐',name:'Ryba nad 120 cm',desc:'Ulov rybu dlouhou alespoň 120 cm.',progress:Math.min(Number(state.best)||0,120),goal:120,unit:'cm',tier:'Zlato'},
+  {id:'length150',category:'Vzácné úlovky',icon:'🌟',name:'Ryba nad 150 cm',desc:'Ulov rybu dlouhou alespoň 150 cm.',progress:Math.min(Number(state.best)||0,150),goal:150,unit:'cm',tier:'Legendární'},
+  {id:'heavy-record',category:'Vzácné úlovky',icon:'⚖️',name:'Rekordní hmotnost',desc:'Ulov rybu těžší než 30 kg.',progress:Math.min(Number(state.bestWeight)||0,30),goal:30,unit:'kg',tier:'Legendární'},
+  {id:'pond',category:'Průzkumníci revírů',icon:'🌿',name:'Rybář rybníků',desc:'Ulov alespoň jednu rybu na rybníku.',progress:Math.min(Number(places['Rybník'])||0,1),goal:1,tier:'Bronz'},
+  {id:'lake',category:'Průzkumníci revírů',icon:'🌊',name:'Jezerní dobrodruh',desc:'Ulov alespoň jednu rybu na jezeře.',progress:Math.min(Number(places['Jezero'])||0,1),goal:1,tier:'Stříbro'},
+  {id:'river',category:'Průzkumníci revírů',icon:'🏞️',name:'Říční dobrodruh',desc:'Ulov alespoň jednu rybu na řece.',progress:Math.min(Number(places['Řeka'])||0,1),goal:1,tier:'Zlato'},
+  {id:'all-waters',category:'Průzkumníci revírů',icon:'🗺️',name:'Mistr všech revírů',desc:'Ulov alespoň 10 ryb na každém ze tří revírů.',progress:['Rybník','Jezero','Řeka'].filter(p=>(Number(places[p])||0)>=10).length,goal:3,unit:'revíry',tier:'Legendární'},
+  {id:'level10',category:'Postup a vybavení',icon:'⭐',name:'Úroveň 10',desc:'Dosáhni hráčské úrovně 10.',progress:Math.min(level,10),goal:10,tier:'Bronz'},
+  {id:'level25',category:'Postup a vybavení',icon:'🥈',name:'Úroveň 25',desc:'Dosáhni hráčské úrovně 25.',progress:Math.min(level,25),goal:25,tier:'Stříbro'},
+  {id:'level50',category:'Postup a vybavení',icon:'🥇',name:'Úroveň 50',desc:'Dosáhni hráčské úrovně 50.',progress:Math.min(level,50),goal:50,tier:'Zlato'},
+  {id:'level100',category:'Postup a vybavení',icon:'👑',name:'Úroveň 100',desc:'Dosáhni hráčské úrovně 100.',progress:Math.min(level,100),goal:100,tier:'Legendární'},
+  {id:'all-places-unlocked',category:'Postup a vybavení',icon:'🔓',name:'Všechny revíry odemčeny',desc:'Odemkni jezero i řeku.',progress:(placeUnlocked('Jezero')?1:0)+(placeUnlocked('Řeka')?1:0),goal:2,unit:'revíry',tier:'Zlato'},
+  {id:'legendary-gear',category:'Postup a vybavení',icon:'🎣',name:'Kompletní legendární výbava',desc:'Vylepši prut, naviják i nástrahy na úroveň 5.',progress:[state.rod,state.reel,state.baitLevel].filter(v=>(Number(v)||0)>=5).length,goal:3,unit:'části',tier:'Legendární'}
  ];
  return items.map(a=>({...a,done:a.progress>=a.goal,pct:Math.min(100,Math.round(a.progress/a.goal*100))}));
 }
 function renderLog(el){
  const achievements=getFishingAchievements(),unlocked=achievements.filter(a=>a.done).length;
  const trophies=(state.records||[]).filter(r=>r.cm >= (fishData.find(f=>f.id===r.id)?.trophy||999));
+ const categories=['Rybářské úspěchy','Mistři jednotlivých druhů','Vzácné úlovky','Průzkumníci revírů','Postup a vybavení'];
+ const groups=categories.map(category=>({category,items:achievements.filter(a=>a.category===category)})).filter(g=>g.items.length);
  const row=(r,i,metric)=>`<div class="record"><span class="badge">#${i+1}</span><img class="artmini" src="${fishImages[fishIdForCatch(r)]}" alt="${escapeHtml(r.name)}" loading="lazy"><div class="grow"><b>${escapeHtml(r.name)}</b><div class="muted">${r.cm} cm · ${Number(r.kg).toFixed(2)} kg · ${escapeHtml(r.place||'Revír')}</div><small class="muted">Rybář: ${escapeHtml(r.angler||'Ty')} · ${escapeHtml(r.date||'')}</small></div><b>${metric==='cm'?r.cm+' cm':Number(r.kg).toFixed(2)+' kg'}</b></div>`;
  el.innerHTML=`<div class="card stack achievement-page">
   <div class="achievement-hero"><div><small>FISHING BROTHERS · TROFEJE A VÝZVY</small><h2>🏆 Úspěchy rybáře</h2><p class="muted">Plň výzvy, sbírej odznáčky a zapisuj se mezi nejlepší rybáře.</p></div><div class="achievement-count"><strong>${unlocked}/${achievements.length}</strong><small>ZÍSKANÝCH ODZNAKŮ</small></div></div>
   <div class="metrics"><div class="metric"><small>CELKEM ÚLOVKŮ</small><strong>${Number(state.count)||0}</strong></div><div class="metric"><small>NEJDELŠÍ RYBA</small><strong>${Number(state.best)||0} cm</strong></div><div class="metric"><small>NEJTĚŽŠÍ RYBA</small><strong>${Number(state.bestWeight||0).toFixed(2)} kg</strong></div><div class="metric"><small>TROFEJNÍ ÚLOVKY</small><strong>${trophies.length}</strong></div></div>
-  <h2>🎖️ Sbírka odznáčků</h2><div class="achievement-grid">${achievements.map(a=>`<article class="achievement-medal ${a.done?'is-unlocked':'is-locked'}"><div class="medal-icon tier-${a.tier.toLowerCase()}">${a.done?a.icon:'🔒'}</div><div class="medal-copy"><div class="medal-top"><b>${a.name}</b><span class="medal-tier">${a.tier}</span></div><p>${a.desc}</p><div class="achievement-progress"><i style="width:${a.pct}%"></i></div><small>${a.done?'Získáno':a.progress+(a.unit?' '+a.unit:'')+' / '+a.goal+(a.unit?' '+a.unit:'')}</small></div></article>`).join('')}</div>
+  ${groups.map(g=>`<section class="achievement-group"><h2>${g.category}</h2><div class="achievement-grid">${g.items.map(a=>`<article class="achievement-medal ${a.done?'is-unlocked':'is-locked'}"><div class="medal-icon tier-${a.tier.toLowerCase()}">${a.done?a.icon:'🔒'}</div><div class="medal-copy"><div class="medal-top"><b>${a.name}</b><span class="medal-tier">${a.tier}</span></div><p>${a.desc}</p><div class="achievement-progress"><i style="width:${a.pct}%"></i></div><small>${a.done?'Získáno':a.progress+(a.unit?' '+a.unit:'')+' / '+a.goal+(a.unit?' '+a.unit:'')}</small></div></article>`).join('')}</div></section>`).join('')}
   <h2>🌍 TOP 5 rybářů podle revíru</h2><p class="muted">Nejlepší úlovek každého hráče na zvoleném revíru. Žebříčky se počítají z online trofejí.</p>
   <div class="achievement-controls"><div class="achievement-tabs"><button class="secondary ${(window.fbAchievementPlace||'Rybník')==='Rybník'?'active':''}" data-ach-place="Rybník">🌿 Rybník</button><button class="secondary ${window.fbAchievementPlace==='Jezero'?'active':''}" data-ach-place="Jezero">🌊 Jezero</button><button class="secondary ${window.fbAchievementPlace==='Řeka'?'active':''}" data-ach-place="Řeka">🏞️ Řeka</button></div><div class="achievement-tabs"><button class="secondary ${(window.fbAchievementMetric||'length')==='length'?'active':''}" data-ach-metric="length">📏 Nejdelší</button><button class="secondary ${window.fbAchievementMetric==='weight'?'active':''}" data-ach-metric="weight">⚖️ Nejtěžší</button></div></div>
   <div id="onlineLeaderboard" class="stack"><p class="muted">${currentUser?'Načítám online žebříček…':'Pro online žebříček se přihlas ke svému účtu.'}</p></div>
