@@ -1710,6 +1710,7 @@ body.fb-premium .fb-number,
   <button class="active" data-tab="home"><i>⌂</i><span>Domů</span></button>
   <button data-tab="fish"><i>♧</i><span>Hra</span></button>
   <button data-tab="log"><i>🏆</i><span>Úspěchy</span></button>
+  <button data-tab="daily"><i>📋</i><span>Denní úkoly</span></button>
   <button data-tab="shop"><i>🛒</i><span>Obchod</span></button>
   <button data-tab="shop"><i>🎒</i><span>Vybavení</span></button>
   <button data-tab="account"><i>👥</i><span>Přátelé</span></button>
@@ -1775,7 +1776,7 @@ function placeArt(place){
 function playerLevel(){return Math.floor((Number(state.xp)||0)/500)+1;}
 function placeRequiredLevel(place){return place==='Jezero'?25:place==='Řeka'?50:1;}
 function placeUnlocked(place){return playerLevel()>=placeRequiredLevel(place);}
-const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],achievementStats:{species:{},places:{},morning:0,night:0,predators:0},claimedAchievementRewards:{},best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
+const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],achievementStats:{species:{},places:{},morning:0,night:0,predators:0},claimedAchievementRewards:{},dailyTasks:null,best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
 let cloudSaveTimer=null,cloudSaveBusy=false,cloudSaveAgain=false;
 function load(){
  try{const s=JSON.parse(window.localStorage.getItem('fb-save'));if(s)Object.assign(state,s);initStoreState()}catch(e){/* local storage may be unavailable */}
@@ -1824,6 +1825,7 @@ function fishSVG(f){
 }
 function headerStats(){document.querySelector('#money').textContent=money(state.money);document.querySelector('#count').textContent=state.count;document.querySelector('#record').textContent=state.best?state.best+' cm':'—';const bc=document.querySelector('#bottomCount'),br=document.querySelector('#bottomRecord');if(bc)bc.textContent=state.count;if(br)br.textContent=state.best?state.best+' cm':'—';const sn=document.querySelector('#sideName');const name=currentProfile?.username||currentUser?.user_metadata?.username||'Rybář';if(sn)sn.textContent=name;const lvl=playerLevel(),xp=(Number(state.xp)||0)%500;const hm=document.querySelector('#headerMoney'),hl=document.querySelector('#headerLevel'),hx=document.querySelector('#headerXp'),hb=document.querySelector('#headerXpBar');if(hm)hm.textContent=money(state.money);if(hl)hl.textContent='Lv. '+lvl;if(hx)hx.textContent=xp+' / 500 XP';if(hb)hb.style.width=Math.round(xp/5)+'%';}
 function render(){
+ ensureDailyTasks();
  headerStats();document.querySelectorAll('.fb-nav [data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===state.tab));
  const el=document.querySelector('#screen');
  if(state.tab==='home')renderHome(el);
@@ -1832,6 +1834,7 @@ function render(){
  else if(state.tab==='account')renderAccount(el);
  else if(state.tab==='leader')renderLeader(el);
  else if(state.tab==='settings')renderSettings(el);
+ else if(state.tab==='daily')renderDailyTasks(el);
  else renderLog(el);
 }
 function renderHome(el){
@@ -2033,6 +2036,7 @@ function finishCatch(release=false){
   if(currentUser&&sb){sb.from('trophy_catches').insert({user_id:currentUser.id,fish_id:f.id,fish_name:f.name,length_cm:f.cm,weight_kg:f.kg,place:state.place,caught_at:new Date().toISOString()}).then(({error})=>{if(error)console.warn('Online trofej se nepodařilo uložit:',error.message);else renderOnlineLeaderboard();});}
  }
  state.count++;
+ updateDailyTasksForCatch(f);
  const achievementStats=state.achievementStats||(state.achievementStats={species:{},places:{},morning:0,night:0,predators:0});
  achievementStats.species=achievementStats.species||{};achievementStats.places=achievementStats.places||{};
  const speciesStat=achievementStats.species[f.id]||(achievementStats.species[f.id]={count:0,maxCm:0});
@@ -2048,6 +2052,60 @@ function finishCatch(release=false){
  save();render();if(isTrophy||state._levelUp)showTrophyCelebration(f,state._levelUp);state._levelUp=0;
 }
 function renderShop(el){renderFishingFriendsShop(el);}
+
+
+function dailyDateKey(){
+ const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function ensureDailyTasks(){
+ const today=dailyDateKey();
+ if(state.dailyTasks&&state.dailyTasks.date===today&&Array.isArray(state.dailyTasks.tasks))return;
+ const level=playerLevel();
+ const available=(fishData||[]).filter(f=>!f.requiredLevel||level>=f.requiredLevel);
+ const species=available.length?available:fishData;
+ const pool=[
+  {type:'count',id:'catch-3',title:'Ulov 3 ryby',desc:'Zdoláš libovolné tři ryby.',target:3,reward:150,xp:50,icon:'🐟'},
+  {type:'count',id:'catch-5',title:'Ulov 5 ryb',desc:'Zdoláš pět ryb během dne.',target:5,reward:220,xp:75,icon:'🎣'},
+  {type:'weight',id:'weight-8',title:'Celkem 8 kg úlovků',desc:'Nasbírej dohromady 8 kg ryb.',target:8,reward:250,xp:80,icon:'⚖️'},
+  {type:'weight',id:'weight-15',title:'Celkem 15 kg úlovků',desc:'Nasbírej dohromady 15 kg ryb.',target:15,reward:350,xp:110,icon:'🏋️'},
+  ...species.map(f=>({type:'species',id:'species-'+f.id,fishId:f.id,title:'Ulov '+f.name,desc:'Chyť alespoň jednu rybu tohoto druhu.',target:1,reward:200,xp:65,icon:'🐠',fishName:f.name}))
+ ];
+ let seed=0;for(const ch of today)seed=(seed*31+ch.charCodeAt(0))>>>0;
+ const chosen=[];
+ while(chosen.length<3&&pool.length){
+  seed=(seed*1664525+1013904223)>>>0;
+  const idx=seed%pool.length;chosen.push({...pool.splice(idx,1)[0],progress:0,claimed:false});
+ }
+ state.dailyTasks={date:today,tasks:chosen,bonusClaimed:false};
+ save();
+}
+function updateDailyTasksForCatch(f){
+ ensureDailyTasks();
+ (state.dailyTasks.tasks||[]).forEach(t=>{
+  if(t.type==='count')t.progress=Math.min(t.target,(Number(t.progress)||0)+1);
+  else if(t.type==='weight')t.progress=Math.min(t.target,+(Number(t.progress||0)+Number(f.kg||0)).toFixed(2));
+  else if(t.type==='species'&&t.fishId===f.id)t.progress=Math.min(t.target,(Number(t.progress)||0)+1);
+ });
+}
+function renderDailyTasks(el){
+ ensureDailyTasks();
+ const tasks=state.dailyTasks.tasks||[];
+ const completed=tasks.filter(t=>Number(t.progress)>=t.target).length;
+ const allClaimed=tasks.length===3&&tasks.every(t=>t.claimed);
+ const totalReward=tasks.reduce((sum,t)=>sum+t.reward,0);
+ const reset=new Date();reset.setHours(24,0,0,0);
+ const remaining=Math.max(0,reset-Date.now());
+ const hours=Math.floor(remaining/3600000),minutes=Math.floor((remaining%3600000)/60000);
+ el.innerHTML=`<div class="card stack daily-page">
+  <div class="daily-hero"><div><small>FISHING BROTHERS · DENNÍ VÝZVY</small><h2>📋 Denní úkoly</h2><p class="muted">Každý den na tebe čekají tři nové rybářské výzvy. Plň je při běžném lovu a vyzvedni si odměny.</p></div><div class="daily-count"><strong>${completed}/3</strong><small>SPLNĚNO</small></div></div>
+  <div class="status">⏳ Nové úkoly za ${hours} h ${minutes} min · Obnova každý den o půlnoci.</div>
+  <div class="daily-task-list">${tasks.map((t,i)=>{const done=Number(t.progress)>=t.target,pct=Math.min(100,Math.round(Number(t.progress||0)/t.target*100));const progress=t.type==='weight'?Number(t.progress||0).toFixed(1).replace('.',',')+' / '+t.target+' kg':Math.floor(Number(t.progress||0))+' / '+t.target;return `<article class="daily-task ${done?'is-done':''}"><div class="daily-task-icon">${t.icon}</div><div class="daily-task-main"><div class="row"><b>${t.title}</b><span class="daily-reward">🪙 ${money(t.reward)}</span></div><p class="muted">${t.desc}</p><div class="daily-progress"><i style="width:${pct}%"></i></div><small>${progress} · +${t.xp} XP</small></div><div class="daily-task-action">${t.claimed?'<span class="reward-claimed">✓ Vyzvednuto</span>':done?'<button class="claim-daily" data-daily-claim="'+i+'">Vyzvednout</button>':'<span class="reward-locked">Probíhá</span>'}</div></article>`}).join('')}</div>
+  <section class="daily-bonus ${allClaimed?'ready':''}"><div><b>🎁 Denní bonus za všechny úkoly</b><p class="muted">Vyzvedni všechny tři odměny a získáš navíc 500 Kč + 150 XP.</p></div>${state.dailyTasks.bonusClaimed?'<span class="reward-claimed">✓ Bonus vyzvednut</span>':allClaimed?'<button class="gold" id="claimDailyBonus">Vyzvednout bonus</button>':'<span class="reward-locked">Po splnění všech 3 úkolů</span>'}</section>
+  <div class="status">💰 Celkem můžeš získat ${money(totalReward+500)} a ${tasks.reduce((s,t)=>s+t.xp,0)+150} XP.</div>
+ </div>`;
+ el.querySelectorAll('[data-daily-claim]').forEach(b=>b.onclick=()=>{const t=state.dailyTasks.tasks[Number(b.dataset.dailyClaim)];if(!t||t.claimed||Number(t.progress)<t.target)return;t.claimed=true;state.money=(Number(state.money)||0)+t.reward;state.xp=(Number(state.xp)||0)+t.xp;save();render();});
+ const bonus=el.querySelector('#claimDailyBonus');if(bonus)bonus.onclick=()=>{if(state.dailyTasks.bonusClaimed||!state.dailyTasks.tasks.every(t=>t.claimed))return;state.dailyTasks.bonusClaimed=true;state.money=(Number(state.money)||0)+500;state.xp=(Number(state.xp)||0)+150;save();render();};
+}
 
 function getFishingAchievements(){
  const stats=state.achievementStats||{},species=stats.species||{},places=stats.places||{};
@@ -2966,5 +3024,9 @@ else{startGame();}
     line-height:1.2!important;
   }
 }
+</style>
+
+<style id="fb-daily-tasks-ui">
+.daily-page{gap:14px!important}.daily-hero{display:flex;align-items:center;justify-content:space-between;gap:12px}.daily-hero h2{font-size:23px;margin:5px 0}.daily-hero small{color:var(--gold);font-size:10px;letter-spacing:1px}.daily-count{flex:none;min-width:76px;padding:10px;border:1px solid var(--line);border-radius:13px;background:#20392d;text-align:center}.daily-count strong{display:block;font-size:24px;color:var(--gold)}.daily-count small{font-size:9px}.daily-task-list{display:grid;gap:10px}.daily-task{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px;background:#1b3429;border:1px solid var(--line);border-radius:13px}.daily-task.is-done{border-color:#7da96c}.daily-task-icon{font-size:26px;text-align:center}.daily-task-main{min-width:0}.daily-task-main .row{align-items:flex-start}.daily-task-main .row>b{font-size:14px}.daily-task-main p{margin:3px 0 7px;font-size:11px}.daily-reward{font-size:11px;color:var(--gold);white-space:nowrap}.daily-progress{height:7px;background:#0e1d15;border-radius:20px;overflow:hidden;margin:5px 0}.daily-progress i{display:block;height:100%;background:linear-gradient(90deg,#68b879,#b5d982);border-radius:20px}.daily-task-main>small{font-size:10px;color:var(--muted)}.daily-task-action{display:flex;justify-content:flex-end}.daily-task-action button,.daily-bonus button{padding:9px 11px;font-size:11px;white-space:nowrap}.reward-claimed{font-size:11px;color:#9ed6a2;white-space:nowrap}.reward-locked{font-size:10px;color:var(--muted);white-space:nowrap}.daily-bonus{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border:1px solid #987344;border-radius:13px;background:linear-gradient(145deg,#3a2d19,#1d2116)}.daily-bonus p{margin:4px 0 0;font-size:11px}.daily-bonus.ready{box-shadow:0 0 0 1px #e6bf62aa}.daily-bonus button{background:var(--gold);color:#2c2108}@media(max-width:520px){.daily-task{grid-template-columns:34px minmax(0,1fr);gap:8px}.daily-task-action{grid-column:2;justify-content:flex-start}.daily-bonus{align-items:flex-start;flex-direction:column}.daily-hero h2{font-size:20px}}
 </style>
 </body></html>
