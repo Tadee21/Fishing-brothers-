@@ -3,6 +3,7 @@ const FF_STORE={
  rods:[['rod-basic','Basic Rod',0,1,'🎣','Síla 30 · Kontrola 30'],['rod-river','River Pro',2500,5,'🎣','Síla 50 · Kontrola 55'],['rod-predator','Predator X',6000,10,'🪝','Síla 70 · Kontrola 75'],['rod-carp','Carp Master',12000,18,'🎣','Síla 85 · Kontrola 85'],['rod-legend','Legend Carbon',25000,30,'🏆','Síla 95 · Kontrola 95']],
  reels:[['reel-basic','Basic Reel',0,1,'⚙️','Brzda 4 kg · Převod 5.0:1'],['reel-spin','Spin 3000',2000,5,'⚙️','Brzda 6 kg · Převod 5.2:1'],['reel-power','Power Reel',5000,10,'⚙️','Brzda 8 kg · Převod 5.5:1'],['reel-bigfish','Big Fish 6000',10000,18,'⚙️','Brzda 12 kg · Převod 5.1:1'],['reel-titan','Titan Pro',20000,30,'🏆','Brzda 16 kg · Převod 5.6:1']],
  lines:[['line-basic','Basic 0,20 mm',0,1,'🧵','Nosnost 4 kg · Průměr 0,20 mm'],['line-strong','Strong 0,25 mm',1500,5,'🧵','Nosnost 5,5 kg · Průměr 0,25 mm'],['line-power','Power 0,30 mm',3500,10,'🧵','Nosnost 7,5 kg · Průměr 0,30 mm'],['line-monster','Monster 0,35 mm',7000,18,'🧵','Nosnost 10 kg · Průměr 0,35 mm'],['line-extreme','Extreme 0,40 mm',12000,30,'🏆','Nosnost 13 kg · Průměr 0,40 mm']],
+ braids:[['braid-catfish-040','Catfish Braid',8000,15,'🧵','Nosnost 30 kg · Průměr 0,40 mm · 250 m'],['braid-monster-050','Monster Catfish',18000,30,'🧵','Nosnost 45 kg · Průměr 0,50 mm · 250 m'],['braid-bigcat-060','Big Catfish Pro',35000,45,'🏆','Nosnost 60 kg · Průměr 0,60 mm · 250 m']],
  baits:[
  ['bait-strawberry','Boilies','Jahodové boilies',0,1,5,['kapr','amur'],'🍓'],['bait-krill','Boilies','Krillové boilies',1500,3,8,['kapr','sumec'],'🦐'],['bait-pineapple','Boilies','Ananasové boilies',2500,5,9,['kapr','amur'],'🍍'],['bait-scopex','Boilies','Scopexové boilies',4000,8,10,['kapr','lin'],'🟠'],['bait-tiger','Boilies','Boilies – tygří ořech',6000,12,12,['kapr','amur'],'🥜'],
  ['corn-yellow','Kukuřice','Žlutá kukuřice',0,1,5,['kapr','amur','lin'],'🌽'],['corn-red','Kukuřice','Červená kukuřice',1000,3,6,['kapr','amur'],'🌽'],['corn-tiger','Kukuřice','Tygří ořech',2000,5,8,['kapr','amur'],'🥜'],['corn-honey','Kukuřice','Medová kukuřice',3500,8,9,['kapr','lin'],'🍯'],['corn-pineapple','Kukuřice','Zelená kukuřice',5000,12,11,['kapr','amur'],'🍍'],
@@ -11,7 +12,7 @@ const FF_STORE={
  ['live-worm','Živá nástraha','Žížala',0,1,5,['lin','okoun','kapr'],'🪱'],['live-rousnice','Živá nástraha','Rak',1000,3,6,['sumec','okoun','candat'],'🪱'],['live-maggots','Živá nástraha','Hnojní červi',1500,5,7,['okoun','lin'],'🐛'],['live-minnow','Živá nástraha','Malá živá rybka',3500,8,10,['candat','stika','sumec'],'🐟'],['live-leech','Živá nástraha','Pijavice',5500,12,11,['sumec','candat'],'〰️']],
  sets:[['set-starter','Starter Set',0,1,'rod-basic','reel-basic','line-basic','Univerzální začátečnická sestava.'],['set-river','River Pro Set',7000,5,'rod-river','reel-spin','line-strong','Vyvážená sestava na rybník a jezero.'],['set-predator','Predator X Set',15000,10,'rod-predator','reel-power','line-power','Specializace na štiky a candáty.'],['set-carp','Carp Master Set',28000,18,'rod-carp','reel-bigfish','line-monster','Silná sestava na kapry a amury.'],['set-legend','Legend Carbon Set',50000,30,'rod-legend','reel-titan','line-extreme','Prémiová sestava na trofejní ryby.']]
 };
-const FF_TABS=[['sets','Hotové sestavy','🧰'],['baits','Nástrahy','🪱'],['rods','Pruty','🎣'],['reels','Navijáky','⚙️'],['lines','Vlasce','🧵'],['inventory','Moje vybavení','🎒']];
+const FF_TABS=[['sets','Hotové sestavy','🧰'],['baits','Nástrahy','🪱'],['rods','Pruty','🎣'],['reels','Navijáky','⚙️'],['lines','Vlasce','🧵'],['braids','Pletenky','🪢'],['inventory','Moje vybavení','🎒']];
 function initStoreState(){
  state.ownedGear=Array.isArray(state.ownedGear)?state.ownedGear:['rod-basic','reel-basic','line-basic'];
  state.ownedBaits=Array.isArray(state.ownedBaits)?state.ownedBaits:['bait-strawberry','corn-yellow','lure-kopyto','wob-minnow','live-worm'];
@@ -30,30 +31,30 @@ function initStoreState(){
   }
  }
 }
-function ffItem(id){return [...FF_STORE.rods,...FF_STORE.reels,...FF_STORE.lines].find(x=>x[0]===id);}
+function ffItem(id){return [...FF_STORE.rods,...FF_STORE.reels,...FF_STORE.lines,...FF_STORE.braids].find(x=>x[0]===id);}
 function currentBaitItem(){return FF_STORE.baits.find(x=>x[0]===state.selectedBait)||FF_STORE.baits[0];}
 function ffBaitPreviewForCategory(category){const remembered=state.baitSelections?.[category];return FF_STORE.baits.find(x=>x[0]===remembered&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category&&x[0]===state.selectedBait&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category)||FF_STORE.baits[0];}
 function equippedStats(){
  const r=ffItem(state.selectedRod)||FF_STORE.rods[0],n=ffItem(state.selectedReel)||FF_STORE.reels[0],l=ffItem(state.selectedLine)||FF_STORE.lines[0];
  return {rodPower:Math.max(0,(Number((r[5].match(/Síla (\d+)/)||[])[1]||30)-30)/40),reelPower:Math.max(0,(Number((n[5].match(/Brzda (\d+)/)||[])[1]||4)-4)/4),lineCapacity:Number(((l[5].match(/Nosnost ([\d,]+)/)||[])[1]||'4').replace(',','.'))};
 }
-const FF_IMAGE_MAP={'rod-basic':'pruty_01','rod-river':'pruty_02','rod-predator':'pruty_03','rod-carp':'pruty_04','rod-legend':'pruty_05','reel-basic':'navijaky_01','reel-spin':'navijaky_02','reel-power':'navijaky_03','reel-bigfish':'navijaky_04','reel-titan':'navijaky_05','line-basic':'vlasce_01','line-strong':'vlasce_02','line-power':'vlasce_03','line-monster':'vlasce_04','line-extreme':'vlasce_05','bait-strawberry':'boilies-strawberry','bait-krill':'boilies-krill','bait-pineapple':'boilies-pineapple','bait-scopex':'boilies-scopex','bait-tiger':'boilies-tiger','corn-yellow':'kukurice_01','corn-red':'kukurice_02','corn-tiger':'kukurice_05','corn-honey':'kukurice_04','corn-pineapple':'kukurice_03','lure-kopyto':'gumy_01','lure-ripper':'gumy_02','lure-twister':'gumy_03','lure-smacek':'gumy_04','lure-frog':'gumy_05','wob-minnow':'woblery_01','wob-crank':'woblery_02','wob-popper':'woblery_05','wob-swimbait':'woblery_04','wob-jointed':'woblery_03','live-worm':'zive_nastrahy_01','live-rousnice':'zive_nastrahy_04','live-maggots':'zive_nastrahy_02','live-minnow':'zive_nastrahy_03','live-leech':'zive_nastrahy_05'};
-function ffAsset(id){const base=FF_IMAGE_MAP[id];const version=(String(id).startsWith('rod-')||String(id).startsWith('bait-')||String(id).startsWith('set-'))?'2':'3';return (base||id)+'%20'+version+'.jpg';}
+const FF_IMAGE_MAP={'rod-basic':'pruty_01','rod-river':'pruty_02','rod-predator':'pruty_03','rod-carp':'pruty_04','rod-legend':'pruty_05','reel-basic':'navijaky_01','reel-spin':'navijaky_02','reel-power':'navijaky_03','reel-bigfish':'navijaky_04','reel-titan':'navijaky_05','line-basic':'vlasce_01','line-strong':'vlasce_02','line-power':'vlasce_03','line-monster':'vlasce_04','line-extreme':'vlasce_05','braid-catfish-040':'catfish-braid-040','braid-monster-050':'monster-catfish-050','braid-bigcat-060':'big-catfish-pro-060','bait-strawberry':'boilies-strawberry','bait-krill':'boilies-krill','bait-pineapple':'boilies-pineapple','bait-scopex':'boilies-scopex','bait-tiger':'boilies-tiger','corn-yellow':'kukurice_01','corn-red':'kukurice_02','corn-tiger':'kukurice_05','corn-honey':'kukurice_04','corn-pineapple':'kukurice_03','lure-kopyto':'gumy_01','lure-ripper':'gumy_02','lure-twister':'gumy_03','lure-smacek':'gumy_04','lure-frog':'gumy_05','wob-minnow':'woblery_01','wob-crank':'woblery_02','wob-popper':'woblery_05','wob-swimbait':'woblery_04','wob-jointed':'woblery_03','live-worm':'zive_nastrahy_01','live-rousnice':'zive_nastrahy_04','live-maggots':'zive_nastrahy_02','live-minnow':'zive_nastrahy_03','live-leech':'zive_nastrahy_05'};
+function ffAsset(id){if(String(id).startsWith('braid-'))return FF_IMAGE_MAP[id]+'.png';const base=FF_IMAGE_MAP[id];const version=(String(id).startsWith('rod-')||String(id).startsWith('bait-')||String(id).startsWith('set-'))?'2':'3';return (base||id)+'%20'+version+'.jpg';}
 function ffBaitImage(id){return ffAsset(id);}
 function ffBuy(id,group){
  const x=group==='baits'?FF_STORE.baits.find(y=>y[0]===id):FF_STORE[group].find(y=>y[0]===id);if(!x)return;
  const price=group==='baits'?x[3]:x[2],req=group==='baits'?x[4]:x[3],owned=group==='baits'?state.ownedBaits:state.ownedGear;
  if(owned.includes(id)||playerLevel()<req||state.money<price)return;state.money-=price;owned.push(id);
- if(group==='baits'){state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}else{state.gearPurchases[id]=price;if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines')state.selectedLine=id;}
+ if(group==='baits'){state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}else{state.gearPurchases[id]=price;if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines'||group==='braids')state.selectedLine=id;}
  save();render();
 }
 function ffEquip(id,group){
  if(group==='baits'){const x=FF_STORE.baits.find(y=>y[0]===id);if(!x||!state.ownedBaits.includes(id))return;state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}
- else{if(!state.ownedGear.includes(id))return;if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines')state.selectedLine=id;}
+ else{if(!state.ownedGear.includes(id))return;if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines'||group==='braids')state.selectedLine=id;}
  save();render();
 }
 function ffSell(id){
- const group=id.startsWith('rod-')?'rods':id.startsWith('reel-')?'reels':'lines',x=FF_STORE[group].find(y=>y[0]===id);
+ const group=id.startsWith('rod-')?'rods':id.startsWith('reel-')?'reels':id.startsWith('braid-')?'braids':'lines',x=FF_STORE[group].find(y=>y[0]===id);
  if(!x||!state.ownedGear.includes(id)||['rod-basic','reel-basic','line-basic'].includes(id))return;
  const refund=Math.floor((Number(state.gearPurchases[id])||x[2])*.5);if(!confirm('Prodat '+x[1]+' za '+money(refund)+'?'))return;
  state.money+=refund;state.ownedGear=state.ownedGear.filter(y=>y!==id);delete state.gearPurchases[id];
@@ -71,7 +72,7 @@ function renderFishingFriendsShop(el){
   return '<article class="store-card '+(active?'is-active':'')+'"><div class="store-art">'+art+'</div><div class="store-card-body"><h3>'+name+'</h3><p>'+desc+'</p><div class="store-specs">'+detail+'</div><div class="store-price"><b>'+(price?money(price):'Zdarma')+'</b><small>Úroveň '+req+'</small></div>'+button+'</div></article>';
  }
  let content='';
- if(['rods','reels','lines'].includes(cat))content='<div class="store-grid">'+FF_STORE[cat].map(x=>card(x,cat)).join('')+'</div>';
+ if(['rods','reels','lines','braids'].includes(cat))content='<div class="store-grid">'+FF_STORE[cat].map(x=>card(x,cat)).join('')+'</div>';
  else if(cat==='baits'){const cats=['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'];content='<div class="store-subnav">'+cats.map(c=>'<button data-bcat="'+c+'" class="'+(state.shopBaitCategory===c?'active':'')+'">'+c+'</button>').join('')+'</div><div class="store-grid">'+FF_STORE.baits.filter(x=>x[1]===state.shopBaitCategory).map(x=>card(x,'baits')).join('')+'</div>';}
  else if(cat==='sets'){content='<div class="store-set-list">'+FF_STORE.sets.map(s=>{const owned=[s[4],s[5],s[6]].every(id=>state.ownedGear.includes(id)),locked=lvl<s[3];return '<article class="store-set-card"><div class="store-set-icon"><img src="'+ffAsset(s[0])+'" alt="'+s[1]+'" loading="lazy"></div><div class="store-set-info"><h3>'+s[1]+'</h3><p>'+s[7]+'</p><small>'+[s[4],s[5],s[6]].map(id=>ffItem(id)[1]).join(' · ')+'</small><div class="store-price"><b>'+(s[2]?money(s[2]):'Zdarma')+'</b><small>Úroveň '+s[3]+'</small></div></div><button data-act="set" data-id="'+s[0]+'" '+(owned||locked||state.money<s[2]?'disabled':'')+'>'+(owned?'Vlastníš sestavu':locked?'🔒 Úroveň '+s[3]:s[2]?'Koupit':'Získat')+'</button></article>';}).join('')+'</div><div class="store-tip">Hotová sestava přidá do inventáře prut, naviják a vlasec. Každou součást můžeš později samostatně vyměnit.</div>';}
  else{
