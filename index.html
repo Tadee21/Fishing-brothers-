@@ -430,6 +430,8 @@ button:active:not(:disabled){transform:translateY(1px)}
  #screen .fish-card img{height:94px}
 }
 
+
+.achievement-reward{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:9px;padding-top:8px;border-top:1px solid #ffffff18;font-size:12px;color:#d8c8a8}.achievement-reward b{color:#f4d37d}.claim-reward{border:1px solid #d7ad55!important;border-radius:9px!important;padding:7px 12px!important;background:linear-gradient(145deg,#80602b,#4d3518)!important;color:#fff2ce!important;font-weight:800!important;font-size:12px!important;min-height:32px!important}.claim-reward:active{transform:scale(.97)}.reward-claimed{color:#91c9a0;font-weight:800}.reward-locked{color:#929292}
 </style>
 <style>
 /* FINAL REFERENCE-MATCH REDESIGN */
@@ -1714,10 +1716,11 @@ function placeArt(place){
 function playerLevel(){return Math.floor((Number(state.xp)||0)/500)+1;}
 function placeRequiredLevel(place){return place==='Jezero'?25:place==='Řeka'?50:1;}
 function placeUnlocked(place){return playerLevel()>=placeRequiredLevel(place);}
-const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],achievementStats:{species:{},places:{},morning:0,night:0,predators:0},best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
+const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],achievementStats:{species:{},places:{},morning:0,night:0,predators:0},claimedAchievementRewards:{},best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
 let cloudSaveTimer=null,cloudSaveBusy=false,cloudSaveAgain=false;
 function load(){
  try{const s=JSON.parse(window.localStorage.getItem('fb-save'));if(s)Object.assign(state,s);initStoreState()}catch(e){/* local storage may be unavailable */}
+ state.claimedAchievementRewards=state.claimedAchievementRewards||{};
  // Backfill the heaviest known trophy for saves created before this statistic existed.
  if(!Number(state.bestWeight||0)){
   const heaviest=(state.records||[]).reduce((best,r)=>!best||Number(r.kg)>Number(best.kg)?r:best,null);
@@ -2025,7 +2028,8 @@ function getFishingAchievements(){
   {id:'all-places-unlocked',category:'Postup a vybavení',icon:'🔓',name:'Všechny revíry odemčeny',desc:'Odemkni jezero i řeku.',progress:(placeUnlocked('Jezero')?1:0)+(placeUnlocked('Řeka')?1:0),goal:2,unit:'revíry',tier:'Zlato'},
   {id:'legendary-gear',category:'Postup a vybavení',icon:'🎣',name:'Kompletní legendární výbava',desc:'Vylepši prut, naviják i nástrahy na úroveň 5.',progress:[state.rod,state.reel,state.baitLevel].filter(v=>(Number(v)||0)>=5).length,goal:3,unit:'části',tier:'Legendární'}
  ];
- return items.map(a=>({...a,done:a.progress>=a.goal,pct:Math.min(100,Math.round(a.progress/a.goal*100))}));
+ const rewards={Bronz:40,Stříbro:80,Zlato:140,Legendární:220};
+ return items.map(a=>({...a,reward:rewards[a.tier]||40,done:a.progress>=a.goal,pct:Math.min(100,Math.round(a.progress/a.goal*100))}));
 }
 function renderLog(el){
  const achievements=getFishingAchievements(),unlocked=achievements.filter(a=>a.done).length;
@@ -2036,7 +2040,7 @@ function renderLog(el){
  el.innerHTML=`<div class="card stack achievement-page">
   <div class="achievement-hero"><div><small>FISHING BROTHERS · TROFEJE A VÝZVY</small><h2>🏆 Úspěchy rybáře</h2><p class="muted">Plň výzvy, sbírej odznáčky a zapisuj se mezi nejlepší rybáře.</p></div><div class="achievement-count"><strong>${unlocked}/${achievements.length}</strong><small>ZÍSKANÝCH ODZNAKŮ</small></div></div>
   <div class="metrics"><div class="metric"><small>CELKEM ÚLOVKŮ</small><strong>${Number(state.count)||0}</strong></div><div class="metric"><small>NEJDELŠÍ RYBA</small><strong>${Number(state.best)||0} cm</strong></div><div class="metric"><small>NEJTĚŽŠÍ RYBA</small><strong>${Number(state.bestWeight||0).toFixed(2)} kg</strong></div><div class="metric"><small>TROFEJNÍ ÚLOVKY</small><strong>${trophies.length}</strong></div></div>
-  ${groups.map(g=>`<section class="achievement-group"><h2>${g.category}</h2><div class="achievement-grid">${g.items.map(a=>`<article class="achievement-medal ${a.done?'is-unlocked':'is-locked'}"><div class="medal-icon tier-${a.tier.toLowerCase()}">${a.done?a.icon:'🔒'}</div><div class="medal-copy"><div class="medal-top"><b>${a.name}</b><span class="medal-tier">${a.tier}</span></div><p>${a.desc}</p><div class="achievement-progress"><i style="width:${a.pct}%"></i></div><small>${a.done?'Získáno':a.progress+(a.unit?' '+a.unit:'')+' / '+a.goal+(a.unit?' '+a.unit:'')}</small></div></article>`).join('')}</div></section>`).join('')}
+  ${groups.map(g=>`<section class="achievement-group"><h2>${g.category}</h2><div class="achievement-grid">${g.items.map(a=>`<article class="achievement-medal ${a.done?'is-unlocked':'is-locked'}"><div class="medal-icon tier-${a.tier.toLowerCase()}">${a.done?a.icon:'🔒'}</div><div class="medal-copy"><div class="medal-top"><b>${a.name}</b><span class="medal-tier">${a.tier}</span></div><p>${a.desc}</p><div class="achievement-progress"><i style="width:${a.pct}%"></i></div><small>${a.done?'Získáno':a.progress+(a.unit?' '+a.unit:'')+' / '+a.goal+(a.unit?' '+a.unit:'')}</small><div class="achievement-reward"><span>🪙 Odměna: <b>${money(a.reward)}</b></span>${a.done?(state.claimedAchievementRewards[a.id]?'<span class="reward-claimed">✓ Vyzvednuto</span>':'<button class="claim-reward" data-ach-claim="'+a.id+'">Vyzvednout</button>'):'<span class="reward-locked">Po odemčení</span>'}</div></div></article>`).join('')}</div></section>`).join('')}
   <h2>🌍 TOP 5 rybářů podle revíru</h2><p class="muted">Nejlepší úlovek každého hráče na zvoleném revíru. Žebříčky se počítají z online trofejí.</p>
   <div class="achievement-controls"><div class="achievement-tabs"><button class="secondary ${(window.fbAchievementPlace||'Rybník')==='Rybník'?'active':''}" data-ach-place="Rybník">🌿 Rybník</button><button class="secondary ${window.fbAchievementPlace==='Jezero'?'active':''}" data-ach-place="Jezero">🌊 Jezero</button><button class="secondary ${window.fbAchievementPlace==='Řeka'?'active':''}" data-ach-place="Řeka">🏞️ Řeka</button></div><div class="achievement-tabs"><button class="secondary ${(window.fbAchievementMetric||'length')==='length'?'active':''}" data-ach-metric="length">📏 Nejdelší</button><button class="secondary ${window.fbAchievementMetric==='weight'?'active':''}" data-ach-metric="weight">⚖️ Nejtěžší</button></div></div>
   <div id="onlineLeaderboard" class="stack"><p class="muted">${currentUser?'Načítám online žebříček…':'Pro online žebříček se přihlas ke svému účtu.'}</p></div>
@@ -2044,6 +2048,7 @@ function renderLog(el){
  </div>`;
  el.querySelectorAll('[data-ach-place]').forEach(b=>b.onclick=()=>{window.fbAchievementPlace=b.dataset.achPlace;renderLog(el);if(currentUser)renderOnlineLeaderboard(window.fbAchievementPlace,window.fbAchievementMetric||'length');});
  el.querySelectorAll('[data-ach-metric]').forEach(b=>b.onclick=()=>{window.fbAchievementMetric=b.dataset.achMetric;renderLog(el);if(currentUser)renderOnlineLeaderboard(window.fbAchievementPlace||'Rybník',window.fbAchievementMetric);});
+ el.querySelectorAll('[data-ach-claim]').forEach(b=>b.onclick=()=>{const id=b.dataset.achClaim;const achievement=getFishingAchievements().find(a=>a.id===id);if(!achievement||!achievement.done||state.claimedAchievementRewards[id])return;state.claimedAchievementRewards[id]=true;state.money=(Number(state.money)||0)+achievement.reward;save();headerStats();renderLog(el);});
  if(currentUser)renderOnlineLeaderboard(window.fbAchievementPlace||'Rybník',window.fbAchievementMetric||'length');
 }
 async function syncLegacyTrophies(){
