@@ -2921,4 +2921,50 @@ else{startGame();}
   }
 }
 </style>
+
+<style id="fb-desktop-square-bait-frames-compact">
+/* Keep square lure photos, but reduce the overall desktop card size slightly. */
+@media (min-width: 1101px) {
+  #screen .choices.bait-square-grid {
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:10px!important;
+    width:100%!important;
+    max-width:1320px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  #screen .choices.bait-square-grid .bait-square-card {
+    min-width:0!important;
+    padding:7px!important;
+    gap:5px!important;
+    border-radius:11px!important;
+  }
+  #screen .choices.bait-square-grid .bait-square-card .bait-art-frame {
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    aspect-ratio:1/1!important;
+    padding:6px!important;
+  }
+  #screen .choices.bait-square-grid .bait-square-card .bait-art-frame img {
+    width:100%!important;
+    height:100%!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    transform:none!important;
+  }
+  #screen .choices.bait-square-grid .bait-square-card .bait-copy b {
+    font-size:13px!important;
+    line-height:1.15!important;
+  }
+  #screen .choices.bait-square-grid .bait-square-card .bait-copy small {
+    font-size:9px!important;
+    line-height:1.2!important;
+  }
+}
+</style>
 </body></html>
