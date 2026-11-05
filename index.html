@@ -2539,4 +2539,51 @@ else{startGame();}
 @keyframes fbBiteRipple{0%{opacity:.65;transform:scale(.55)}100%{opacity:0;transform:scale(4)}}
 @media(prefers-reduced-motion:reduce){.bite-scene *{animation-duration:.01ms!important;animation-iteration-count:1!important}}
 </style>
+
+<style id="fb-desktop-catch-override-v2">
+/* Final override is placed last so older runtime styles cannot overwrite it. */
+@media (min-width: 761px) {
+  #screen .fight-panel-desktop.fight-caught {
+    display:flex!important; flex-direction:column!important; gap:6px!important;
+    width:min(100%,820px)!important; max-width:820px!important;
+    margin:8px auto!important; align-items:stretch!important;
+  }
+  #screen .fight-panel-desktop.fight-caught .fish-catch-frame {
+    display:flex!important; align-items:center!important; justify-content:center!important;
+    width:100%!important; height:300px!important; min-height:300px!important;
+    max-height:300px!important; padding:0!important; margin:0 auto!important;
+    overflow:hidden!important; box-sizing:border-box!important;
+  }
+  #screen .fight-panel-desktop.fight-caught .fish-catch-frame img.fishart {
+    display:block!important; width:100%!important; height:100%!important;
+    max-width:100%!important; max-height:100%!important; margin:0!important;
+    object-fit:contain!important; object-position:center!important;
+    transform:scale(1.55)!important; transform-origin:center!important;
+  }
+  #screen .fight-panel-desktop.fight-caught .card {
+    padding:8px 10px!important; gap:4px!important; margin:0!important;
+  }
+  #screen .fight-panel-desktop.fight-caught .card .badge {
+    padding:2px 6px!important; font-size:9px!important; line-height:1.1!important;
+  }
+  #screen .fight-panel-desktop.fight-caught .card h2 {
+    font-size:19px!important; line-height:1.1!important; margin:1px 0 3px!important;
+  }
+  #screen .fight-panel-desktop.fight-caught .card .metrics { gap:5px!important; margin:0!important; }
+  #screen .fight-panel-desktop.fight-caught .card .metric {
+    padding:5px 8px!important; min-height:0!important; border-radius:8px!important;
+  }
+  #screen .fight-panel-desktop.fight-caught .card .metric small { font-size:8px!important; line-height:1.1!important; }
+  #screen .fight-panel-desktop.fight-caught .card .metric strong { font-size:16px!important; line-height:1.1!important; }
+  #screen .fight-panel-desktop.fight-caught .card .catch-xp {
+    margin:0!important; padding:5px 8px!important; font-size:10px!important; line-height:1.15!important;
+  }
+  #screen .fight-panel-desktop.fight-caught .card p.muted {
+    margin:0!important; font-size:9px!important; line-height:1.15!important;
+  }
+  #screen .fight-panel-desktop.fight-caught .card button {
+    min-height:32px!important; padding:5px 9px!important; font-size:11px!important; line-height:1.1!important;
+  }
+}
+</style>
 </body></html>
