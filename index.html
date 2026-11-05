@@ -1789,7 +1789,6 @@ function load(){
   if(heaviest){state.bestWeight=Number(heaviest.kg)||0;state.heaviestCatch=heaviest;}
  }
  if(!placeUnlocked(state.place))state.place='Rybník';
- syncPlayerTitles(true);
 }
 function save(){
  const snapshot={...state,phase:'idle',current:null,progress:0};
@@ -2100,7 +2099,8 @@ function syncPlayerTitles(silent=false){
  return silent?[]:newly;
 }
 function renderPlayerTitles(el){
- syncPlayerTitles(true);
+ const newlyUnlocked=syncPlayerTitles();
+ if(newlyUnlocked.length)save();
  const unlocked=new Set(state.unlockedTitles||[]),active=getPlayerTitleById(state.activeTitle);
  const categories=['Obecné','Kapři','Dravci','Sumci','Nejvyšší hodnosti'];
  const groups=categories.map(category=>({category,items:PLAYER_TITLE_DEFS.filter(t=>t.category===category)}));
@@ -2111,6 +2111,7 @@ function renderPlayerTitles(el){
  <div class="titles-summary"><span>🪙 Celkem k získání: <b>${money(totalCash)}</b></span><span>⭐ Celkem k získání: <b>${totalXp.toLocaleString('cs-CZ')} XP</b></span></div>
  ${groups.map(g=>`<section class="title-group"><h3>${g.category}</h3><div class="title-grid">${g.items.map(t=>{const done=unlocked.has(t.id),p=playerTitleProgress(t),pct=Math.min(100,Math.round(p/t.goal*100)),isActive=state.activeTitle===t.id;return `<article class="player-title-card ${done?'is-unlocked':'is-locked'} ${isActive?'is-active':''}"><div class="player-title-medal">${done?t.icon:'🔒'}</div><div class="player-title-info"><div class="player-title-heading"><b>${escapeHtml(t.name)}</b><span>${done?'ZÍSKÁNO':'ZAMČENO'}</span></div><p>${escapeHtml(t.desc)}</p><div class="title-progress"><i style="width:${pct}%"></i></div><small class="title-progress-label">${t.unit?Number(p).toLocaleString('cs-CZ')+' / '+t.goal+' '+t.unit:Math.floor(p).toLocaleString('cs-CZ')+' / '+t.goal}</small><div class="title-reward-row"><span>🪙 ${money(t.reward)}</span><span>⭐ +${t.xp} XP</span></div>${done?(isActive?'<span class="title-equipped">✓ Aktivní titul</span>':`<button class="title-equip" data-equip-title="${t.id}">Nasadit titul</button>`):'<span class="title-locked-note">Odměna se připíše automaticky po získání.</span>'}</div></article>`;}).join('')}</div></section>`).join('')}
  </div>`;
+ if(newlyUnlocked.length)showTitleUnlockNotice(newlyUnlocked);
  el.querySelectorAll('[data-equip-title]').forEach(b=>b.onclick=()=>{const id=b.dataset.equipTitle;if(!unlocked.has(id))return;state.activeTitle=id;save();render();});
 }
 function showTitleUnlockNotice(titles){
@@ -2326,7 +2327,7 @@ async function renderAccount(el){
  }
  const username=currentProfile?.username||currentUser.user_metadata?.username||currentUser.email;
  const activeTitle=getPlayerTitleById(state.activeTitle);
- el.innerHTML=`<div class="card stack"><div class="row"><div><h2>👤 ${escapeHtml(username)}</h2><small class="muted">${escapeHtml(currentUser.email||'')}</small>${activeTitle?`<div class="home-active-title">🏅 ${escapeHtml(activeTitle.name)}</div>`:'<div class="muted">Zatím bez aktivního titulu</div>'}<${escapeHtml(currentUser.email||'')}</small></div><button class="secondary" id="logout">Odhlásit</button></div><div class="metrics account-profile-metrics"><div class="metric"><small>ÚROVEŇ HRÁČE</small><strong>LVL ${playerLevel()}</strong></div><div class="metric"><small>ÚLOVKY</small><strong>${state.count}</strong></div><div class="metric"><small>KAMARÁDI</small><strong id="friendCount">—</strong></div></div><h2>🤝 Kamarádi</h2><div class="account-grid"><input class="wide" id="friendSearch" placeholder="Najít hráče podle přezdívky"><button id="searchPlayers" class="wide">Vyhledat hráče</button></div><div id="playerResults" class="account-list"></div><h3>📨 Žádosti o přátelství</h3><div id="friendRequests" class="account-list">Načítám…</div><h3>🟢 Moji kamarádi</h3><div id="friendList" class="account-list">Načítám…</div><p id="accountMsg" class="auth-note"></p></div>`;
+ el.innerHTML=`<div class="card stack"><div class="row"><div><h2>👤 ${escapeHtml(username)}</h2><small class="muted">${escapeHtml(currentUser.email||'')}</small>${activeTitle?`<div class="home-active-title">🏅 ${escapeHtml(activeTitle.name)}</div>`:'<div class="muted">Zatím bez aktivního titulu</div>'}</div><button class="secondary" id="logout">Odhlásit</button></div><div class="metrics account-profile-metrics"><div class="metric"><small>ÚROVEŇ HRÁČE</small><strong>LVL ${playerLevel()}</strong></div><div class="metric"><small>ÚLOVKY</small><strong>${state.count}</strong></div><div class="metric"><small>KAMARÁDI</small><strong id="friendCount">—</strong></div></div><h2>🤝 Kamarádi</h2><div class="account-grid"><input class="wide" id="friendSearch" placeholder="Najít hráče podle přezdívky"><button id="searchPlayers" class="wide">Vyhledat hráče</button></div><div id="playerResults" class="account-list"></div><h3>📨 Žádosti o přátelství</h3><div id="friendRequests" class="account-list">Načítám…</div><h3>🟢 Moji kamarádi</h3><div id="friendList" class="account-list">Načítám…</div><p id="accountMsg" class="auth-note"></p></div>`;
  document.querySelector('#logout').onclick=async()=>{await sb.auth.signOut();};
  document.querySelector('#searchPlayers').onclick=searchPlayers;await loadFriends();
 }
