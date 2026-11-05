@@ -1712,6 +1712,7 @@ body.fb-premium .fb-number,
   <button data-tab="shop"><i>🛒</i><span>Obchod</span></button>
   <button data-tab="daily"><i>📋</i><span>Denní úkoly</span></button>
   <button data-tab="weekly"><i>📅</i><span>Týdenní úkoly</span></button>
+  <button data-tab="titles"><i>🏅</i><span>Tituly</span></button>
   <button data-tab="log"><i>🏆</i><span>Úspěchy</span></button>
   <button data-tab="account"><i>👥</i><span>Přátelé</span></button>
   <button data-tab="settings"><i>⚙</i><span>Nastavení</span></button>
@@ -1776,17 +1777,19 @@ function placeArt(place){
 function playerLevel(){return Math.floor((Number(state.xp)||0)/500)+1;}
 function placeRequiredLevel(place){return place==='Jezero'?25:place==='Řeka'?50:1;}
 function placeUnlocked(place){return playerLevel()>=placeRequiredLevel(place);}
-const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],achievementStats:{species:{},places:{},morning:0,night:0,predators:0},claimedAchievementRewards:{},dailyTasks:null,best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
+const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],achievementStats:{species:{},places:{},morning:0,night:0,predators:0},claimedAchievementRewards:{},unlockedTitles:[],activeTitle:null,dailyTasks:null,best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
 let cloudSaveTimer=null,cloudSaveBusy=false,cloudSaveAgain=false;
 function load(){
  try{const s=JSON.parse(window.localStorage.getItem('fb-save'));if(s)Object.assign(state,s);initStoreState()}catch(e){/* local storage may be unavailable */}
  state.claimedAchievementRewards=state.claimedAchievementRewards||{};
+ state.unlockedTitles=Array.isArray(state.unlockedTitles)?state.unlockedTitles:[];
  // Backfill the heaviest known trophy for saves created before this statistic existed.
  if(!Number(state.bestWeight||0)){
   const heaviest=(state.records||[]).reduce((best,r)=>!best||Number(r.kg)>Number(best.kg)?r:best,null);
   if(heaviest){state.bestWeight=Number(heaviest.kg)||0;state.heaviestCatch=heaviest;}
  }
  if(!placeUnlocked(state.place))state.place='Rybník';
+ syncPlayerTitles(true);
 }
 function save(){
  const snapshot={...state,phase:'idle',current:null,progress:0};
@@ -1829,6 +1832,7 @@ function render(){
  headerStats();document.querySelectorAll('.fb-nav [data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===state.tab));
  const el=document.querySelector('#screen');
  if(state.tab==='home')renderHome(el);
+ else if(state.tab==='titles')renderPlayerTitles(el);
  else if(state.tab==='fish')renderFish(el);
  else if(state.tab==='shop')renderShop(el);
  else if(state.tab==='account')renderAccount(el);
@@ -1839,6 +1843,7 @@ function render(){
  else renderLog(el);
 }
 function renderHome(el){
+ const activeTitle=getPlayerTitleById(state.activeTitle);
  const places=[
   {name:'Rybník',desc:'Kapr, amur, lín, štika, okoun',image:'https://images.pexels.com/photos/17786368/pexels-photo-17786368.jpeg?auto=compress&cs=tinysrgb&w=1200'},
   {name:'Jezero',desc:'Kapr, amur, jeseter, sumec, candát',image:'https://images.pexels.com/photos/35008328/pexels-photo-35008328.jpeg?auto=compress&cs=tinysrgb&w=1200'},
@@ -1853,7 +1858,7 @@ function renderHome(el){
   <div class="fb-home-title"><span></span><h2>Vyber revír a vyraz na lov!</h2><span></span></div>
   <div class="fb-home-grid">
    <aside class="home-side home-side-left">
-    <section class="home-panel profile-panel"><div class="home-avatar">🎣</div><div class="home-player-name">${escapeHtml(currentProfile?.username||currentUser?.user_metadata?.username||'Rybář')}</div><small>Člen Fishing Brothers</small><div class="profile-divider"></div><div class="profile-stat"><span>🪙</span><b>${money(state.money)}</b></div><div class="profile-stat"><span>🏆</span><b>${Number(state.xp)||0} XP</b></div><div class="profile-stat"><span>🐟</span><b>${state.count} úlovků</b></div></section>
+    <section class="home-panel profile-panel"><div class="home-avatar">🎣</div><div class="home-player-name">${escapeHtml(currentProfile?.username||currentUser?.user_metadata?.username||'Rybář')}</div><small>Člen Fishing Friends</small>${activeTitle?`<div class="home-active-title">🏅 ${escapeHtml(activeTitle.name)}</div>`:''}<div class="profile-divider"></div><div class="profile-stat"><span>🪙</span><b>${money(state.money)}</b></div><div class="profile-stat"><span>🏆</span><b>${Number(state.xp)||0} XP</b></div><div class="profile-stat"><span>🐟</span><b>${state.count} úlovků</b></div></section>
     <section class="home-panel"><h2>📊 Tvoje statistiky</h2><div class="home-stat-row"><span>Celkem úlovků</span><b>${state.count}</b></div><div class="home-stat-row"><span>Největší ryba</span><b>${state.best?state.best+' cm':'—'}</b></div><div class="home-stat-row"><span>Nejtěžší ryba</span><b>${Number(state.bestWeight||state.heaviestCatch?.kg||0)>0?Number(state.bestWeight||state.heaviestCatch.kg).toFixed(2)+' kg':'—'}</b></div><div class="home-stat-row"><span>Úroveň</span><b>LVL ${playerLevel()}</b></div></section>
     <button class="home-side-button" data-tab="account">👤 Můj profil a kamarádi</button>
    </aside>
@@ -2053,8 +2058,68 @@ function finishCatch(release=false){
  const oldLevel=Math.floor((Number(state.xp)||0)/500)+1;state.xp=(Number(state.xp)||0)+(f.xpReward||Math.round(35+f.cm*1.1+f.kg*3));const newLevel=Math.floor(state.xp/500)+1;state._levelUp=newLevel>oldLevel?newLevel:0;
  if(release)state.released++;else{state.sold++;state.money+=f.reward}
  state.current=null;state.phase='idle';state.message=release?'Ryba je zpět ve vodě. Díky za šetrný lov!':`Ryba prodána za ${money(f.reward)}!`;
- save();render();if(isTrophy||state._levelUp)showTrophyCelebration(f,state._levelUp);state._levelUp=0;
+ const newlyUnlockedTitles=syncPlayerTitles();
+  save();render();if(newlyUnlockedTitles.length)showTitleUnlockNotice(newlyUnlockedTitles);else if(isTrophy||state._levelUp)showTrophyCelebration(f,state._levelUp);state._levelUp=0;
 }
+
+const PLAYER_TITLE_DEFS=[
+{id:'first-catch',name:'První úlovek',category:'Obecné',icon:'🎣',desc:'Ulov alespoň 1 rybu.',goal:1,reward:500,xp:50,progress:()=>Number(state.count)||0},
+{id:'keen-angler',name:'Nadšený rybář',category:'Obecné',icon:'🐟',desc:'Ulov 50 ryb.',goal:50,reward:2000,xp:150,progress:()=>Number(state.count)||0},
+{id:'experienced-angler',name:'Zkušený rybář',category:'Obecné',icon:'🏅',desc:'Ulov 250 ryb.',goal:250,reward:5000,xp:300,progress:()=>Number(state.count)||0},
+{id:'carp-beginner',name:'Kapří začátečník',category:'Kapři',icon:'🐟',desc:'Ulov 10 kaprů.',goal:10,reward:1500,xp:100,progress:()=>Number(state.achievementStats?.species?.kapr?.count)||0},
+{id:'carp-hunter',name:'Kapří lovec',category:'Kapři',icon:'🎣',desc:'Ulov 50 kaprů.',goal:50,reward:4000,xp:250,progress:()=>Number(state.achievementStats?.species?.kapr?.count)||0},
+{id:'carp-king',name:'Kapří král',category:'Kapři',icon:'👑',desc:'Ulov 150 kaprů.',goal:150,reward:10000,xp:500,progress:()=>Number(state.achievementStats?.species?.kapr?.count)||0},
+{id:'pike-hunter',name:'Lovec štik',category:'Dravci',icon:'🦈',desc:'Ulov 25 štik.',goal:25,reward:3000,xp:200,progress:()=>Number(state.achievementStats?.species?.stika?.count)||0},
+{id:'zander-specialist',name:'Candátí specialista',category:'Dravci',icon:'🌙',desc:'Ulov 25 candátů.',goal:25,reward:3000,xp:200,progress:()=>Number(state.achievementStats?.species?.candat?.count)||0},
+{id:'predator-king',name:'Král dravců',category:'Dravci',icon:'⚔️',desc:'Ulov dohromady 100 štik a candátů.',goal:100,reward:12000,xp:600,progress:()=>Number(state.achievementStats?.species?.stika?.count||0)+Number(state.achievementStats?.species?.candat?.count||0)},
+{id:'catfish-hunter',name:'Sumcový lovec',category:'Sumci',icon:'🐋',desc:'Ulov 5 sumců.',goal:5,reward:4000,xp:250,progress:()=>Number(state.achievementStats?.species?.sumec?.count)||0},
+{id:'deep-lord',name:'Pán hlubin',category:'Sumci',icon:'🌊',desc:'Ulov 25 sumců.',goal:25,reward:10000,xp:500,progress:()=>Number(state.achievementStats?.species?.sumec?.count)||0},
+{id:'catfish-legend',name:'Sumcová legenda',category:'Sumci',icon:'🐉',desc:'Ulov sumce delšího než 200 cm.',goal:201,unit:'cm',reward:20000,xp:1000,progress:()=>Number(state.achievementStats?.species?.sumec?.maxCm)||0},
+{id:'master-angler',name:'Rybářský mistr',category:'Nejvyšší hodnosti',icon:'🏆',desc:'Ulov celkem 1 000 ryb.',goal:1000,reward:15000,xp:750,progress:()=>Number(state.count)||0},
+{id:'waters-master',name:'Mistr revírů',category:'Nejvyšší hodnosti',icon:'🧭',desc:'Ulov alespoň 10 různých druhů ryb.',goal:10,reward:12000,xp:600,progress:()=>Object.values(state.achievementStats?.species||{}).filter(x=>Number(x?.count)>0).length},
+{id:'fishing-friends-legend',name:'Fishing Friends legenda',category:'Nejvyšší hodnosti',icon:'👑',desc:'Získej všech ostatních 14 titulů.',goal:14,reward:50000,xp:2500,progress:()=>PLAYER_TITLE_DEFS.slice(0,14).filter(t=>(state.unlockedTitles||[]).includes(t.id)).length}
+];
+function getPlayerTitleById(id){return PLAYER_TITLE_DEFS.find(t=>t.id===id)||null;}
+function playerTitleProgress(t){return Math.min(Number(t.progress())||0,t.goal);}
+function syncPlayerTitles(silent=false){
+ state.unlockedTitles=Array.isArray(state.unlockedTitles)?state.unlockedTitles:[];
+ const newly=[];
+ for(const t of PLAYER_TITLE_DEFS.slice(0,14)){
+  if(!state.unlockedTitles.includes(t.id)&&playerTitleProgress(t)>=t.goal){
+   state.unlockedTitles.push(t.id);state.money=(Number(state.money)||0)+t.reward;state.xp=(Number(state.xp)||0)+t.xp;newly.push(t);
+   if(!state.activeTitle)state.activeTitle=t.id;
+  }
+ }
+ const legend=PLAYER_TITLE_DEFS[14];
+ if(!state.unlockedTitles.includes(legend.id)&&playerTitleProgress(legend)>=legend.goal){
+  state.unlockedTitles.push(legend.id);state.money=(Number(state.money)||0)+legend.reward;state.xp=(Number(state.xp)||0)+legend.xp;newly.push(legend);
+  if(!state.activeTitle)state.activeTitle=legend.id;
+ }
+ if(state.activeTitle&&!state.unlockedTitles.includes(state.activeTitle))state.activeTitle=null;
+ if(!state.activeTitle&&state.unlockedTitles.length)state.activeTitle=state.unlockedTitles[0];
+ return silent?[]:newly;
+}
+function renderPlayerTitles(el){
+ syncPlayerTitles(true);
+ const unlocked=new Set(state.unlockedTitles||[]),active=getPlayerTitleById(state.activeTitle);
+ const categories=['Obecné','Kapři','Dravci','Sumci','Nejvyšší hodnosti'];
+ const groups=categories.map(category=>({category,items:PLAYER_TITLE_DEFS.filter(t=>t.category===category)}));
+ const totalCash=PLAYER_TITLE_DEFS.reduce((n,t)=>n+t.reward,0),totalXp=PLAYER_TITLE_DEFS.reduce((n,t)=>n+t.xp,0);
+ el.innerHTML=`<div class="card stack player-titles-page">
+ <div class="titles-hero"><div><small>FISHING FRIENDS · SBÍRKA HODNOSTÍ</small><h2>🏅 Tituly hráče</h2><p class="muted">Plň rybářské výzvy, získávej tituly a ukaž ostatním, co už máš za sebou.</p></div><div class="titles-count"><strong>${unlocked.size}/15</strong><small>ZÍSKANÝCH TITULŮ</small></div></div>
+ <div class="active-title-panel"><div class="active-title-icon">${active?.icon||'🏅'}</div><div class="active-title-copy"><small>TVŮJ AKTIVNÍ TITUL</small><b>${active?escapeHtml(active.name):'Zatím bez titulu'}</b><span>${active?'Zobrazuje se u tvého profilu a jména.':'Získej svůj první titul při rybaření.'}</span></div></div>
+ <div class="titles-summary"><span>🪙 Celkem k získání: <b>${money(totalCash)}</b></span><span>⭐ Celkem k získání: <b>${totalXp.toLocaleString('cs-CZ')} XP</b></span></div>
+ ${groups.map(g=>`<section class="title-group"><h3>${g.category}</h3><div class="title-grid">${g.items.map(t=>{const done=unlocked.has(t.id),p=playerTitleProgress(t),pct=Math.min(100,Math.round(p/t.goal*100)),isActive=state.activeTitle===t.id;return `<article class="player-title-card ${done?'is-unlocked':'is-locked'} ${isActive?'is-active':''}"><div class="player-title-medal">${done?t.icon:'🔒'}</div><div class="player-title-info"><div class="player-title-heading"><b>${escapeHtml(t.name)}</b><span>${done?'ZÍSKÁNO':'ZAMČENO'}</span></div><p>${escapeHtml(t.desc)}</p><div class="title-progress"><i style="width:${pct}%"></i></div><small class="title-progress-label">${t.unit?Number(p).toLocaleString('cs-CZ')+' / '+t.goal+' '+t.unit:Math.floor(p).toLocaleString('cs-CZ')+' / '+t.goal}</small><div class="title-reward-row"><span>🪙 ${money(t.reward)}</span><span>⭐ +${t.xp} XP</span></div>${done?(isActive?'<span class="title-equipped">✓ Aktivní titul</span>':`<button class="title-equip" data-equip-title="${t.id}">Nasadit titul</button>`):'<span class="title-locked-note">Odměna se připíše automaticky po získání.</span>'}</div></article>`;}).join('')}</div></section>`).join('')}
+ </div>`;
+ el.querySelectorAll('[data-equip-title]').forEach(b=>b.onclick=()=>{const id=b.dataset.equipTitle;if(!unlocked.has(id))return;state.activeTitle=id;save();render();});
+}
+function showTitleUnlockNotice(titles){
+ if(!titles?.length)return;
+ const overlay=document.createElement('div');overlay.className='trophy-celebration title-unlock-celebration';
+ overlay.innerHTML=`<div class="trophy-box title-unlock-box"><div class="confetti">✦　✧　★　✦　✧</div><div class="trophy-emoji">🏅</div><h2>${titles.length>1?'NOVÉ TITULY!':'NOVÝ TITUL!'}</h2><div class="title-unlock-list">${titles.map(t=>`<div><b>${t.icon} ${escapeHtml(t.name)}</b><small>🪙 ${money(t.reward)} · ⭐ +${t.xp} XP</small></div>`).join('')}</div><p>Odměna byla automaticky připsána na tvůj účet.</p><button id="closeTitleUnlock">Paráda!</button></div>`;
+ document.body.appendChild(overlay);overlay.querySelector('#closeTitleUnlock').onclick=()=>overlay.remove();overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+}
+
 function renderShop(el){renderFishingFriendsShop(el);}
 
 
@@ -2260,7 +2325,8 @@ async function renderAccount(el){
   document.querySelector('#login').onclick=async()=>{const email=document.querySelector('#authEmail').value.trim(),password=document.querySelector('#authPassword').value;const {error}=await sb.auth.signInWithPassword({email,password});accountMessage(error?error.message:'Přihlášení proběhlo.');};return;
  }
  const username=currentProfile?.username||currentUser.user_metadata?.username||currentUser.email;
- el.innerHTML=`<div class="card stack"><div class="row"><div><h2>👤 ${escapeHtml(username)}</h2><small class="muted">${escapeHtml(currentUser.email||'')}</small></div><button class="secondary" id="logout">Odhlásit</button></div><div class="metrics account-profile-metrics"><div class="metric"><small>ÚROVEŇ HRÁČE</small><strong>LVL ${playerLevel()}</strong></div><div class="metric"><small>ÚLOVKY</small><strong>${state.count}</strong></div><div class="metric"><small>KAMARÁDI</small><strong id="friendCount">—</strong></div></div><h2>🤝 Kamarádi</h2><div class="account-grid"><input class="wide" id="friendSearch" placeholder="Najít hráče podle přezdívky"><button id="searchPlayers" class="wide">Vyhledat hráče</button></div><div id="playerResults" class="account-list"></div><h3>📨 Žádosti o přátelství</h3><div id="friendRequests" class="account-list">Načítám…</div><h3>🟢 Moji kamarádi</h3><div id="friendList" class="account-list">Načítám…</div><p id="accountMsg" class="auth-note"></p></div>`;
+ const activeTitle=getPlayerTitleById(state.activeTitle);
+ el.innerHTML=`<div class="card stack"><div class="row"><div><h2>👤 ${escapeHtml(username)}</h2><small class="muted">${escapeHtml(currentUser.email||'')}</small>${activeTitle?`<div class="home-active-title">🏅 ${escapeHtml(activeTitle.name)}</div>`:'<div class="muted">Zatím bez aktivního titulu</div>'}<${escapeHtml(currentUser.email||'')}</small></div><button class="secondary" id="logout">Odhlásit</button></div><div class="metrics account-profile-metrics"><div class="metric"><small>ÚROVEŇ HRÁČE</small><strong>LVL ${playerLevel()}</strong></div><div class="metric"><small>ÚLOVKY</small><strong>${state.count}</strong></div><div class="metric"><small>KAMARÁDI</small><strong id="friendCount">—</strong></div></div><h2>🤝 Kamarádi</h2><div class="account-grid"><input class="wide" id="friendSearch" placeholder="Najít hráče podle přezdívky"><button id="searchPlayers" class="wide">Vyhledat hráče</button></div><div id="playerResults" class="account-list"></div><h3>📨 Žádosti o přátelství</h3><div id="friendRequests" class="account-list">Načítám…</div><h3>🟢 Moji kamarádi</h3><div id="friendList" class="account-list">Načítám…</div><p id="accountMsg" class="auth-note"></p></div>`;
  document.querySelector('#logout').onclick=async()=>{await sb.auth.signOut();};
  document.querySelector('#searchPlayers').onclick=searchPlayers;await loadFriends();
 }
@@ -2269,16 +2335,16 @@ async function searchPlayers(){const q=document.querySelector('#friendSearch').v
 function presenceLabel(ts){if(!ts)return 'Naposledy neznámá aktivita';const mins=Math.floor((Date.now()-new Date(ts).getTime())/60000);return mins<5?'Pravděpodobně online':mins<60?`Aktivní před ${mins} min`: `Naposledy ${new Date(ts).toLocaleString('cs-CZ')}`;}
 async function sendFriendRequest(id){const {error}=await sb.from('friendships').insert({requester_id:currentUser.id,addressee_id:id,status:'pending'});accountMessage(error?error.message:'Žádost o přátelství odeslána.');await loadFriends();}
 async function loadFriends(){if(!currentUser)return;const req=document.querySelector('#friendRequests'),list=document.querySelector('#friendList');if(!req||!list)return;const {data:incoming,error}=await sb.from('friendships').select('id,requester_id,profiles!friendships_requester_id_fkey(username)').eq('addressee_id',currentUser.id).eq('status','pending');req.innerHTML=error?escapeHtml(error.message):(incoming?.length?incoming.map(r=>`<div class="account-row"><span>${escapeHtml(r.profiles?.username||'Rybář')}</span><button data-accept="${r.id}">Přijmout</button></div>`).join(''):'Žádné nové žádosti.');req.querySelectorAll('[data-accept]').forEach(b=>b.onclick=async()=>{const {error}=await sb.from('friendships').update({status:'accepted'}).eq('id',b.dataset.accept);accountMessage(error?error.message:'Kamarád přidán.');loadFriends();});
- const {data:friends,error:e2}=await sb.from('friendships').select('id,requester_id,addressee_id,requester:profiles!friendships_requester_id_fkey(username,last_seen),addressee:profiles!friendships_addressee_id_fkey(username,last_seen)').eq('status','accepted').or(`requester_id.eq.${currentUser.id},addressee_id.eq.${currentUser.id}`);list.innerHTML=e2?escapeHtml(e2.message):(friends?.length?friends.map(f=>{const p=f.requester_id===currentUser.id?f.addressee:f.requester;return `<div class="account-row"><span><i class="${new Date(p?.last_seen||0)>new Date(Date.now()-5*60000)?'online-dot':'offline-dot'}"></i>${escapeHtml(p?.username||'Rybář')}<small>${presenceLabel(p?.last_seen)}</small></span><button class="secondary" data-removefriend="${f.id}">Odebrat</button></div>`}).join(''):'Zatím nemáš žádné kamarády.');const countEl=document.querySelector('#friendCount');if(countEl)countEl.textContent=String(friends?.length||0);list.querySelectorAll('[data-removefriend]').forEach(b=>b.onclick=async()=>{await sb.from('friendships').delete().eq('id',b.dataset.removefriend);loadFriends();});}
+ const {data:friends,error:e2}=await sb.from('friendships').select('id,requester_id,addressee_id,requester:profiles!friendships_requester_id_fkey(username,last_seen,game_state),addressee:profiles!friendships_addressee_id_fkey(username,last_seen,game_state)').eq('status','accepted').or(`requester_id.eq.${currentUser.id},addressee_id.eq.${currentUser.id}`);list.innerHTML=e2?escapeHtml(e2.message):(friends?.length?friends.map(f=>{const p=f.requester_id===currentUser.id?f.addressee:f.requester;return `<div class="account-row"><span><i class="${new Date(p?.last_seen||0)>new Date(Date.now()-5*60000)?'online-dot':'offline-dot'}"></i>${escapeHtml(p?.username||'Rybář')}<small>${escapeHtml(getPlayerTitleById(p?.game_state?.activeTitle)?.name||'Bez titulu')} · ${presenceLabel(p?.last_seen)}</small></span><button class="secondary" data-removefriend="${f.id}">Odebrat</button></div>`}).join(''):'Zatím nemáš žádné kamarády.');const countEl=document.querySelector('#friendCount');if(countEl)countEl.textContent=String(friends?.length||0);list.querySelectorAll('[data-removefriend]').forEach(b=>b.onclick=async()=>{await sb.from('friendships').delete().eq('id',b.dataset.removefriend);loadFriends();});}
 async function renderOnlineLeaderboard(place=window.fbAchievementPlace||'Rybník',metric=window.fbAchievementMetric||'length'){
  const box=document.querySelector('#onlineLeaderboard'),side=document.querySelector('#sideLeaderboard');
  if(!sb){const msg='<p class="muted">Pro online žebříček se přihlas ke svému účtu.</p>';if(box)box.innerHTML=msg;if(side)side.innerHTML=msg;return;}
  const {data:rows,error}=await sb.from('trophy_catches').select('user_id,length_cm,weight_kg,fish_name,fish_id,place').limit(3000);
  if(error){console.warn('Online žebříček:',error);const msg='<p class="muted">Online žebříček se nepodařilo načíst.</p>';if(box)box.innerHTML=msg;if(side)side.innerHTML=msg;return;}
- const profilesIds=[...new Set((rows||[]).map(r=>r.user_id).filter(Boolean))];let names={},levels={};
- if(profilesIds.length){const {data:profiles,error:pe}=await sb.from('profiles').select('id,username,game_state').in('id',profilesIds);if(!pe)(profiles||[]).forEach(p=>{names[p.id]=p.username;const xp=Number(p.game_state?.xp||0);levels[p.id]=Math.floor(xp/500)+1;});}
+ const profilesIds=[...new Set((rows||[]).map(r=>r.user_id).filter(Boolean))];let names={},levels={},titles={};
+ if(profilesIds.length){const {data:profiles,error:pe}=await sb.from('profiles').select('id,username,game_state').in('id',profilesIds);if(!pe)(profiles||[]).forEach(p=>{names[p.id]=p.username;const xp=Number(p.game_state?.xp||0);levels[p.id]=Math.floor(xp/500)+1;titles[p.id]=p.game_state?.activeTitle||null;});}
  const makeTop=(source,key)=>{const sorted=[...source].filter(r=>r.user_id&&Number(r[key])>0).sort((a,b)=>Number(b[key])-Number(a[key]));const bestByPlayer=new Map();for(const r of sorted)if(!bestByPlayer.has(r.user_id))bestByPlayer.set(r.user_id,r);return [...bestByPlayer.values()].slice(0,5);};
- const draw=(list,key,unit)=>list.length?list.map((r,i)=>{const fishName=String(r.fish_name||'Ryba'),fish=escapeHtml(fishName),rawName=names[r.user_id]||'Rybář',username=escapeHtml(rawName),value=Number(r[key]),entry=fishData.find(f=>f.name===fishName||f.id===r.fish_id),thumb=fishImages[entry?.id]||fishImages.kapr,initials=escapeHtml(rawName.trim().slice(0,1).toUpperCase());return `<div class="leaderboard-row"><b class="leader-rank">${['🥇','🥈','🥉','4','5'][i]}</b><span class="leader-avatar">${initials}</span><span class="leader-person"><strong>${username}<em class="leader-level">LVL ${levels[r.user_id]||1}</em></strong><small>${fish} · ${escapeHtml(r.place||'Revír')}</small></span><b class="leader-value">${value.toFixed(unit==='kg'?2:0)} ${unit}</b><img class="leader-fish-thumb" src="${thumb}" alt="${fish}" loading="lazy"></div>`;}).join(''):'<p class="muted">Zatím zde nejsou žádné trofejní úlovky.</p>';
+ const draw=(list,key,unit)=>list.length?list.map((r,i)=>{const fishName=String(r.fish_name||'Ryba'),fish=escapeHtml(fishName),rawName=names[r.user_id]||'Rybář',username=escapeHtml(rawName),value=Number(r[key]),entry=fishData.find(f=>f.name===fishName||f.id===r.fish_id),thumb=fishImages[entry?.id]||fishImages.kapr,initials=escapeHtml(rawName.trim().slice(0,1).toUpperCase());return `<div class="leaderboard-row"><b class="leader-rank">${['🥇','🥈','🥉','4','5'][i]}</b><span class="leader-avatar">${initials}</span><span class="leader-person"><strong>${username}<em class="leader-level">LVL ${levels[r.user_id]||1}</em></strong><small>${escapeHtml(getPlayerTitleById(titles[r.user_id])?.name||'Bez titulu')} · ${fish} · ${escapeHtml(r.place||'Revír')}</small></span><b class="leader-value">${value.toFixed(unit==='kg'?2:0)} ${unit}</b><img class="leader-fish-thumb" src="${thumb}" alt="${fish}" loading="lazy"></div>`;}).join(''):'<p class="muted">Zatím zde nejsou žádné trofejní úlovky.</p>';
  const filtered=(rows||[]).filter(r=>r.place===place);
  if(box){const key=metric==='weight'?'weight_kg':'length_cm',unit=metric==='weight'?'kg':'cm',top=makeTop(filtered,key);box.innerHTML=`<h3>TOP 5 · ${escapeHtml(place)} · ${metric==='weight'?'nejtěžší ryby':'nejdelší ryby'}</h3>${draw(top,key,unit)}`;}
  if(side){const longest=makeTop(rows||[],'length_cm'),heaviest=makeTop(rows||[],'weight_kg');side.innerHTML=`<div class="side-top-title">📏 Nejdelší</div>${draw(longest,'length_cm','cm')}<div class="side-top-title">⚖️ Nejtěžší</div>${draw(heaviest,'weight_kg','kg')}`;}
@@ -3111,4 +3177,25 @@ else{startGame();}
 }
 @media(max-width:380px){.fb-top>.fb-nav{gap:4px!important;padding:4px!important}.fb-top>.fb-nav button{min-height:42px!important;padding:4px 1px!important}.fb-top>.fb-nav button span{font-size:8px!important}}
 </style>
-</body></html>
+<style id="fb-player-titles">
+.home-active-title{display:inline-block;margin-top:5px;padding:4px 8px;border:1px solid #c59a4e;border-radius:20px;background:linear-gradient(120deg,#4b3519,#21170d);color:#f8d77e;font-size:11px;font-weight:800}
+.player-titles-page{gap:16px}.titles-hero{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:5px 2px 13px;border-bottom:1px solid #8a683d}
+.titles-hero small,.active-title-copy small{font-size:10px;letter-spacing:1.6px;color:#d8bd83;font-weight:800}.titles-hero h2{margin:5px 0}.titles-hero p{margin:0}
+.titles-count{min-width:82px;padding:12px;border:1px solid #b28b50;border-radius:12px;background:linear-gradient(145deg,#4c371b,#1b130b);text-align:center}.titles-count strong{display:block;font-size:25px;color:#f7d47c}.titles-count small{font-size:9px}
+.active-title-panel{display:flex;align-items:center;gap:13px;padding:14px;border:1px solid #bd9653;border-radius:13px;background:linear-gradient(120deg,#473318,#21170d)}
+.active-title-icon{width:58px;height:58px;display:grid;place-items:center;border-radius:50%;border:2px solid #e2bc68;background:radial-gradient(circle,#8d6a31,#21160b);font-size:31px;flex:none}
+.active-title-copy{display:grid;gap:3px}.active-title-copy b{font-size:17px;color:#ffe3a0}.active-title-copy span{font-size:11px;color:#d4c09a}
+.titles-summary{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:10px;background:#241a10;color:#e8d5ae;font-size:12px}
+.title-group h3{margin:5px 0 10px;color:#f5d78e;font-size:17px}.title-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.player-title-card{display:flex;gap:10px;min-width:0;padding:11px;border:1px solid #725735;border-radius:12px;background:linear-gradient(145deg,#342719,#17110b)}
+.player-title-card.is-locked{opacity:.78}.player-title-card.is-active{border-color:#f0cd77;box-shadow:inset 0 0 0 1px #f0cd7755}
+.player-title-medal{width:46px;height:46px;flex:none;display:grid;place-items:center;border:1px solid #a17b43;border-radius:50%;background:radial-gradient(circle,#6d5129,#21160b);font-size:23px}
+.player-title-card.is-locked .player-title-medal{filter:grayscale(1);background:#28231c}
+.player-title-info{flex:1;min-width:0}.player-title-heading{display:flex;justify-content:space-between;gap:5px;align-items:start}.player-title-heading b{font-size:13px;color:#f5e4c1}.player-title-heading span{font-size:8px;letter-spacing:.5px;color:#e4bd70;white-space:nowrap}
+.player-title-info p{min-height:30px;margin:5px 0;color:#c8b797;font-size:10px;line-height:1.4}.title-progress{height:6px;overflow:hidden;border-radius:20px;background:#100d09;border:1px solid #5c472c}.title-progress i{display:block;height:100%;background:linear-gradient(90deg,#9a6c2b,#f2cf78)}
+.title-progress-label{display:block;margin-top:4px;color:#d6c29c;font-size:9px}.title-reward-row{display:flex;gap:10px;flex-wrap:wrap;margin:7px 0;color:#f1d17e;font-size:10px;font-weight:800}
+.title-equipped,.title-locked-note{display:block;font-size:10px;color:#c9b58e;margin-top:5px}#screen .title-equip{padding:7px 10px;font-size:11px}
+.title-unlock-box{max-width:440px}.title-unlock-list{display:grid;gap:8px;margin:12px 0}.title-unlock-list>div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px;border:1px solid #9b784a;border-radius:9px;background:#24190e}
+.title-unlock-list b{color:#ffe39a}.title-unlock-list small{color:#e3ca94;font-size:10px}
+@media(max-width:700px){.title-grid{grid-template-columns:1fr}.titles-hero{align-items:start}.titles-count{min-width:68px;padding:9px}.player-title-card{padding:10px}.player-title-info p{min-height:0}}
+</style></body></html>
