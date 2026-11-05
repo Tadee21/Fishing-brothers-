@@ -1640,7 +1640,66 @@ body.fb-premium .fb-number,
 .bite-strike button{width:100%;min-height:66px!important;font-size:21px!important;background:linear-gradient(#d49a38,#7d3f12)!important;border:2px solid #ffe08a!important;box-shadow:0 0 18px #e49c35aa!important}
 .bite-strike small{display:block;margin-top:10px;color:#f5dca7}
 @keyframes bitePulse{from{opacity:.65;transform:scale(.97)}to{opacity:1;transform:scale(1.04)}}
-</style></head>
+</style><style id="fb-desktop-compact-cards">
+/* Desktop-only layout refinement. Mobile/tablet styling remains untouched. */
+@media (min-width: 1101px) {
+  /* Fish collection: more compact cards, with the fish artwork taking up more of each card. */
+  #screen .fish-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+  }
+  #screen .fish-gallery .fish-card {
+    padding: 6px !important;
+    border-radius: 12px !important;
+  }
+  #screen .fish-gallery .fish-card img,
+  #screen .fish-gallery .fish-card .fish-image {
+    height: 116px !important;
+    min-height: 116px !important;
+  }
+  #screen .fish-gallery .fish-card .fish-image img {
+    height: 100% !important;
+    min-height: 0 !important;
+    object-fit: contain !important;
+  }
+  #screen .fish-gallery .fish-card b { margin-top: 5px !important; font-size: 13px !important; }
+  #screen .fish-gallery .fish-card small { font-size: 10px !important; }
+
+  /* Shop equipment: shorter image frames and tighter cards. */
+  #screen .store-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; gap: 9px !important; }
+  #screen .store-grid .store-card { border-radius: 11px !important; }
+  #screen .store-grid .store-card .store-art {
+    height: 122px !important;
+    min-height: 122px !important;
+    padding: 5px !important;
+  }
+  #screen .store-grid .store-card:has(.store-art img[src*="rod-"]) .store-art {
+    height: 132px !important; min-height: 132px !important;
+  }
+  #screen .store-grid .store-card:has(.store-art img[src*="reel-"]) .store-art {
+    height: 112px !important; min-height: 112px !important;
+  }
+  #screen .store-grid .store-card .store-card-body { padding: 8px !important; gap: 5px !important; }
+  #screen .store-grid .store-card h3 { font-size: 13px !important; }
+  #screen .store-grid .store-card p { font-size: 10px !important; min-height: 25px !important; }
+  #screen .store-grid .store-card .store-specs { font-size: 9px !important; min-height: 24px !important; }
+
+  /* After landing a fish: reduce the oversized catch photo only on desktop. */
+  #screen .fight-panel-desktop.fight-caught .fish-catch-frame {
+    height: 148px !important;
+    max-height: 148px !important;
+    margin: 6px auto !important;
+    width: min(100%, 760px) !important;
+  }
+  #screen .fight-panel-desktop.fight-caught .fish-catch-frame .fishart {
+    height: 148px !important;
+    max-height: 148px !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
+</style>
+</head>
 <body class="fb-premium">
 <header class="fb-top">
  <div class="brand">
