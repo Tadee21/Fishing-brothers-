@@ -2671,4 +2671,122 @@ else{startGame();}
   }
 }
 </style>
+
+<style id="fb-desktop-fish-and-gear-refinement">
+/* Desktop only: show complete fish photos and make equipment tiles compact. */
+@media (min-width: 761px) {
+  #screen .fish-gallery {
+    display:grid!important;
+    grid-template-columns:repeat(auto-fit,minmax(145px,1fr))!important;
+    gap:9px!important;
+    align-items:start!important;
+  }
+  #screen .fish-gallery .fish-card {
+    display:flex!important;
+    flex-direction:column!important;
+    min-width:0!important;
+    padding:6px!important;
+    gap:5px!important;
+    border-radius:12px!important;
+    overflow:hidden!important;
+  }
+  #screen .fish-gallery .fish-card .fish-gallery-photo {
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:1/1!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding:4px!important;
+    margin:0!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    transform:none!important;
+    border-radius:9px!important;
+    background:radial-gradient(ellipse at center,#173b2c,#071710)!important;
+  }
+  #screen .fish-gallery .fish-card b {
+    padding:2px 2px 0!important;
+    margin:0!important;
+    font-size:12px!important;
+    line-height:1.2!important;
+    text-align:center!important;
+  }
+  #screen .fish-gallery .fish-card small {
+    padding:0 2px 2px!important;
+    font-size:10px!important;
+    line-height:1.2!important;
+    text-align:center!important;
+  }
+
+  /* Equipped rod/reel/line/bait: four compact tiles, image above the label. */
+  #screen .ff-equipped-visuals {
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:9px!important;
+    align-items:stretch!important;
+  }
+  #screen .ff-equipped-visuals > div {
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:5px!important;
+    min-width:0!important;
+    padding:8px!important;
+    border-radius:11px!important;
+    overflow:hidden!important;
+    text-align:center!important;
+  }
+  #screen .ff-equipped-visuals > div img {
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:1/1!important;
+    max-width:132px!important;
+    min-height:0!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    padding:5px!important;
+    margin:0 auto!important;
+    border-radius:8px!important;
+    background:radial-gradient(ellipse,#36563d,#102117)!important;
+  }
+  #screen .ff-equipped-visuals > div small,
+  #screen .ff-equipped-visuals > div b {
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    padding:0!important;
+    margin:0!important;
+    text-align:center!important;
+    overflow-wrap:anywhere!important;
+  }
+  #screen .ff-equipped-visuals > div small {font-size:9px!important;line-height:1.15!important}
+  #screen .ff-equipped-visuals > div b {font-size:11px!important;line-height:1.2!important}
+
+  /* Shop cards use a compact square product window instead of a tall rectangle. */
+  #screen .store-grid {
+    grid-template-columns:repeat(auto-fill,minmax(155px,1fr))!important;
+    gap:9px!important;
+  }
+  #screen .store-grid .store-card .store-art {
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    aspect-ratio:1/1!important;
+    padding:7px!important;
+    overflow:hidden!important;
+  }
+  #screen .store-grid .store-card .store-art img {
+    width:100%!important;
+    height:100%!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    transform:none!important;
+  }
+}
+</style>
 </body></html>
