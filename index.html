@@ -2586,4 +2586,89 @@ else{startGame();}
   }
 }
 </style>
+
+<style id="fb-desktop-square-fish-equipment">
+/* Desktop only: square photo windows for fish and equipment; touch/mobile layouts stay unchanged. */
+@media (min-width: 761px) and (hover: hover) and (pointer: fine) {
+  /* Fish species cards: square photo area, tighter frame and legible caption below. */
+  #screen .fish-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)) !important;
+    gap: 12px !important;
+  }
+  #screen .fish-gallery .fish-card {
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+    padding: 7px !important;
+    gap: 5px !important;
+    border-radius: 13px !important;
+  }
+  #screen .fish-gallery .fish-card .fish-gallery-photo {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 3px !important;
+    margin: 0 !important;
+    border-radius: 9px !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    transform: none !important;
+  }
+  #screen .fish-gallery .fish-card b {
+    padding: 3px 3px 0 !important;
+    margin: 0 !important;
+    font-size: 13px !important;
+    line-height: 1.2 !important;
+  }
+  #screen .fish-gallery .fish-card small {
+    padding: 0 3px 3px !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Shop equipment and tackle: square image windows, with the whole product visible. */
+  #screen .store-grid {
+    grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)) !important;
+    gap: 12px !important;
+  }
+  #screen .store-grid .store-card {
+    min-width: 0 !important;
+    border-radius: 13px !important;
+  }
+  #screen .store-grid .store-card .store-art {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 1 / 1 !important;
+    padding: 7px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    background: radial-gradient(ellipse at center, #294735, #0b1711 78%) !important;
+  }
+  #screen .store-grid .store-card .store-art img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    transform: scale(1.08) !important;
+    margin: auto !important;
+    padding: 0 !important;
+  }
+  #screen .store-grid .store-card .store-card-body {
+    padding: 8px !important;
+    gap: 5px !important;
+  }
+}
+</style>
 </body></html>
