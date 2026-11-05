@@ -2868,4 +2868,57 @@ else{startGame();}
   }
 }
 </style>
+
+<style id="fb-desktop-square-bait-frames">
+/* Desktop only: square lure image frames, with readable card sizing. */
+@media (min-width: 1101px) {
+  #screen .choices.bait-square-grid {
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:11px!important;
+    width:100%!important;
+    max-width:none!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+  #screen .choices.bait-square-grid .bait-square-card {
+    min-width:0!important;
+    padding:8px!important;
+    gap:6px!important;
+    border-radius:12px!important;
+  }
+  #screen .choices.bait-square-grid .bait-square-card .bait-art-frame {
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    aspect-ratio:1/1!important;
+    padding:7px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+  #screen .choices.bait-square-grid .bait-square-card .bait-art-frame img {
+    display:block!important;
+    width:100%!important;
+    height:100%!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    transform:none!important;
+    padding:3px!important;
+    margin:0!important;
+  }
+  #screen .choices.bait-square-grid .bait-square-card .bait-copy b {
+    font-size:14px!important;
+    line-height:1.2!important;
+  }
+  #screen .choices.bait-square-grid .bait-square-card .bait-copy small {
+    font-size:10px!important;
+    line-height:1.25!important;
+  }
+}
+</style>
 </body></html>
