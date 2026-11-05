@@ -2274,6 +2274,62 @@ else{startGame();}
  "#screen .medal-copy small{font-size:10px!important;color:#e8d4a8!important;}"+
  "@media(max-width:680px){#screen .achievement-grid{grid-template-columns:1fr!important;gap:9px!important;}#screen .achievement-medal{padding:12px!important;}#screen .record{grid-template-columns:26px 62px minmax(0,1fr)!important;gap:8px!important;}#screen .record> b:last-child{grid-column:3!important;justify-self:start!important;font-size:13px!important;}#screen .record img.artmini{width:62px!important;height:56px!important;}}";
 
+
+ /* Desktop fine-tuning after visual feedback: larger fish, tighter cards and catch details. */
+ gearStyle.textContent += `
+ @media(min-width:1101px){
+   /* Caught fish: bring the fish back up in size while keeping the whole panel compact. */
+   #screen .fight-panel-desktop.fight-caught .fish-catch-frame{
+     width:min(100%,760px)!important;
+     height:205px!important;
+     max-height:205px!important;
+     min-height:205px!important;
+     margin:5px auto!important;
+     overflow:hidden!important;
+   }
+   #screen .fight-panel-desktop.fight-caught .fish-catch-frame img.fishart{
+     width:100%!important;
+     height:205px!important;
+     max-height:205px!important;
+     object-fit:contain!important;
+     transform:scale(1.18)!important;
+     transform-origin:center!important;
+   }
+   #screen .fight-panel-desktop.fight-caught .card{
+     padding:10px!important;
+     gap:6px!important;
+   }
+   #screen .fight-panel-desktop.fight-caught .card h2{
+     font-size:22px!important;
+     margin:5px 0!important;
+   }
+   #screen .fight-panel-desktop.fight-caught .metrics{gap:6px!important}
+   #screen .fight-panel-desktop.fight-caught .metric{padding:8px!important}
+   #screen .fight-panel-desktop.fight-caught .metric small{font-size:9px!important}
+   #screen .fight-panel-desktop.fight-caught .metric strong{font-size:19px!important}
+   #screen .fight-panel-desktop.fight-caught .catch-xp{
+     margin:2px 0!important;
+     padding:8px 10px!important;
+     font-size:13px!important;
+   }
+   #screen .fight-panel-desktop.fight-caught .card>p:not(.catch-xp){font-size:11px!important;margin:3px 0!important}
+   #screen .fight-panel-desktop.fight-caught .card button{min-height:38px!important;padding:8px 12px!important;font-size:13px!important}
+
+   /* Fish selection: shorter cards, slightly larger and clearer fish photos. */
+   #screen .fish-gallery{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+   #screen .fish-gallery .fish-card{padding:0!important;border-radius:12px!important}
+   #screen .fish-gallery .fish-card .fish-gallery-photo{
+     height:116px!important;
+     min-height:116px!important;
+     max-height:116px!important;
+     object-fit:cover!important;
+     object-position:center!important;
+     transform:scale(1.06)!important;
+   }
+   #screen .fish-gallery .fish-card b{padding:6px 4px 1px!important;font-size:12px!important}
+   #screen .fish-gallery .fish-card small{padding:0 4px 6px!important;font-size:10px!important}
+ }
+ `;
  document.documentElement.dataset.fishHabitatsLoaded=String(species.length);
 })();
 </script>
