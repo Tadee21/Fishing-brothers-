@@ -2028,7 +2028,7 @@ function getFishingAchievements(){
   {id:'all-places-unlocked',category:'Postup a vybavení',icon:'🔓',name:'Všechny revíry odemčeny',desc:'Odemkni jezero i řeku.',progress:(placeUnlocked('Jezero')?1:0)+(placeUnlocked('Řeka')?1:0),goal:2,unit:'revíry',tier:'Zlato'},
   {id:'legendary-gear',category:'Postup a vybavení',icon:'🎣',name:'Kompletní legendární výbava',desc:'Vylepši prut, naviják i nástrahy na úroveň 5.',progress:[state.rod,state.reel,state.baitLevel].filter(v=>(Number(v)||0)>=5).length,goal:3,unit:'části',tier:'Legendární'}
  ];
- const rewards={Bronz:40,Stříbro:80,Zlato:140,Legendární:220};
+ const rewards={Bronz:150,Stříbro:300,Zlato:600,Legendární:1000};
  return items.map(a=>({...a,reward:rewards[a.tier]||40,done:a.progress>=a.goal,pct:Math.min(100,Math.round(a.progress/a.goal*100))}));
 }
 function renderLog(el){
