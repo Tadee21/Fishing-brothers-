@@ -3202,4 +3202,55 @@ else{startGame();}
 </style><style id="fb-title-name-badges">
 .player-title-badge{display:inline-flex;align-items:center;vertical-align:middle;max-width:100%;padding:3px 7px;margin:0 5px 2px 0;border:1px solid #c49a56;border-radius:6px;background:linear-gradient(135deg,#5b421f,#25190d);color:#ffe3a1;font:800 10px/1.2 system-ui,sans-serif;letter-spacing:.15px;white-space:nowrap;box-shadow:inset 0 1px #fff2,0 1px 3px #0006}
 .home-player-name .player-title-badge{font-size:10px}.account-row .player-title-badge{margin-right:6px}.leader-person strong .player-title-badge{font-size:9px;padding:2px 5px}
-</style></body></html>
+</style>
+<style id="fb-desktop-leaderboard-fix">
+/* Desktop only: keep the trophy leaderboard rows inside the right sidebar */
+@media (min-width:1101px){
+  .fb-right{min-width:0}
+  .fb-leader{min-width:0;overflow:hidden}
+  .fb-ranking{min-width:0;width:100%}
+  .fb-ranking .leaderboard-row{
+    grid-template-columns:22px 30px minmax(0,1fr) auto!important;
+    gap:6px!important;
+    align-items:center;
+    min-width:0;
+    padding:9px 0!important;
+  }
+  .fb-ranking .leaderboard-row .leader-avatar{
+    width:29px;height:29px;min-width:29px;
+    display:grid;place-items:center;
+    border:2px solid #c69a50;border-radius:50%;
+    background:linear-gradient(145deg,#397653,#173c2b);
+    color:#ffe5a3;font-weight:800;font-size:13px;
+  }
+  .fb-ranking .leaderboard-row .leader-person{
+    min-width:0;width:100%;display:grid;gap:3px;
+  }
+  .fb-ranking .leaderboard-row .leader-person strong{
+    display:flex;align-items:center;flex-wrap:wrap;gap:3px 5px;
+    min-width:0;max-width:100%;overflow:visible;
+    white-space:normal;text-overflow:clip;line-height:1.25;
+    font-size:11px;
+  }
+  .fb-ranking .leaderboard-row .leader-person strong .player-title-badge{
+    display:inline-flex;max-width:100%;margin:0;
+    font-size:9px;padding:2px 5px;white-space:normal;
+    line-height:1.15;overflow-wrap:anywhere;
+  }
+  .fb-ranking .leaderboard-row .leader-level{
+    display:inline-block;white-space:nowrap;flex:none;
+    font-size:9px;padding:2px 5px;border-radius:10px;
+  }
+  .fb-ranking .leaderboard-row .leader-person small{
+    display:block;min-width:0;max-width:100%;
+    white-space:normal;overflow-wrap:anywhere;
+    line-height:1.25;font-size:9px;
+  }
+  .fb-ranking .leaderboard-row .leader-value{
+    white-space:nowrap;font-size:11px!important;
+    text-align:right;justify-self:end;padding-left:2px;
+  }
+  .fb-ranking .leaderboard-row .leader-fish-thumb{display:none!important}
+}
+</style>
+</body></html>
