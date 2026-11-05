@@ -1712,7 +1712,7 @@ body.fb-premium .fb-number,
   <button data-tab="log"><i>🏆</i><span>Úspěchy</span></button>
   <button data-tab="daily"><i>📋</i><span>Denní úkoly</span></button>
   <button data-tab="shop"><i>🛒</i><span>Obchod</span></button>
-  <button data-tab="shop"><i>🎒</i><span>Vybavení</span></button>
+  <button data-tab="weekly"><i>📅</i><span>Týdenní úkoly</span></button>
   <button data-tab="account"><i>👥</i><span>Přátelé</span></button>
   <button data-tab="settings"><i>⚙</i><span>Nastavení</span></button>
  </nav>
@@ -1835,6 +1835,7 @@ function render(){
  else if(state.tab==='leader')renderLeader(el);
  else if(state.tab==='settings')renderSettings(el);
  else if(state.tab==='daily')renderDailyTasks(el);
+ else if(state.tab==='weekly')renderWeeklyTasks(el);
  else renderLog(el);
 }
 function renderHome(el){
@@ -1858,7 +1859,7 @@ function renderHome(el){
    </aside>
    <div class="home-main">
     <section class="home-panel home-places-panel"><div class="home-section-title"><h2>🌅 Vyber revír</h2><span>3 lokality</span></div><div class="home-places">${places.map(p=>`<article class="home-place ${state.place===p.name?'is-selected':''}"><h3>${p.name}</h3><div class="home-place-image"><img src="${p.image}" alt="${p.name}" loading="lazy"></div><div class="home-place-content"><small>🐟 Typické druhy</small><p>${p.desc}</p><button data-home-place="${p.name}" ${placeUnlocked(p.name)?'':'disabled'}>${placeUnlocked(p.name)?'Vybrat revír　›':'🔒 Úroveň '+placeRequiredLevel(p.name)}</button></div></article>`).join('')}</div></section>
-    <div class="home-main-actions"><button data-tab="fish">🐟 Začít lovit</button><button class="home-secondary" data-tab="shop">🛒 Obchod</button><button class="home-secondary" data-tab="shop">🎒 Výbava</button><button class="home-secondary" data-tab="log">🏆 Úspěchy</button></div>
+    <div class="home-main-actions"><button data-tab="fish">🐟 Začít lovit</button><button class="home-secondary" data-tab="shop">🛒 Obchod</button><button class="home-secondary" data-tab="weekly">📅 Týdenní úkoly</button><button class="home-secondary" data-tab="log">🏆 Úspěchy</button></div>
    </div>
    <aside class="home-side home-side-right">
     <section class="home-panel home-leader-panel"><h2>🏆 TOP RYBÁŘI</h2><div class="home-leader-subtitle">Pořadí podle délky a hmotnosti trofejních ryb</div><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section>
@@ -2039,6 +2040,7 @@ function finishCatch(release=false){
  }
  state.count++;
  updateDailyTasksForCatch(f);
+  updateWeeklyTasksForCatch(f,isTrophy);
  const achievementStats=state.achievementStats||(state.achievementStats={species:{},places:{},morning:0,night:0,predators:0});
  achievementStats.species=achievementStats.species||{};achievementStats.places=achievementStats.places||{};
  const speciesStat=achievementStats.species[f.id]||(achievementStats.species[f.id]={count:0,maxCm:0});
@@ -2108,6 +2110,53 @@ function renderDailyTasks(el){
  el.querySelectorAll('[data-daily-claim]').forEach(b=>b.onclick=()=>{const t=state.dailyTasks.tasks[Number(b.dataset.dailyClaim)];if(!t||t.claimed||Number(t.progress)<t.target)return;t.claimed=true;state.money=(Number(state.money)||0)+t.reward;state.xp=(Number(state.xp)||0)+t.xp;save();render();});
  const bonus=el.querySelector('#claimDailyBonus');if(bonus)bonus.onclick=()=>{if(state.dailyTasks.bonusClaimed||!state.dailyTasks.tasks.every(t=>t.claimed))return;state.dailyTasks.bonusClaimed=true;state.money=(Number(state.money)||0)+500;state.xp=(Number(state.xp)||0)+150;save();render();};
 }
+
+function weeklyDateKey(){
+ const d=new Date(),day=(d.getDay()+6)%7,monday=new Date(d.getFullYear(),d.getMonth(),d.getDate()-day);
+ return monday.getFullYear()+'-'+String(monday.getMonth()+1).padStart(2,'0')+'-'+String(monday.getDate()).padStart(2,'0');
+}
+function ensureWeeklyTasks(){
+ const week=weeklyDateKey();
+ if(state.weeklyTasks&&state.weeklyTasks.week===week&&Array.isArray(state.weeklyTasks.tasks))return;
+ state.weeklyTasks={week,tasks:[
+  {type:'count',id:'week-catch-15',title:'Ulov 15 ryb',desc:'Zdoláš během týdne libovolných 15 ryb.',target:15,reward:1000,xp:200,icon:'🐟',progress:0,claimed:false},
+  {type:'weight',id:'week-weight-50',title:'Nachytej 50 kg ryb',desc:'Nasbírej dohromady 50 kg úlovků.',target:50,reward:1500,xp:250,icon:'⚖️',progress:0,claimed:false},
+  {type:'species',id:'week-pike-3',fishId:'stika',title:'Ulov 3 štiky',desc:'Vydej se za štikami a přelsti alespoň tři.',target:3,reward:1200,xp:220,icon:'🦈',progress:0,claimed:false},
+  {type:'bigcatfish',id:'week-catfish-100',title:'Sumec přes 100 cm',desc:'Ulov sumce, který měří alespoň 100 cm.',target:1,reward:2000,xp:350,icon:'🐋',progress:0,claimed:false},
+  {type:'trophy',id:'week-trophies-5',title:'Získej 5 trofejí',desc:'Ulov pět trofejních ryb libovolného druhu.',target:5,reward:2500,xp:400,icon:'💎',progress:0,claimed:false}
+ ],bonusClaimed:false};
+ save();
+}
+function updateWeeklyTasksForCatch(f,isTrophy){
+ ensureWeeklyTasks();
+ (state.weeklyTasks.tasks||[]).forEach(t=>{
+  if(t.type==='count')t.progress=Math.min(t.target,(Number(t.progress)||0)+1);
+  else if(t.type==='weight')t.progress=Math.min(t.target,+(Number(t.progress||0)+Number(f.kg||0)).toFixed(2));
+  else if(t.type==='species'&&t.fishId===f.id)t.progress=Math.min(t.target,(Number(t.progress)||0)+1);
+  else if(t.type==='bigcatfish'&&f.id==='sumec'&&Number(f.cm)>=100)t.progress=1;
+  else if(t.type==='trophy'&&isTrophy)t.progress=Math.min(t.target,(Number(t.progress)||0)+1);
+ });
+}
+function renderWeeklyTasks(el){
+ ensureWeeklyTasks();
+ const tasks=state.weeklyTasks.tasks||[];
+ const completed=tasks.filter(t=>Number(t.progress)>=t.target).length;
+ const allClaimed=tasks.length===5&&tasks.every(t=>t.claimed);
+ const totalReward=tasks.reduce((sum,t)=>sum+t.reward,0);
+ const now=new Date(),days=(now.getDay()+6)%7,reset=new Date(now.getFullYear(),now.getMonth(),now.getDate()+(7-days));
+ reset.setHours(0,0,0,0);
+ const remaining=Math.max(0,reset-Date.now()),daysLeft=Math.floor(remaining/86400000),hours=Math.floor((remaining%86400000)/3600000);
+ el.innerHTML=`<div class="card stack daily-page">
+  <div class="daily-hero"><div><small>FISHING BROTHERS · TÝDENNÍ VÝZVY</small><h2>📅 Týdenní úkoly</h2><p class="muted">Pět větších rybářských výzev na celý týden. Plň je při běžném lovu a vyzvedávej odměny.</p></div><div class="daily-count"><strong>${completed}/5</strong><small>SPLNĚNO</small></div></div>
+  <div class="status">⏳ Nové úkoly za ${daysLeft} dní ${hours} h · Obnova každé pondělí o půlnoci.</div>
+  <div class="daily-task-list">${tasks.map((t,i)=>{const done=Number(t.progress)>=t.target,pct=Math.min(100,Math.round(Number(t.progress||0)/t.target*100));const progress=t.type==='weight'?Number(t.progress||0).toFixed(1).replace('.',',')+' / '+t.target+' kg':Math.floor(Number(t.progress||0))+' / '+t.target;return `<article class="daily-task ${done?'is-done':''}"><div class="daily-task-icon">${t.icon}</div><div class="daily-task-main"><div class="row"><b>${t.title}</b><span class="daily-reward">🪙 ${money(t.reward)}</span></div><p class="muted">${t.desc}</p><div class="daily-progress"><i style="width:${pct}%"></i></div><small>${progress} · +${t.xp} XP</small></div><div class="daily-task-action">${t.claimed?'<span class="reward-claimed">✓ Vyzvednuto</span>':done?'<button class="claim-daily" data-weekly-claim="'+i+'">Vyzvednout</button>':'<span class="reward-locked">Probíhá</span>'}</div></article>`}).join('')}</div>
+  <section class="daily-bonus ${allClaimed?'ready':''}"><div><b>🎁 Týdenní bonus za všechny úkoly</b><p class="muted">Vyzvedni všech pět odměn a získáš navíc 5 000 Kč + 500 XP.</p></div>${state.weeklyTasks.bonusClaimed?'<span class="reward-claimed">✓ Bonus vyzvednut</span>':allClaimed?'<button class="gold" id="claimWeeklyBonus">Vyzvednout bonus</button>':'<span class="reward-locked">Po splnění všech 5 úkolů</span>'}</section>
+  <div class="status">💰 Celkem můžeš získat ${money(totalReward+5000)} a ${tasks.reduce((sum,t)=>sum+t.xp,0)+500} XP.</div>
+ </div>`;
+ el.querySelectorAll('[data-weekly-claim]').forEach(b=>b.onclick=()=>{const t=state.weeklyTasks.tasks[Number(b.dataset.weeklyClaim)];if(!t||t.claimed||Number(t.progress)<t.target)return;t.claimed=true;state.money=(Number(state.money)||0)+t.reward;state.xp=(Number(state.xp)||0)+t.xp;save();render();});
+ const bonus=el.querySelector('#claimWeeklyBonus');if(bonus)bonus.onclick=()=>{if(state.weeklyTasks.bonusClaimed||!state.weeklyTasks.tasks.every(t=>t.claimed))return;state.weeklyTasks.bonusClaimed=true;state.money=(Number(state.money)||0)+5000;state.xp=(Number(state.xp)||0)+500;save();render();};
+}
+
 
 function getFishingAchievements(){
  const stats=state.achievementStats||{},species=stats.species||{},places=stats.places||{};
