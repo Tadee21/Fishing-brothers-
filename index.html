@@ -2144,20 +2144,24 @@ const PLAYER_TITLE_DEFS=[
 {id:'catfish-legend',name:'Sumcová legenda',category:'Sumci',icon:'🐉',desc:'Ulov sumce delšího než 200 cm.',goal:201,unit:'cm',reward:20000,xp:1000,progress:()=>Number(state.achievementStats?.species?.sumec?.maxCm)||0},
 {id:'master-angler',name:'Rybářský mistr',category:'Nejvyšší hodnosti',icon:'🏆',desc:'Ulov celkem 1 000 ryb.',goal:1000,reward:15000,xp:750,progress:()=>Number(state.count)||0},
 {id:'waters-master',name:'Mistr revírů',category:'Nejvyšší hodnosti',icon:'🧭',desc:'Ulov alespoň 10 různých druhů ryb.',goal:10,reward:12000,xp:600,progress:()=>Object.values(state.achievementStats?.species||{}).filter(x=>Number(x?.count)>0).length},
-{id:'fishing-friends-legend',name:'Fishing Friends legenda',category:'Nejvyšší hodnosti',icon:'👑',desc:'Získej všech ostatních 14 titulů.',goal:14,reward:50000,xp:2500,progress:()=>PLAYER_TITLE_DEFS.slice(0,14).filter(t=>(state.unlockedTitles||[]).includes(t.id)).length}
+{id:'mountain-explorer',name:'Průzkumník hor',category:'Horské jezero',icon:'🏔️',desc:'Ulov první rybu na Horském jezeře.',goal:1,reward:2500,xp:150,progress:()=>Number(state.achievementStats?.places?.['Horské jezero'])||0},
+{id:'trout-specialist',name:'Pstruhový specialista',category:'Horské jezero',icon:'🎣',desc:'Ulov dohromady 25 pstruhů obecných a duhových.',goal:25,reward:6000,xp:350,progress:()=>Number(state.achievementStats?.species?.['pstruh-obecny']?.count||0)+Number(state.achievementStats?.species?.['pstruh-duhovy']?.count||0)},
+{id:'mountain-master',name:'Mistr horských vod',category:'Horské jezero',icon:'❄️',desc:'Ulov 50 ryb na Horském jezeře.',goal:50,reward:12000,xp:650,progress:()=>Number(state.achievementStats?.places?.['Horské jezero'])||0},
+{id:'alpine-legend',name:'Legenda alpských jezer',category:'Horské jezero',icon:'👑',desc:'Ulov trofejního pstruha obecného, pstruha duhového, sivena, lipana i lososa.',goal:5,reward:40000,xp:2000,progress:()=>['pstruh-obecny','pstruh-duhovy','siven','lipan','losos'].filter(id=>{const f=fishData.find(x=>x.id===id);return f&&Number(state.achievementStats?.species?.[id]?.maxCm||0)>=(Number(f.trophy)||999);}).length},
+{id:'fishing-friends-legend',name:'Fishing Friends legenda',category:'Nejvyšší hodnosti',icon:'👑',desc:'Získej všechny ostatní tituly.',goal:PLAYER_TITLE_DEFS.length-1,reward:50000,xp:2500,progress:()=>PLAYER_TITLE_DEFS.slice(0,-1).filter(t=>(state.unlockedTitles||[]).includes(t.id)).length}
 ];
 function getPlayerTitleById(id){return PLAYER_TITLE_DEFS.find(t=>t.id===id)||null;}
 function playerTitleProgress(t){return Math.min(Number(t.progress())||0,t.goal);}
 function syncPlayerTitles(silent=false){
  state.unlockedTitles=Array.isArray(state.unlockedTitles)?state.unlockedTitles:[];
  const newly=[];
- for(const t of PLAYER_TITLE_DEFS.slice(0,14)){
+ for(const t of PLAYER_TITLE_DEFS.slice(0,-1)){
   if(!state.unlockedTitles.includes(t.id)&&playerTitleProgress(t)>=t.goal){
    state.unlockedTitles.push(t.id);state.money=(Number(state.money)||0)+t.reward;state.xp=(Number(state.xp)||0)+t.xp;newly.push(t);
    if(!state.activeTitle)state.activeTitle=t.id;
   }
  }
- const legend=PLAYER_TITLE_DEFS[14];
+ const legend=PLAYER_TITLE_DEFS[PLAYER_TITLE_DEFS.length-1];
  if(!state.unlockedTitles.includes(legend.id)&&playerTitleProgress(legend)>=legend.goal){
   state.unlockedTitles.push(legend.id);state.money=(Number(state.money)||0)+legend.reward;state.xp=(Number(state.xp)||0)+legend.xp;newly.push(legend);
   if(!state.activeTitle)state.activeTitle=legend.id;
@@ -2170,11 +2174,11 @@ function renderPlayerTitles(el){
  const newlyUnlocked=syncPlayerTitles();
  if(newlyUnlocked.length)save();
  const unlocked=new Set(state.unlockedTitles||[]),active=getPlayerTitleById(state.activeTitle);
- const categories=['Obecné','Kapři','Dravci','Sumci','Nejvyšší hodnosti'];
+ const categories=['Obecné','Kapři','Dravci','Sumci','Horské jezero','Nejvyšší hodnosti'];
  const groups=categories.map(category=>({category,items:PLAYER_TITLE_DEFS.filter(t=>t.category===category)}));
  const totalCash=PLAYER_TITLE_DEFS.reduce((n,t)=>n+t.reward,0),totalXp=PLAYER_TITLE_DEFS.reduce((n,t)=>n+t.xp,0);
  el.innerHTML=`<div class="card stack player-titles-page">
- <div class="titles-hero"><div><small>FISHING FRIENDS · SBÍRKA HODNOSTÍ</small><h2>🏅 Tituly hráče</h2><p class="muted">Plň rybářské výzvy, získávej tituly a ukaž ostatním, co už máš za sebou.</p></div><div class="titles-count"><strong>${unlocked.size}/15</strong><small>ZÍSKANÝCH TITULŮ</small></div></div>
+ <div class="titles-hero"><div><small>FISHING FRIENDS · SBÍRKA HODNOSTÍ</small><h2>🏅 Tituly hráče</h2><p class="muted">Plň rybářské výzvy, získávej tituly a ukaž ostatním, co už máš za sebou.</p></div><div class="titles-count"><strong>${unlocked.size}/${PLAYER_TITLE_DEFS.length}</strong><small>ZÍSKANÝCH TITULŮ</small></div></div>
  <div class="active-title-panel"><div class="active-title-icon">${active?.icon||'🏅'}</div><div class="active-title-copy"><small>TVŮJ AKTIVNÍ TITUL</small><b>${active?escapeHtml(active.name):'Zatím bez titulu'}</b><span>${active?'Zobrazuje se u tvého profilu a jména.':'Získej svůj první titul při rybaření.'}</span></div></div>
  <div class="titles-summary"><span>🪙 Celkem k získání: <b>${money(totalCash)}</b></span><span>⭐ Celkem k získání: <b>${totalXp.toLocaleString('cs-CZ')} XP</b></span></div>
  ${groups.map(g=>`<section class="title-group"><h3>${g.category}</h3><div class="title-grid">${g.items.map(t=>{const done=unlocked.has(t.id),p=playerTitleProgress(t),pct=Math.min(100,Math.round(p/t.goal*100)),isActive=state.activeTitle===t.id;return `<article class="player-title-card ${done?'is-unlocked':'is-locked'} ${isActive?'is-active':''}"><div class="player-title-medal">${done?t.icon:'🔒'}</div><div class="player-title-info"><div class="player-title-heading"><b>${escapeHtml(t.name)}</b><span>${done?'ZÍSKÁNO':'ZAMČENO'}</span></div><p>${escapeHtml(t.desc)}</p><div class="title-progress"><i style="width:${pct}%"></i></div><small class="title-progress-label">${t.unit?Number(p).toLocaleString('cs-CZ')+' / '+t.goal+' '+t.unit:Math.floor(p).toLocaleString('cs-CZ')+' / '+t.goal}</small><div class="title-reward-row"><span>🪙 ${money(t.reward)}</span><span>⭐ +${t.xp} XP</span></div>${done?(isActive?'<span class="title-equipped">✓ Aktivní titul</span>':`<button class="title-equip" data-equip-title="${t.id}">Nasadit titul</button>`):'<span class="title-locked-note">Odměna se připíše automaticky po získání.</span>'}</div></article>`;}).join('')}</div></section>`).join('')}
@@ -2318,6 +2322,10 @@ function getFishingAchievements(){
   {id:'heavy-record',category:'Vzácné úlovky',icon:'⚖️',name:'Rekordní hmotnost',desc:'Ulov rybu těžší než 30 kg.',progress:Math.min(Number(state.bestWeight)||0,30),goal:30,unit:'kg',tier:'Legendární'},
   {id:'heavy20',category:'Vzácné úlovky',icon:'🏋️',name:'Těžká váha',desc:'Ulov rybu těžší než 20 kg.',progress:Math.min(Number(state.bestWeight)||0,20),goal:20,unit:'kg',tier:'Zlato'},
   {id:'trophies25',category:'Vzácné úlovky',icon:'💎',name:'Sběratel trofejí',desc:'Získej 25 trofejních úlovků.',progress:Math.min(records.filter(r=>r.cm >= (fishData.find(f=>f.id===r.id)?.trophy||999)).length,25),goal:25,tier:'Legendární'},
+  {id:'first-trout',category:'Mistři jednotlivých druhů',icon:'🐟',name:'První pstruh',desc:'Ulov svého prvního pstruha obecného nebo duhového.',progress:Math.min((Number(species['pstruh-obecny']?.count)||0)+(Number(species['pstruh-duhovy']?.count)||0),1),goal:1,tier:'Bronz'},
+  {id:'mountain-ten',category:'Průzkumníci revírů',icon:'🏔️',name:'Horský rybář',desc:'Ulov 10 ryb na Horském jezeře.',progress:Math.min(Number(places['Horské jezero'])||0,10),goal:10,tier:'Stříbro'},
+  {id:'lipan-ten',category:'Mistři jednotlivých druhů',icon:'🪶',name:'Král lipanů',desc:'Ulov 10 lipanů podhorních.',progress:Math.min(Number(species.lipan?.count)||0,10),goal:10,tier:'Zlato'},
+  {id:'mountain-trophy',category:'Průzkumníci revírů',icon:'💎',name:'Horská trofej',desc:'Ulov trofejní rybu na Horském jezeře.',progress:Math.min(records.filter(r=>r.place==='Horské jezero'&&r.cm>=(fishData.find(f=>f.id===r.id)?.trophy||999)).length,1),goal:1,tier:'Legendární'},
   {id:'pond',category:'Průzkumníci revírů',icon:'🌿',name:'Rybář rybníků',desc:'Ulov alespoň jednu rybu na rybníku.',progress:Math.min(Number(places['Rybník'])||0,1),goal:1,tier:'Bronz'},
   {id:'lake',category:'Průzkumníci revírů',icon:'🌊',name:'Jezerní dobrodruh',desc:'Ulov alespoň jednu rybu na jezeře.',progress:Math.min(Number(places['Jezero'])||0,1),goal:1,tier:'Stříbro'},
   {id:'river',category:'Průzkumníci revírů',icon:'🏞️',name:'Říční dobrodruh',desc:'Ulov alespoň jednu rybu na řece.',progress:Math.min(Number(places['Řeka'])||0,1),goal:1,tier:'Zlato'},
