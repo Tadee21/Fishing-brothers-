@@ -1786,6 +1786,19 @@ body.fb-premium .fb-number,
  <section class="fb-bottom"><div class="fb-statbox"><b>Tvoje statistiky</b><div>🐟 Celkem úlovků: <strong id="bottomCount">0</strong></div><div>📏 Nejdelší ryba: <strong id="bottomRecord">—</strong></div></div><div class="fb-statbox"><b>Fishing Brothers</b><div>🎣 Rybník · Jezero · Řeka</div><div>🤝 Lov s kamarády</div></div></section>
  <footer>Fishing Brothers · FISH · CATCH · REPEAT</footer>
 </main>
+<script id="fb-early-error-capture">
+(function(){
+ function show(message,source,line,column,stack){
+  var screen=document.getElementById('screen');
+  if(!screen)return;
+  var detail=[message,source?('Soubor: '+source):'',line?('Řádek: '+line+(column?':'+column:'')):'',stack||''].filter(Boolean).join('\n');
+  screen.innerHTML='<div class="card" style="padding:20px;color:#ffe0a0"><h2>⚠️ Našli jsme chybu při načítání hry</h2><p>Pošli nám prosím screenshot této hlášky.</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;color:#fff"></pre><button onclick="location.reload()">Zkusit znovu</button></div>';
+  screen.querySelector('pre').textContent=detail;
+ }
+ window.addEventListener('error',function(e){show(e.message||'Chyba JavaScriptu',e.filename,e.lineno,e.colno,e.error&&e.error.stack);},true);
+ window.addEventListener('unhandledrejection',function(e){var r=e.reason;show(r&&r.message||String(r),'Promise',0,0,r&&r.stack);});
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="store.js?v=mountain-baits-2"></script>
 <script>
