@@ -2489,8 +2489,16 @@ async function renderOnlineLeaderboard(place=window.fbAchievementPlace||'Rybník
 async function onAuthChanged(session){currentUser=session?.user||null;currentProfile=null;if(onlineChannel){sb.removeChannel(onlineChannel);onlineChannel=null;}if(currentUser){await refreshProfile();await sb.from('profiles').update({last_seen:new Date().toISOString()}).eq('id',currentUser.id);onlineChannel=sb.channel('fb-presence').on('presence',{event:'sync'},()=>{}).subscribe(async status=>{if(status==='SUBSCRIBED')await onlineChannel.track({user_id:currentUser.id,username:currentProfile?.username||'Rybář'});});if(window.fbHeartbeat)clearInterval(window.fbHeartbeat);window.fbHeartbeat=setInterval(()=>{if(currentUser)sb.from('profiles').update({last_seen:new Date().toISOString()}).eq('id',currentUser.id);},60000);}else{if(window.fbHeartbeat)clearInterval(window.fbHeartbeat);}render();if(currentUser)renderOnlineLeaderboard();}
 
 function startGame(){
- document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;render()});
- load();state.tab='home';render();if(sb){sb.auth.getSession().then(({data})=>onAuthChanged(data.session));sb.auth.onAuthStateChange((_event,session)=>{onAuthChanged(session);});}
+ document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{try{state.tab=b.dataset.tab;render()}catch(error){showStartupError(error)}});
+ try{
+  load();state.tab='home';render();
+  if(sb){sb.auth.getSession().then(({data})=>onAuthChanged(data.session)).catch(showStartupError);sb.auth.onAuthStateChange((_event,session)=>{onAuthChanged(session);});}
+ }catch(error){showStartupError(error);}
+}
+function showStartupError(error){
+ console.error('Fishing Brothers startup error:',error);
+ const screen=document.querySelector('#screen');
+ if(screen)screen.innerHTML='<div class="card" style="padding:20px;color:#ffe0a0"><h2>⚠️ Chyba při spuštění hry</h2><p>Pomoz nám ji opravit. Pošli prosím screenshot této hlášky.</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;color:#fff">'+String(error?.stack||error?.message||error).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</pre><button onclick="location.reload()">Zkusit znovu</button></div>';
 }
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',startGame,{once:true});}
 else{startGame();}
