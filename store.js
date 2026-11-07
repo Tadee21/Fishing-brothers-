@@ -8,11 +8,11 @@ const FF_STORE={
  ['line-mountain','Crystal Clear 0,32 mm',5200,75,'🧵','Nosnost 8,5 kg · Průměr 0,32 mm'],['line-basic','Basic 0,20 mm',0,1,'🧵','Nosnost 4 kg · Průměr 0,20 mm'],['line-strong','Strong 0,25 mm',1500,5,'🧵','Nosnost 5,5 kg · Průměr 0,25 mm'],['line-power','Power 0,30 mm',3500,10,'🧵','Nosnost 7,5 kg · Průměr 0,30 mm'],['line-monster','Monster 0,35 mm',7000,18,'🧵','Nosnost 10 kg · Průměr 0,35 mm'],['line-extreme','Extreme 0,40 mm',12000,30,'🏆','Nosnost 13 kg · Průměr 0,40 mm']],
  braids:[['braid-catfish-040','Catfish Braid',8000,15,'🧵','Nosnost 30 kg · Průměr 0,40 mm · 250 m'],['braid-monster-050','Monster Catfish',18000,30,'🧵','Nosnost 45 kg · Průměr 0,50 mm · 250 m'],['braid-bigcat-060','Big Catfish Pro',35000,45,'🏆','Nosnost 60 kg · Průměr 0,60 mm · 250 m']],
  baits:[
- ['mountain-spinner','Guma','Pstruhová třpytka',1800,75,16,['pstruh-obecny','pstruh-duhovy','siven','lipan'],'✨'],
- ['mountain-spoon','Guma','Jezerní plandavka',2200,75,17,['pstruh-obecny','pstruh-duhovy','siven'],'🥄'],
- ['mountain-fly','Wobbler','Muška na mokrém kameni',1600,75,15,['pstruh-obecny','pstruh-duhovy','lipan'],'🪰'],
- ['mountain-nymph','Wobbler','Muškařská nymfa',1900,75,16,['pstruh-obecny','siven','lipan'],'🪰'],
- ['mountain-realistic','Guma','Realistická horská nástraha',2500,75,18,['pstruh-obecny','pstruh-duhovy','siven','losos'],'🐟'],
+ ['mountain-spinner','Horské jezero','Pstruhová třpytka',1800,75,16,['pstruh-obecny','pstruh-duhovy','siven','lipan'],'✨'],
+ ['mountain-spoon','Horské jezero','Jezerní plandavka',2200,75,17,['pstruh-obecny','pstruh-duhovy','siven'],'🥄'],
+ ['mountain-fly','Horské jezero','Muška na mokrém kameni',1600,75,15,['pstruh-obecny','pstruh-duhovy','lipan'],'🪰'],
+ ['mountain-nymph','Horské jezero','Muškařská nymfa',1900,75,16,['pstruh-obecny','siven','lipan'],'🪰'],
+ ['mountain-realistic','Horské jezero','Realistická horská nástraha',2500,75,18,['pstruh-obecny','pstruh-duhovy','siven','losos'],'🐟'],
  ['bait-strawberry','Boilies','Jahodové boilies',0,1,5,['kapr','amur'],'🍓'],['bait-krill','Boilies','Krillové boilies',1500,3,8,['kapr','sumec'],'🦐'],['bait-pineapple','Boilies','Ananasové boilies',2500,5,9,['kapr','amur'],'🍍'],['bait-scopex','Boilies','Scopexové boilies',4000,8,10,['kapr','lin'],'🟠'],['bait-tiger','Boilies','Boilies – tygří ořech',6000,12,12,['kapr','amur'],'🥜'],
  ['corn-yellow','Kukuřice','Žlutá kukuřice',0,1,5,['kapr','amur','lin'],'🌽'],['corn-red','Kukuřice','Červená kukuřice',1000,3,6,['kapr','amur'],'🌽'],['corn-tiger','Kukuřice','Tygří ořech',2000,5,8,['kapr','amur'],'🥜'],['corn-honey','Kukuřice','Medová kukuřice',3500,8,9,['kapr','lin'],'🍯'],['corn-pineapple','Kukuřice','Zelená kukuřice',5000,12,11,['kapr','amur'],'🍍'],
  ['lure-kopyto','Guma','Kopyto – chartreuse',0,1,5,['stika','candat','okoun'],'🐟'],['lure-ripper','Guma','Ripper – stříbrný',1500,3,6,['stika','candat'],'🐟'],['lure-twister','Guma','Twister – oranžový',2500,5,8,['candat','okoun'],'〰️'],['lure-smacek','Guma','Smáček – okouní vzor',4000,8,9,['candat','okoun','bolen'],'🐠'],['lure-frog','Guma','Perleťový shad',6000,12,11,['stika'],'🐟'],
@@ -31,7 +31,7 @@ function initStoreState(){
  state.baitSelections=state.baitSelections&&typeof state.baitSelections==='object'?state.baitSelections:{};
  const selected=FF_STORE.baits.find(x=>x[0]===state.selectedBait);
  if(selected&&state.ownedBaits.includes(selected[0]))state.baitSelections[selected[1]]=selected[0];
- for(const category of ['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha']){
+ for(const category of ['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha','Horské jezero']){
   const remembered=state.baitSelections[category];
   if(!state.ownedBaits.includes(remembered)||!FF_STORE.baits.some(x=>x[0]===remembered&&x[1]===category)){
    const firstOwned=FF_STORE.baits.find(x=>x[1]===category&&state.ownedBaits.includes(x[0]));
