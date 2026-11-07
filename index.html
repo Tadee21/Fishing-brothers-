@@ -432,6 +432,28 @@ button:active:not(:disabled){transform:translateY(1px)}
 
 
 .achievement-reward{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:9px;padding-top:8px;border-top:1px solid #ffffff18;font-size:12px;color:#d8c8a8}.achievement-reward b{color:#f4d37d}.claim-reward{border:1px solid #d7ad55!important;border-radius:9px!important;padding:7px 12px!important;background:linear-gradient(145deg,#80602b,#4d3518)!important;color:#fff2ce!important;font-weight:800!important;font-size:12px!important;min-height:32px!important}.claim-reward:active{transform:scale(.97)}.reward-claimed{color:#91c9a0;font-weight:800}.reward-locked{color:#929292}
+
+/* HORSKE JEZERO – sjednoceni karet revíru s ostatními */
+@media(min-width:621px){
+ .home-places{grid-template-columns:repeat(4,minmax(0,1fr))!important;}
+ #screen .choices:has([data-place]){grid-template-columns:repeat(4,minmax(0,1fr))!important;}
+}
+@media(max-width:620px){
+ .home-places{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;}
+ .home-place{display:flex!important;flex-direction:column!important;grid-column:auto!important;min-width:0!important;aspect-ratio:1/1!important;}
+ .home-place h3{grid-column:auto!important;text-align:center!important;padding:7px 5px!important;font-size:clamp(14px,4vw,18px)!important;}
+ .home-place-image{grid-column:auto!important;grid-row:auto!important;height:auto!important;min-height:0!important;flex:1 1 auto!important;}
+ .home-place-content{grid-column:auto!important;grid-row:auto!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;flex:0 0 auto!important;padding:6px!important;}
+ .home-place-content small{font-size:9px!important;}
+ .home-place-content p{font-size:10px!important;line-height:1.2!important;min-height:0!important;margin:3px 0 5px!important;}
+ .home-place-content button{font-size:10px!important;padding:6px 3px!important;}
+ #screen .choices:has([data-place]){grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;}
+ #screen .place-choice:last-child,#screen .place-choice:last-child:nth-child(odd){grid-column:auto!important;}
+ #screen .place-choice{display:flex!important;flex-direction:column!important;min-width:0!important;aspect-ratio:1/1!important;padding:7px!important;}
+ #screen .place-choice .place-photo,#screen .place-photo{width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:1.65/1!important;flex:1 1 auto!important;margin:0 0 7px!important;border-radius:8px!important;}
+ #screen .place-choice b{font-size:clamp(13px,3.8vw,17px)!important;line-height:1.15!important;}
+ #screen .place-choice small{font-size:10px!important;line-height:1.2!important;}
+}
 </style>
 <style>
 /* FINAL REFERENCE-MATCH REDESIGN */
