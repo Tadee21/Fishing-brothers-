@@ -2161,7 +2161,7 @@ const PLAYER_TITLE_DEFS=[
 {id:'trout-specialist',name:'Pstruhový specialista',category:'Horské jezero',icon:'🎣',desc:'Ulov dohromady 25 pstruhů obecných a duhových.',goal:25,reward:6000,xp:350,progress:()=>Number(state.achievementStats?.species?.['pstruh-obecny']?.count||0)+Number(state.achievementStats?.species?.['pstruh-duhovy']?.count||0)},
 {id:'mountain-master',name:'Mistr horských vod',category:'Horské jezero',icon:'❄️',desc:'Ulov 50 ryb na Horském jezeře.',goal:50,reward:12000,xp:650,progress:()=>Number(state.achievementStats?.places?.['Horské jezero'])||0},
 {id:'alpine-legend',name:'Legenda alpských jezer',category:'Horské jezero',icon:'👑',desc:'Ulov trofejního pstruha obecného, pstruha duhového, sivena, lipana i lososa.',goal:5,reward:40000,xp:2000,progress:()=>['pstruh-obecny','pstruh-duhovy','siven','lipan','losos'].filter(id=>{const f=fishData.find(x=>x.id===id);return f&&Number(state.achievementStats?.species?.[id]?.maxCm||0)>=(Number(f.trophy)||999);}).length},
-{id:'fishing-friends-legend',name:'Fishing Friends legenda',category:'Nejvyšší hodnosti',icon:'👑',desc:'Získej všechny ostatní tituly.',goal:PLAYER_TITLE_DEFS.length-1,reward:50000,xp:2500,progress:()=>PLAYER_TITLE_DEFS.slice(0,-1).filter(t=>(state.unlockedTitles||[]).includes(t.id)).length}
+{id:'fishing-friends-legend',name:'Fishing Friends legenda',category:'Nejvyšší hodnosti',icon:'👑',desc:'Získej všechny ostatní tituly.',goal:18,reward:50000,xp:2500,progress:()=>PLAYER_TITLE_DEFS.slice(0,-1).filter(t=>(state.unlockedTitles||[]).includes(t.id)).length}
 ];
 function getPlayerTitleById(id){return PLAYER_TITLE_DEFS.find(t=>t.id===id)||null;}
 function playerTitleProgress(t){return Math.min(Number(t.progress())||0,t.goal);}
