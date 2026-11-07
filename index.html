@@ -454,6 +454,31 @@ button:active:not(:disabled){transform:translateY(1px)}
  #screen .place-choice b{font-size:clamp(13px,3.8vw,17px)!important;line-height:1.15!important;}
  #screen .place-choice small{font-size:10px!important;line-height:1.2!important;}
 }
+
+/* FINAL OVERRIDE: every venue is an identical square tile on home and fishing screens */
+@media(max-width:620px){
+ .home-places{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:auto!important;align-items:stretch!important;gap:10px!important}
+ .home-places>.home-place{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) auto!important;grid-column:auto!important;width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:1/1!important;align-self:stretch!important;overflow:hidden!important}
+ .home-places>.home-place h3{grid-column:1!important;grid-row:1!important;text-align:center!important;white-space:normal!important;min-height:0!important;padding:7px 4px!important;font-size:clamp(14px,3.8vw,18px)!important}
+ .home-places>.home-place .home-place-image{grid-column:1!important;grid-row:2!important;width:100%!important;height:100%!important;min-height:0!important;aspect-ratio:auto!important;overflow:hidden!important}
+ .home-places>.home-place .home-place-content{grid-column:1!important;grid-row:3!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;min-height:0!important;padding:6px!important}
+ .home-places>.home-place .home-place-content small{font-size:9px!important;line-height:1.1!important}
+ .home-places>.home-place .home-place-content p{display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;min-height:0!important;height:2.4em!important;margin:3px 0!important;font-size:9px!important;line-height:1.2!important}
+ .home-places>.home-place .home-place-content button{margin-top:2px!important;width:100%!important;padding:5px 2px!important;font-size:9px!important}
+ #screen .choices:has(> [data-place]){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:auto!important;align-items:stretch!important;gap:9px!important}
+ #screen .choices:has(> [data-place])>.place-choice{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr) auto auto!important;grid-column:auto!important;width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:1/1!important;align-self:stretch!important;overflow:hidden!important;padding:7px!important}
+ #screen .choices:has(> [data-place])>.place-choice .place-photo{grid-column:1!important;grid-row:1!important;display:block!important;width:100%!important;height:100%!important;min-height:0!important;aspect-ratio:auto!important;max-width:none!important;margin:0 0 6px!important;object-fit:cover!important}
+ #screen .choices:has(> [data-place])>.place-choice b{grid-column:1!important;grid-row:2!important;display:block!important;font-size:clamp(13px,3.8vw,17px)!important;line-height:1.15!important}
+ #screen .choices:has(> [data-place])>.place-choice small{grid-column:1!important;grid-row:3!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;min-height:0!important;font-size:9px!important;line-height:1.2!important}
+ #screen .choices:has(> [data-place])>.place-choice:last-child{grid-column:auto!important}
+}
+@media(min-width:621px){
+ .home-places{grid-template-columns:repeat(4,minmax(0,1fr))!important;align-items:stretch!important}
+ .home-places>.home-place{aspect-ratio:1/1!important;display:grid!important;grid-template-rows:auto minmax(0,1fr) auto!important;min-height:0!important}
+ #screen .choices:has(> [data-place]){grid-template-columns:repeat(4,minmax(0,1fr))!important;align-items:stretch!important}
+ #screen .choices:has(> [data-place])>.place-choice{aspect-ratio:1/1!important;display:grid!important;grid-template-rows:minmax(0,1fr) auto auto!important;min-height:0!important}
+}
+
 </style>
 <style>
 /* FINAL REFERENCE-MATCH REDESIGN */
