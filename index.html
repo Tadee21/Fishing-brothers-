@@ -1756,7 +1756,13 @@ const fishData = [
  {id:'lin',name:'Lín obecný',min:18,max:60,ref:35,kg:.6,variation:.18,color:'#a98a4d',type:'kaprovité',places:['Rybník','Řeka'],baits:['Kukuřice','Boilies'],price:42,trophy:45},
  {id:'tolstolobik',name:'Tolstolobik',min:40,max:130,ref:80,kg:7,variation:.17,color:'#b6bdc1',type:'ostatní',places:['Rybník','Jezero'],baits:['Kukuřice','Boilies'],price:40,trophy:110},
  {id:'bolen',name:'Bolen dravý',min:30,max:100,ref:60,kg:2.5,variation:.16,color:'#aeb9b2',type:'dravé',places:['Řeka'],baits:['Guma','Wobbler'],price:52,trophy:75},
- {id:'okoun',name:'Okoun říční',min:10,max:50,ref:25,kg:.35,variation:.18,color:'#c58b42',type:'dravé',places:['Rybník','Řeka'],baits:['Guma','Wobbler','Živá nástraha'],price:46,trophy:40}
+ {id:'okoun',name:'Okoun říční',min:10,max:50,ref:25,kg:.35,variation:.18,color:'#c58b42',type:'dravé',places:['Rybník','Řeka'],baits:['Guma','Wobbler','Živá nástraha'],price:46,trophy:40},
+ {id:'pstruh-obecny',name:'Pstruh obecný',min:20,max:75,ref:38,kg:.65,variation:.18,color:'#b58a58',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha'],price:78,trophy:90},
+ {id:'pstruh-duhovy',name:'Pstruh duhový',min:22,max:85,ref:42,kg:.9,variation:.17,color:'#9caa9b',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha'],price:82,trophy:100},
+ {id:'jezerni-pstruh',name:'Pstruh jezerní',min:35,max:110,ref:62,kg:2.8,variation:.17,color:'#667c68',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha'],price:105,trophy:145},
+ {id:'siven',name:'Siven alpský',min:18,max:65,ref:34,kg:.55,variation:.18,color:'#c17a66',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha'],price:88,trophy:95},
+ {id:'lipan',name:'Lipan podhorní',min:22,max:55,ref:35,kg:.45,variation:.16,color:'#8795a2',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha'],price:92,trophy:85},
+ {id:'losos',name:'Losos obecný',min:45,max:120,ref:72,kg:4.5,variation:.18,color:'#b77d6d',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha'],price:118,trophy:180}
 ];
 const fishImages = {
  kapr:'./fish-habitat-kapr%202.webp',
@@ -1768,7 +1774,13 @@ const fishImages = {
  lin:'./fish-habitat-lin%202.webp',
  tolstolobik:'./fish-habitat-tolstolobik%202.webp',
  bolen:'./fish-habitat-bolen%202.webp',
- okoun:'./fish-habitat-okoun%202.webp'
+ okoun:'./fish-habitat-okoun%202.webp',
+ 'pstruh-obecny':'./Pstruh%20obecny%CC%81%20v%20kr%CC%8Cis%CC%8Ct%CC%8Ca%CC%81love%CC%81%20vode%CC%8C_2%202.webp',
+ 'pstruh-duhovy':'./Pstruh%20duhovy%CC%81%20nad%20mechem%20porostly%CC%81mi%20kameny%202.webp',
+ 'jezerni-pstruh':'./Jezerni%CC%81%20pstruh%20v%20paprsci%CC%81ch%20slunce%202.webp',
+ siven:'./Siven%20v%20pru%CC%8Azrac%CC%8Cny%CC%81ch%20r%CC%8Ci%CC%81c%CC%8Cni%CC%81ch%20voda%CC%81ch%202.webp',
+ lipan:'./Lipan%20v%20kr%CC%8Cis%CC%8Ct%CC%8Ca%CC%81love%CC%8C%20c%CC%8Ciste%CC%81%20r%CC%8Cece%202.webp',
+ losos:'./Losos%20v%20kr%CC%8Cis%CC%8Ct%CC%8Ca%CC%81love%CC%81%20r%CC%8Cece%202.webp'
 };
 function fishImage(f){const id=fishImages[f?.id]?f.id:(fishData.find(x=>x.name===f?.name)?.id||'kapr');return `<div class="fishart-frame fish-catch-frame"><img class="fishart" src="${fishImages[id]}" alt="${escapeHtml(f?.name||'Ryba')}" loading="eager"></div>`;}
 function fishIdForCatch(c){if(c?.id&&fishImages[c.id])return c.id;return fishData.find(x=>x.name===c?.name)?.id||'kapr';}
@@ -1776,13 +1788,14 @@ function placeArt(place){
  const scenes={
   'Rybník':'https://images.pexels.com/photos/17786368/pexels-photo-17786368.jpeg?auto=compress&cs=tinysrgb&w=1200',
   'Jezero':'https://images.pexels.com/photos/35008328/pexels-photo-35008328.jpeg?auto=compress&cs=tinysrgb&w=1200',
-  'Řeka':'https://images.pexels.com/photos/24205803/pexels-photo-24205803.jpeg?auto=compress&cs=tinysrgb&w=1200'
+  'Řeka':'https://images.pexels.com/photos/24205803/pexels-photo-24205803.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'Horské jezero':'./Horske%CC%81%20jezero%20v%20lesni%CC%81%20za%CC%81toce%202.webp'
  };
  return `<img class="place-photo" src="${scenes[place]}" alt="${place} – ostrá fotografie přírody" loading="lazy">`;
 }
 
 function playerLevel(){return Math.floor((Number(state.xp)||0)/500)+1;}
-function placeRequiredLevel(place){return place==='Jezero'?25:place==='Řeka'?50:1;}
+function placeRequiredLevel(place){return place==='Jezero'?25:place==='Řeka'?50:place==='Horské jezero'?75:1;}
 function placeUnlocked(place){return playerLevel()>=placeRequiredLevel(place);}
 const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],achievementStats:{species:{},places:{},morning:0,night:0,predators:0},claimedAchievementRewards:{},unlockedTitles:[],activeTitle:null,dailyTasks:null,best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
 let cloudSaveTimer=null,cloudSaveBusy=false,cloudSaveAgain=false;
@@ -1854,7 +1867,8 @@ function renderHome(el){
  const places=[
   {name:'Rybník',desc:'Kapr, amur, lín, štika, okoun',image:'https://images.pexels.com/photos/17786368/pexels-photo-17786368.jpeg?auto=compress&cs=tinysrgb&w=1200'},
   {name:'Jezero',desc:'Kapr, amur, jeseter, sumec, candát',image:'https://images.pexels.com/photos/35008328/pexels-photo-35008328.jpeg?auto=compress&cs=tinysrgb&w=1200'},
-  {name:'Řeka',desc:'Štika, candát, bolen, okoun, sumec',image:'https://images.pexels.com/photos/24205803/pexels-photo-24205803.jpeg?auto=compress&cs=tinysrgb&w=1200'}
+  {name:'Řeka',desc:'Štika, candát, bolen, okoun, sumec',image:'https://images.pexels.com/photos/24205803/pexels-photo-24205803.jpeg?auto=compress&cs=tinysrgb&w=1200'},
+  {name:'Horské jezero',desc:'Pstruzi, siven, lipan a losos',image:'./Horske%CC%81%20jezero%20v%20lesni%CC%81%20za%CC%81toce%202.webp'}
  ];
  const recent=(state.records||[]).slice(0,1)[0];
  const fishHere=fishData.filter(f=>f.places.includes(state.place));
@@ -1893,7 +1907,7 @@ const baitImages={"Boilies":"bait-boilies%202.webp","Kukuřice":"bait-corn%202.w
 function renderFish(el){
  const f=state.current;
  const isSpinning=state.bait==='Guma'||state.bait==='Wobbler';
- let inner=`<div class="card stack"><h2>📍 Vyber revír</h2><div class="choices">${['Rybník','Jezero','Řeka'].map(p=>`<div class="choice place-choice ${state.place===p?'selected':''} ${placeUnlocked(p)?'':'place-locked'}" data-place="${p}" aria-disabled="${!placeUnlocked(p)}">${placeArt(p)}<b>${p==='Rybník'?'🌿':p==='Jezero'?'🌊':'🏞️'} ${p} ${placeUnlocked(p)?'':'🔒'}</b><small>${placeUnlocked(p)?(p==='Rybník'?'Kapr, amur, štika, okoun, lín':p==='Jezero'?'Amur, dravci, jeseter':'Bolen, okoun, sumec, candát, kapr'):'Odemkneš na úrovni '+placeRequiredLevel(p)}</small></div>`).join('')}</div>
+ let inner=`<div class="card stack"><h2>📍 Vyber revír</h2><div class="choices">${['Rybník','Jezero','Řeka','Horské jezero'].map(p=>`<div class="choice place-choice ${state.place===p?'selected':''} ${placeUnlocked(p)?'':'place-locked'}" data-place="${p}" aria-disabled="${!placeUnlocked(p)}">${placeArt(p)}<b>${p==='Rybník'?'🌿':p==='Jezero'?'🌊':'🏞️'} ${p} ${placeUnlocked(p)?'':'🔒'}</b><small>${placeUnlocked(p)?(p==='Rybník'?'Kapr, amur, štika, okoun, lín':p==='Jezero'?'Amur, dravci, jeseter':p==='Řeka'?'Bolen, okoun, sumec, candát, kapr':'Pstruzi, siven, lipan a losos'):'Odemkneš na úrovni '+placeRequiredLevel(p)}</small></div>`).join('')}</div>
  <h2>🪱 Vyber nástrahu</h2><div class="choices bait-square-grid">${['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'].map(b=>{const preview=ffBaitPreviewForCategory(b);const recommended=(preview[6]||[]).map(id=>fishData.find(f=>f.id===id)?.name).filter(Boolean);return `<div class="choice bait-choice bait-square-card ${state.bait===b?'selected':''}" data-bait="${b}"><div class="bait-art-frame"><img src="${ffBaitImage(preview[0])}" alt="${escapeHtml(preview[2])}" loading="lazy"></div><div class="bait-copy"><b>${escapeHtml(preview[2])}</b><small>🐟 ${recommended.length?recommended.map(escapeHtml).join(', '):'Univerzální použití'}</small></div></div>`}).join('')}</div>
  <div class="status" id="status">${state.message||'Připrav si vybavení a nahoď prut.'}</div>`;
  if(state.phase==='idle')inner+=`<button id="cast">${isSpinning?'🎯 Nahodit nástrahu':'🎣 Nahodit prut'}</button>`;
