@@ -1779,7 +1779,7 @@ body.fb-premium .fb-number,
 <main class="fb-layout">
  <aside class="fb-left"><section class="fb-profile"><div class="avatar">🎣</div><div><b id="sideName">Rybář</b><small>⭐ Fishing Brothers</small></div></section>
  <section class="fb-currency"><div>🪙 <span id="money">500 Kč</span></div><div>🐟 <span id="count">0</span> úlovků</div><div>🏆 Rekord <span id="record">—</span></div></section>
- <div class="fb-side-actions"><button data-tab="shop">🎒　Výbava a obchod</button><button data-tab="account">👥　Kamarádi a účet</button><button data-tab="log">🏆　Úspěchy a odznáčky</button><button data-tab="fish">🎣　Zpět k lovu</button></div>
+ <div class="fb-side-actions"><button data-tab="shop">🎒　Výbava a obchod</button><button data-tab="account">👥　Kamarádi a účet</button><button data-tab="log">🏆　Úspěchy a odznáčky</button><button data-tab="gallery">📖　Galerie úlovků</button><button data-tab="fish">🎣　Zpět k lovu</button></div>
  <div class="fb-upgrade"><b>AKTIVNÍ VYBAVENÍ</b><p>🎣 Prut a naviják</p><small>Vylepšuj výbavu v obchodě a zdolávej větší ryby.</small></div></aside>
  <section class="fb-center"><div class="fb-slogan">Lov, který nikdy nekončí...</div><section id="screen"><div class="card">Načítám Fishing Brothers…</div></section></section>
  <aside class="fb-right"><section class="fb-leader"><h2>🏆 TOP 5 RYBÁŘŮ</h2><h3>📏 Nejdelší a ⚖️ nejtěžší úlovky</h3><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section><section class="fb-promo"><div>🌅</div><b>Každý záběr může být rekordní!</b><small>Vyber revír a vydej se za trofejí.</small></section></aside>
@@ -1911,6 +1911,7 @@ function render(){
  if(state.tab==='home')renderHome(el);
  else if(state.tab==='titles')renderPlayerTitles(el);
  else if(state.tab==='fish')renderFish(el);
+ else if(state.tab==='gallery')renderCatchGallery(el);
  else if(state.tab==='shop')renderShop(el);
  else if(state.tab==='account')renderAccount(el);
  else if(state.tab==='players')renderPlayers(el);
@@ -1920,6 +1921,44 @@ function render(){
  else if(state.tab==='weekly')renderWeeklyTasks(el);
  else renderLog(el);
 }
+function renderCatchGallery(el){
+ const places=['Rybník','Jezero','Řeka','Horské jezero'];
+ const stats=state.achievementStats?.species||{};
+ const records=Array.isArray(state.records)?state.records:[];
+ const knownCount=id=>Math.max(0,Number(stats[id]?.count)||0);
+ const bestFor=id=>{
+  const saved=stats[id]||{};
+  const trophies=records.filter(r=>(r.id===id)||(!r.id&&fishData.find(f=>f.id===id)?.name===r.name));
+  const longest=trophies.reduce((best,r)=>Math.max(best,Number(r.cm)||0),Number(saved.maxCm)||0);
+  const heaviest=trophies.reduce((best,r)=>Math.max(best,Number(r.kg)||0),0);
+  return {cm:longest,kg:heaviest};
+ };
+ const discovered=fishData.filter(f=>knownCount(f.id)>0||records.some(r=>r.id===f.id||(!r.id&&r.name===f.name))).length;
+ const total=fishData.length;
+ const activePlace=window.fbGalleryPlace||'Všechny revíry';
+ const visible=fishData.filter(f=>activePlace==='Všechny revíry'||f.places.includes(activePlace));
+ el.innerHTML=`<div class="card stack">
+ <div class="gallery-hero"><div><small>FISHING FRIENDS · TVOJE RYBÁŘSKÁ SBÍRKA</small><h2>📖 Galerie úlovků</h2><p class="muted">Objevuj jednotlivé druhy, sleduj své rekordy a postupně zaplň celou sbírku.</p></div><div class="gallery-total"><strong>${discovered}/${total}</strong><small>OBJEVENO</small></div></div>
+ <div class="gallery-progress"><div><span>Dokončení sbírky</span><b>${Math.round(discovered/total*100)} %</b></div><i><em style="width:${discovered/total*100}%"></em></i></div>
+ <div class="gallery-filters">${['Všechny revíry',...places].map(p=>`<button class="${activePlace===p?'active':''}" data-gallery-place="${p}">${p==='Všechny revíry'?'Všechny':p}</button>`).join('')}</div>
+ <div class="gallery-grid">${visible.map(f=>{
+  const count=knownCount(f.id),recorded=records.some(r=>r.id===f.id||(!r.id&&r.name===f.name)),unlocked=count>0||recorded;
+  const best=bestFor(f.id),trophy=best.cm>=(Number(f.trophy)||999);
+  return `<article class="gallery-fish ${unlocked?'is-discovered':'is-hidden'}">
+   <div class="gallery-fish-art"><img src="${fishImages[f.id]}" alt="${unlocked?escapeHtml(f.name):'Neobjevená ryba'}" loading="lazy">${unlocked?'':'<span>?</span>'}</div>
+   <div class="gallery-fish-info"><b>${unlocked?escapeHtml(f.name):'Neobjevený druh'}</b>
+   <small>${unlocked?'Revír: '+escapeHtml(f.places.join(', ')):'🔒 Zatím neuloveno'}</small>
+   ${unlocked?`<div class="gallery-fish-stats"><span>Úlovky <b>${count||'—'}</b></span><span>Rekord <b>${best.cm?best.cm+' cm':'—'}</b></span><span>Hmotnost <b>${best.kg?best.kg.toFixed(2)+' kg':'—'}</b></span></div>${trophy?'<em class="gallery-trophy">🏆 Trofejní velikost dosažena</em>':''}`:'<small class="gallery-secret">Chyť tuto rybu a odhal její kartu.</small>'}
+   </div></article>`;
+ }).join('')}</div>
+ <p class="gallery-note">Statistiky druhů se počítají od chvíle, kdy hra začala ukládat podrobné záznamy jednotlivých druhů. Starší trofejní úlovky se zobrazí podle uložených rekordů.</p>
+ </div>
+ <style>
+ .gallery-hero{display:flex;justify-content:space-between;align-items:center;gap:12px}.gallery-hero>div:first-child>small{font-size:10px;letter-spacing:1.4px;color:#e4c77f}.gallery-hero h2{margin:5px 0}.gallery-hero p{margin:0}.gallery-total{flex:none;min-width:78px;padding:10px;border:1px solid #a17a49;border-radius:12px;background:#21170e;text-align:center}.gallery-total strong{display:block;color:#f4d078;font-size:24px}.gallery-total small{font-size:9px;color:#d6c39d}.gallery-progress{display:grid;gap:6px;padding:11px;border:1px solid #80603b;border-radius:11px;background:#1c291d}.gallery-progress>div{display:flex;justify-content:space-between;font-size:12px}.gallery-progress b{color:#f2d078}.gallery-progress>i{height:8px;border-radius:20px;background:#0c120d;overflow:hidden}.gallery-progress>i em{display:block;height:100%;background:linear-gradient(90deg,#668e4f,#e2bf69);border-radius:20px}.gallery-filters{display:flex;flex-wrap:wrap;gap:7px}.gallery-filters button{padding:8px 10px;font-size:11px}.gallery-filters button.active{background:linear-gradient(#d8b45d,#8d6129);color:#201609}.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px}.gallery-fish{min-width:0;overflow:hidden;border:1px solid #80603b;border-radius:12px;background:linear-gradient(145deg,#2b261a,#15120d)}.gallery-fish-art{height:125px;position:relative;display:grid;place-items:center;background:radial-gradient(ellipse,#42513a,#101710)}.gallery-fish-art img{width:100%;height:100%;object-fit:contain;padding:7px}.gallery-fish.is-hidden .gallery-fish-art img{filter:brightness(0);opacity:.55}.gallery-fish-art>span{position:absolute;font-size:37px;font-weight:900;color:#f3d27a;text-shadow:0 2px 7px #000}.gallery-fish-info{display:grid;gap:5px;padding:10px}.gallery-fish-info>b{font-size:14px;color:#f3d58f}.gallery-fish-info>small{font-size:10px;color:#c8b99d;line-height:1.35}.gallery-fish-stats{display:grid;gap:4px;margin-top:3px}.gallery-fish-stats span{display:flex;justify-content:space-between;gap:5px;font-size:10px;color:#c9ba9b}.gallery-fish-stats b{color:#f1d17c}.gallery-trophy{font-size:10px;color:#f5d27a;font-style:normal}.gallery-secret{color:#c6b28c!important}.gallery-note{font-size:10px;color:#b8a98b;margin:3px 0 0}@media(max-width:520px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.gallery-fish-art{height:105px}.gallery-fish-info{padding:8px}.gallery-fish-info>b{font-size:12px}}
+ </style>`;
+ el.querySelectorAll('[data-gallery-place]').forEach(b=>b.onclick=()=>{window.fbGalleryPlace=b.dataset.galleryPlace;renderCatchGallery(el);});
+}
+
 function renderHome(el){
  const activeTitle=getPlayerTitleById(state.activeTitle);
  const places=[
@@ -1943,7 +1982,7 @@ function renderHome(el){
    </aside>
    <div class="home-main">
     <section class="home-panel home-places-panel"><div class="home-section-title"><h2>🌅 Vyber revír</h2><span>3 lokality</span></div><div class="home-places">${places.map(p=>`<article class="home-place ${state.place===p.name?'is-selected':''}"><h3>${p.name}</h3><div class="home-place-image"><img src="${p.image}" alt="${p.name}" loading="lazy"></div><div class="home-place-content"><small>🐟 Typické druhy</small><p>${p.desc}</p><button data-home-place="${p.name}" ${placeUnlocked(p.name)?'':'disabled'}>${placeUnlocked(p.name)?'Vybrat revír　›':'🔒 Úroveň '+placeRequiredLevel(p.name)}</button></div></article>`).join('')}</div></section>
-    <div class="home-main-actions"><button data-tab="fish">🐟 Začít lovit</button><button class="home-secondary" data-tab="shop">🛒 Obchod</button><button class="home-secondary" data-tab="weekly">📅 Týdenní úkoly</button><button class="home-secondary" data-tab="log">🏆 Úspěchy</button></div>
+    <div class="home-main-actions"><button data-tab="fish">🐟 Začít lovit</button><button class="home-secondary" data-tab="shop">🛒 Obchod</button><button class="home-secondary" data-tab="weekly">📅 Týdenní úkoly</button><button class="home-secondary" data-tab="log">🏆 Úspěchy</button><button class="home-secondary" data-tab="gallery">📖 Galerie úlovků</button></div>
    </div>
    <aside class="home-side home-side-right">
     <section class="home-panel home-leader-panel"><h2>🏆 TOP RYBÁŘI</h2><div class="home-leader-subtitle">Pořadí podle délky a hmotnosti trofejních ryb</div><div id="sideLeaderboard" class="fb-ranking"><p>Přihlas se pro online žebříček.</p></div></section>
