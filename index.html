@@ -128,6 +128,8 @@ footer{color:#c9b58e}
 @media(max-width:380px){.fb-user{font-size:11px}.fb-side-actions button{font-size:11px}#screen .place-choice .place-photo{height:80px}#screen .fish-card img{height:125px}#screen .bait-choice img{width:52px;height:52px}}
 
 
+.legendary-celebration{position:fixed;inset:0;z-index:10001;display:grid;place-items:center;padding:18px;background:radial-gradient(ellipse at center,#33250fdd,#050806f2 75%);backdrop-filter:blur(7px);animation:celeFade .35s ease-out;overflow:hidden}.legendary-rays{position:absolute;inset:-35%;background:repeating-conic-gradient(from 0deg,transparent 0 8deg,#f5d47a16 9deg 10deg,transparent 11deg 18deg);animation:sparkSpin 28s linear infinite}.legendary-box{position:relative;width:min(460px,100%);padding:22px;text-align:center;border:2px solid #eac66f;border-radius:20px;background:linear-gradient(150deg,#49371f,#17110b 75%);box-shadow:0 0 0 5px #eac66f22,0 0 65px #e4b64d66;color:#fff0cf;animation:trophyPop .7s cubic-bezier(.2,1.5,.4,1)}.legendary-kicker{font-size:10px;letter-spacing:3px;color:#f5d98b}.legendary-art{height:190px;margin:12px auto;display:grid;place-items:center;overflow:hidden;border-radius:13px;background:radial-gradient(ellipse,#6d5a32,#15130d);border:1px solid #b18a4c}.legendary-art img{width:100%;height:100%;object-fit:contain;padding:7px;filter:drop-shadow(0 0 14px #f2d16a88)}.legendary-color img,.legendary-perfect img{filter:sepia(.7) saturate(1.8) hue-rotate(5deg) drop-shadow(0 0 16px #f5d16b)}.legendary-record img{filter:contrast(1.12) saturate(1.1) drop-shadow(0 0 13px #e9c56c88)}.legendary-label{display:inline-block;padding:6px 13px;border:1px solid #eac66f;border-radius:30px;background:#765222;color:#ffe7a2;font-size:10px;font-weight:900;letter-spacing:1.5px}.legendary-box h2{margin:10px 0 2px;color:#ffdf88;font-size:27px}.legendary-species{margin:0;color:#d8c49d}.legendary-measures{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}.legendary-measures span{padding:10px;border:1px solid #87683d;border-radius:10px;background:#1c170f}.legendary-measures small{display:block;color:#c8b48b;font-size:9px;letter-spacing:1px}.legendary-measures b{font-size:20px;color:#ffe09a}.legendary-bonus{font-size:11px;color:#f1d17a}.legendary-box button{min-width:180px}
+.legendary-color img,.legendary-perfect img{filter:sepia(.65) saturate(1.8) hue-rotate(5deg) drop-shadow(0 0 16px #f5d16b)}
 .trophy-celebration{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:rgba(4,10,7,.78);backdrop-filter:blur(5px);animation:celeFade .35s ease-out;padding:20px}.trophy-celebration .trophy-box{position:relative;max-width:420px;width:100%;text-align:center;padding:28px 22px;border:2px solid #f5d47a;border-radius:22px;background:radial-gradient(circle at 50% 0,#72501e,#21170e 68%);box-shadow:0 0 0 5px #f5d47a22,0 0 55px #f5bd35aa;color:#fff1c9;overflow:hidden}.trophy-celebration .trophy-emoji{font-size:66px;filter:drop-shadow(0 0 18px #ffd85a);animation:trophyPop .8s cubic-bezier(.2,1.6,.4,1)}.trophy-celebration h2{font-size:30px;color:#ffdc79;margin:8px 0}.trophy-celebration p{margin:8px 0 18px}.trophy-celebration .spark{position:absolute;inset:-20%;pointer-events:none;background:repeating-conic-gradient(from 0deg,transparent 0 8deg,#ffdf7a44 9deg 10deg,transparent 11deg 20deg);animation:sparkSpin 18s linear infinite}.trophy-celebration .trophy-box>*:not(.spark){position:relative}.trophy-celebration button{min-width:150px}@keyframes trophyPop{0%{transform:scale(.2) rotate(-25deg);opacity:0}70%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}@keyframes sparkSpin{to{transform:rotate(360deg)}}@keyframes celeFade{from{opacity:0}to{opacity:1}}
 /* Faithful wide-screen layout inspired by the supplied Fishing Brothers reference */
 :root{--wood:#21170f;--wood2:#392719;--gold:#e7bd66;--gold-light:#ffe2a0;--cream:#fff2d6;--muted:#d0bd9b;--edge:#9c7546}
@@ -1922,6 +1924,49 @@ function render(){
  else if(state.tab==='weekly')renderWeeklyTasks(el);
  else renderLog(el);
 }
+const LEGENDARY_FISH_VARIANTS={
+ kapr:{name:'Zlatý kapr',kind:'color',look:'Zlatavé šupiny'},
+ amur:{name:'Zlatavý amur',kind:'color',look:'Světlé zlatavé boky'},
+ stika:{name:'Obří štika',kind:'record',look:'Rekordní délka a mohutné tělo'},
+ candat:{name:'Rekordní candát',kind:'record',look:'Mimořádně mohutný exemplář'},
+ sumec:{name:'Albínský sumec',kind:'color',look:'Světlé krémové zbarvení'},
+ jeseter:{name:'Bílý jeseter',kind:'color',look:'Neobvykle světlé tělo'},
+ lin:{name:'Zlatý lín',kind:'color',look:'Zlatavé boky a typické šupiny'},
+ tolstolobik:{name:'Rekordní tolstolobik',kind:'record',look:'Mimořádná délka a hmotnost'},
+ bolen:{name:'Stříbrný bolen',kind:'color',look:'Výrazně stříbrné boky'},
+ okoun:{name:'Tmavý okoun',kind:'color',look:'Výrazné tmavé pruhy'},
+ 'pstruh-obecny':{name:'Zlatavý pstruh obecný',kind:'color',look:'Zlatohnědé tělo s typickými tečkami'},
+ 'pstruh-duhovy':{name:'Zlatý pstruh duhový',kind:'color',look:'Vzácná zlatá barevná forma'},
+ siven:{name:'Světlý siven alpský',kind:'color',look:'Světlé stříbřité tělo'},
+ lipan:{name:'Rekordní lipan',kind:'record',look:'Výjimečná délka a vysoká hřbetní ploutev'},
+ losos:{name:'Rekordní losos',kind:'record',look:'Mimořádně mohutný exemplář'}
+};
+function rollLegendaryVariant(f,cm){
+ const roll=Math.random();
+ let type=null;
+ if(roll<0.0005)type='perfect';
+ else if(roll<0.0035)type='color';
+ else if(roll<0.0085)type='record';
+ if(!type)return {cm,kg:weightFor(f,cm),legendary:null};
+ const definition=LEGENDARY_FISH_VARIANTS[f.id];
+ if(!definition)return {cm,kg:weightFor(f,cm),legendary:null};
+ const record=type==='record'||type==='perfect';
+ const finalCm=record?Math.max(cm,Math.round(f.max*(type==='perfect'?.995:.98))):cm;
+ return {cm:Math.min(f.max,finalCm),kg:weightFor(f,Math.min(f.max,finalCm)),legendary:{type,name:type==='perfect'?'Dokonalá legenda':definition.name,variantName:definition.name,look:definition.look}};
+}
+function legendaryBonus(type){
+ return type==='perfect'?{xp:750,multiplier:5}:type==='record'?{xp:350,multiplier:2.5}:{xp:250,multiplier:2};
+}
+function showLegendaryCelebration(f){
+ const rarity=f.legendary||{},labels={color:'VZÁCNÉ ZBARVENÍ',record:'REKORDNÍ VELIKOST',perfect:'DOKONALÁ LEGENDA'};
+ const overlay=document.createElement('div');overlay.className='legendary-celebration';
+ overlay.innerHTML=`<div class="legendary-rays"></div><div class="legendary-box"><div class="legendary-kicker">✦ VÝJIMEČNÝ ÚLOVEK ✦</div><div class="legendary-art legendary-${rarity.type}"><img src="${fishImages[f.id]}" alt="${escapeHtml(f.name)}"></div><div class="legendary-label">${labels[rarity.type]||'LEGENDÁRNÍ ÚLOVEK'}</div><h2>${escapeHtml(rarity.type==='perfect'?'Dokonalá legenda':rarity.variantName||rarity.name||f.name)}</h2><p class="legendary-species">${escapeHtml(f.name)}</p><div class="legendary-measures"><span><small>DÉLKA</small><b>${f.cm} cm</b></span><span><small>HMOTNOST</small><b>${Number(f.kg).toFixed(2)} kg</b></span></div><p class="legendary-bonus">✦ Zvláštní odměna byla připsána ✦</p><button id="closeLegendary">Uložit do sbírky</button></div>`;
+ document.body.appendChild(overlay);
+ const close=()=>overlay.remove();
+ overlay.querySelector('#closeLegendary').onclick=close;
+ overlay.addEventListener('click',e=>{if(e.target===overlay)close();});
+}
+
 function renderCatchGallery(el){
  const places=['Rybník','Jezero','Řeka','Horské jezero'];
  const stats=state.achievementStats?.species||{};
@@ -1936,6 +1981,8 @@ function renderCatchGallery(el){
  };
  const discovered=fishData.filter(f=>knownCount(f.id)>0||records.some(r=>r.id===f.id||(!r.id&&r.name===f.name))).length;
  const total=fishData.length;
+ const legendaryCatches=Array.isArray(state.legendaryCatches)?state.legendaryCatches:[];
+ const legendaryDiscovered=fishData.filter(f=>legendaryCatches.some(c=>c.id===f.id)).length;
  const activePlace=window.fbGalleryPlace||'Všechny revíry';
  const visible=fishData.filter(f=>activePlace==='Všechny revíry'||f.places.includes(activePlace));
  el.innerHTML=`<div class="card stack">
@@ -1952,10 +1999,23 @@ function renderCatchGallery(el){
    ${unlocked?`<div class="gallery-fish-stats"><span>Úlovky <b>${count||'—'}</b></span><span>Rekord <b>${best.cm?best.cm+' cm':'—'}</b></span><span>Hmotnost <b>${best.kg?best.kg.toFixed(2)+' kg':'—'}</b></span></div>${trophy?'<em class="gallery-trophy">🏆 Trofejní velikost dosažena</em>':''}`:'<small class="gallery-secret">Chyť tuto rybu a odhal její kartu.</small>'}
    </div></article>`;
  }).join('')}</div>
+ <section class="legendary-gallery">
+  <div class="legendary-gallery-head"><div><small>VZÁCNÉ EXEMPLÁŘE</small><h2>✨ Legendární sbírka</h2><p>Každý druh má svou vlastní legendární podobu.</p></div><strong>${legendaryDiscovered}/${fishData.length}</strong></div>
+  <div class="legendary-gallery-grid">${fishData.map(f=>{
+   const variant=LEGENDARY_FISH_VARIANTS[f.id],caught=legendaryCatches.filter(c=>c.id===f.id);
+   const best=caught.slice().sort((a,b)=>(Number(b.cm)||0)-(Number(a.cm)||0))[0];
+   return `<article class="legendary-gallery-card ${best?'is-found':'is-locked'}">
+    <div class="legendary-gallery-art">${best?`<img class="legendary-${best.type}" src="${fishImages[f.id]}" alt="${escapeHtml(variant.name)}">`:'<span>?</span>'}</div>
+    <div><b>${best?escapeHtml(variant.name):'Neobjevená legenda'}</b><small>${best?escapeHtml(f.name)+' · '+best.cm+' cm · '+Number(best.kg).toFixed(2)+' kg':escapeHtml(f.name)+' · '+escapeHtml(f.places.join(', '))}</small><em>${best?(best.type==='perfect'?'✦ Dokonalá legenda':best.type==='record'?'🏆 Rekordní velikost':'✨ Vzácné zbarvení'):'🔒 Zatím neuloveno'}</em></div>
+   </article>`;
+  }).join('')}</div>
+ </section>
  <p class="gallery-note">Statistiky druhů se počítají od chvíle, kdy hra začala ukládat podrobné záznamy jednotlivých druhů. Starší trofejní úlovky se zobrazí podle uložených rekordů.</p>
  </div>
  <style>
- .gallery-hero{display:flex;justify-content:space-between;align-items:center;gap:12px}.gallery-hero>div:first-child>small{font-size:10px;letter-spacing:1.4px;color:#e4c77f}.gallery-hero h2{margin:5px 0}.gallery-hero p{margin:0}.gallery-total{flex:none;min-width:78px;padding:10px;border:1px solid #a17a49;border-radius:12px;background:#21170e;text-align:center}.gallery-total strong{display:block;color:#f4d078;font-size:24px}.gallery-total small{font-size:9px;color:#d6c39d}.gallery-progress{display:grid;gap:6px;padding:11px;border:1px solid #80603b;border-radius:11px;background:#1c291d}.gallery-progress>div{display:flex;justify-content:space-between;font-size:12px}.gallery-progress b{color:#f2d078}.gallery-progress>i{height:8px;border-radius:20px;background:#0c120d;overflow:hidden}.gallery-progress>i em{display:block;height:100%;background:linear-gradient(90deg,#668e4f,#e2bf69);border-radius:20px}.gallery-filters{display:flex;flex-wrap:wrap;gap:7px}.gallery-filters button{padding:8px 10px;font-size:11px}.gallery-filters button.active{background:linear-gradient(#d8b45d,#8d6129);color:#201609}.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px}.gallery-fish{min-width:0;overflow:hidden;border:1px solid #80603b;border-radius:12px;background:linear-gradient(145deg,#2b261a,#15120d)}.gallery-fish-art{height:125px;position:relative;display:grid;place-items:center;background:radial-gradient(ellipse,#42513a,#101710)}.gallery-fish-art img{width:100%;height:100%;object-fit:contain;padding:7px}.gallery-fish.is-hidden .gallery-fish-art img{filter:brightness(0);opacity:.55}.gallery-fish-art>span{position:absolute;font-size:37px;font-weight:900;color:#f3d27a;text-shadow:0 2px 7px #000}.gallery-fish-info{display:grid;gap:5px;padding:10px}.gallery-fish-info>b{font-size:14px;color:#f3d58f}.gallery-fish-info>small{font-size:10px;color:#c8b99d;line-height:1.35}.gallery-fish-stats{display:grid;gap:4px;margin-top:3px}.gallery-fish-stats span{display:flex;justify-content:space-between;gap:5px;font-size:10px;color:#c9ba9b}.gallery-fish-stats b{color:#f1d17c}.gallery-trophy{font-size:10px;color:#f5d27a;font-style:normal}.gallery-secret{color:#c6b28c!important}.gallery-note{font-size:10px;color:#b8a98b;margin:3px 0 0}@media(max-width:520px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.gallery-fish-art{height:105px}.gallery-fish-info{padding:8px}.gallery-fish-info>b{font-size:12px}}
+ .gallery-hero{display:flex;justify-content:space-between;align-items:center;gap:12px}.gallery-hero>div:first-child>small{font-size:10px;letter-spacing:1.4px;color:#e4c77f}.gallery-hero h2{margin:5px 0}.gallery-hero p{margin:0}.gallery-total{flex:none;min-width:78px;padding:10px;border:1px solid #a17a49;border-radius:12px;background:#21170e;text-align:center}.gallery-total strong{display:block;color:#f4d078;font-size:24px}.gallery-total small{font-size:9px;color:#d6c39d}.gallery-progress{display:grid;gap:6px;padding:11px;border:1px solid #80603b;border-radius:11px;background:#1c291d}.gallery-progress>div{display:flex;justify-content:space-between;font-size:12px}.gallery-progress b{color:#f2d078}.gallery-progress>i{height:8px;border-radius:20px;background:#0c120d;overflow:hidden}.gallery-progress>i em{display:block;height:100%;background:linear-gradient(90deg,#668e4f,#e2bf69);border-radius:20px}.gallery-filters{display:flex;flex-wrap:wrap;gap:7px}.gallery-filters button{padding:8px 10px;font-size:11px}.gallery-filters button.active{background:linear-gradient(#d8b45d,#8d6129);color:#201609}.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px}.gallery-fish{min-width:0;overflow:hidden;border:1px solid #80603b;border-radius:12px;background:linear-gradient(145deg,#2b261a,#15120d)}.gallery-fish-art{height:125px;position:relative;display:grid;place-items:center;background:radial-gradient(ellipse,#42513a,#101710)}.gallery-fish-art img{width:100%;height:100%;object-fit:contain;padding:7px}.gallery-fish.is-hidden .gallery-fish-art img{filter:brightness(0);opacity:.55}.gallery-fish-art>span{position:absolute;font-size:37px;font-weight:900;color:#f3d27a;text-shadow:0 2px 7px #000}.gallery-fish-info{display:grid;gap:5px;padding:10px}.gallery-fish-info>b{font-size:14px;color:#f3d58f}.gallery-fish-info>small{font-size:10px;color:#c8b99d;line-height:1.35}.gallery-fish-stats{display:grid;gap:4px;margin-top:3px}.gallery-fish-stats span{display:flex;justify-content:space-between;gap:5px;font-size:10px;color:#c9ba9b}.gallery-fish-stats b{color:#f1d17c}.gallery-trophy{font-size:10px;color:#f5d27a;font-style:normal}.gallery-secret{color:#c6b28c!important}.gallery-note{font-size:10px;color:#b8a98b;margin:3px 0 0}
+ .legendary-gallery{margin-top:18px;padding-top:14px;border-top:1px solid #967343}.legendary-gallery-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.legendary-gallery-head small{color:#e8c46d;letter-spacing:1.5px;font-size:9px}.legendary-gallery-head h2{margin:4px 0}.legendary-gallery-head p{margin:0;color:#c8b99d;font-size:11px}.legendary-gallery-head>strong{font-size:22px;color:#f5d47a}.legendary-gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;margin-top:11px}.legendary-gallery-card{overflow:hidden;border:1px solid #80603b;border-radius:11px;background:linear-gradient(145deg,#302518,#15110c)}.legendary-gallery-art{height:100px;display:grid;place-items:center;background:radial-gradient(ellipse,#54452a,#14100b)}.legendary-gallery-art img{width:100%;height:100%;object-fit:contain;padding:5px}.legendary-gallery-card.is-locked .legendary-gallery-art{filter:grayscale(1);opacity:.65}.legendary-gallery-art span{font-size:34px;color:#e7c56f}.legendary-gallery-card>div:last-child{display:grid;gap:4px;padding:8px}.legendary-gallery-card b{font-size:12px;color:#f4d58a}.legendary-gallery-card small{font-size:10px;color:#c8b99d}.legendary-gallery-card em{font-size:9px;color:#e8c46d;font-style:normal}
+@media(max-width:520px){.legendary-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.gallery-fish-art{height:105px}.gallery-fish-info{padding:8px}.gallery-fish-info>b{font-size:12px}}
  </style>`;
  el.querySelectorAll('[data-gallery-place]').forEach(b=>b.onclick=()=>{window.fbGalleryPlace=b.dataset.galleryPlace;renderCatchGallery(el);});
 }
@@ -2073,8 +2133,10 @@ function beginFishFight(quickStrike){
  const pool=preferred.length&&Math.random()<.35?preferred:candidates;
  const f=pool[Math.floor(Math.random()*pool.length)];
  const cm=Math.round(f.min+Math.pow(Math.random(),3.0)*(f.max-f.min));
- const kg=weightFor(f,cm);
- state.current={...f,cm,kg,xpReward:Math.round(35+cm*1.1+kg*3),reward:Math.round(kg*f.price*(1+state.rod*.04))};
+ const rolled=rollLegendaryVariant(f,cm);
+ const finalCm=rolled.cm,kg=rolled.kg,legendary=rolled.legendary;
+ const bonus=legendary?legendaryBonus(legendary.type):{xp:0,multiplier:1};
+ state.current={...f,cm:finalCm,kg,legendary,xpReward:Math.round(35+finalCm*1.1+kg*3)+bonus.xp,reward:Math.round(kg*f.price*(1+state.rod*.04)*bonus.multiplier)};
  state.phase='fight';state.progress=35;state.fightStarted=Date.now();
  state.fight={energy:100,tension:quickStrike?27:39,distance:Math.round(24+Math.random()*10),brake:45,event:quickStrike?'Zasekl jsi včas! Ryba se rozjíždí.':'Pozdní zásek! Ryba je opatrná.',surgeAt:Date.now()+3500+Math.random()*3500,surgeUntil:0,overTension:0,slackTime:0};
  state.message=quickStrike?'Skvělý zásek! Ryba zabrala!':'Ryba zabrala!';
@@ -2157,7 +2219,14 @@ function showTrophyCelebration(f,levelUp=0){
 function finishCatch(release=false){
  const f=state.current;if(!f)return;
  const isTrophy=f.cm >= (f.trophy||999);
- state.lastCatch={name:f.name,id:f.id,cm:f.cm,kg:f.kg,place:state.place,action:release?'Puštěna':'Prodána',date:new Date().toLocaleString('cs-CZ')};
+ state.lastCatch={name:f.name,id:f.id,cm:f.cm,kg:f.kg,place:state.place,action:release?'Puštěna':'Prodána',date:new Date().toLocaleString('cs-CZ'),legendary:f.legendary||null};
+ if(f.legendary){
+  state.legendaryCatches=Array.isArray(state.legendaryCatches)?state.legendaryCatches:[];
+  const entry={id:f.id,name:f.name,variantName:f.legendary.variantName||f.legendary.name,type:f.legendary.type,cm:f.cm,kg:f.kg,place:state.place,action:release?'Puštěna':'Prodána',date:new Date().toLocaleString('cs-CZ')};
+  state.legendaryCatches.unshift(entry);state.legendaryCatches=state.legendaryCatches.slice(0,200);
+  state.legendaryStats=state.legendaryStats||{};
+  state.legendaryStats[f.id]=Number(state.legendaryStats[f.id]||0)+1;
+ }
  if(isTrophy) {
   const rec={name:f.name,id:f.id,cm:f.cm,kg:f.kg,place:state.place,action:release?'Puštěna':'Prodána',date:new Date().toLocaleDateString('cs-CZ'),angler:currentProfile?.username||'Ty'};
   state.records.unshift(rec);state.records=state.records.slice(0,100);
@@ -2179,7 +2248,7 @@ function finishCatch(release=false){
  if(release)state.released++;else{state.sold++;state.money+=f.reward}
  state.current=null;state.phase='idle';state.message=release?'Ryba je zpět ve vodě. Díky za šetrný lov!':`Ryba prodána za ${money(f.reward)}!`;
  const newlyUnlockedTitles=syncPlayerTitles();
-  save();render();if(newlyUnlockedTitles.length)showTitleUnlockNotice(newlyUnlockedTitles);else if(isTrophy||state._levelUp)showTrophyCelebration(f,state._levelUp);state._levelUp=0;
+  save();render();if(f.legendary)showLegendaryCelebration(f);else if(newlyUnlockedTitles.length)showTitleUnlockNotice(newlyUnlockedTitles);else if(isTrophy||state._levelUp)showTrophyCelebration(f,state._levelUp);state._levelUp=0;
 }
 
 const PLAYER_TITLE_DEFS=[
