@@ -1945,46 +1945,24 @@ function render(){
  else if(state.tab==='weekly')renderWeeklyTasks(el);
  else renderLog(el);
 }
-const LEGENDARY_FISH_VARIANTS={
- kapr:{name:'Zlatý kapr',kind:'color',look:'Zlatavé šupiny'},
- amur:{name:'Zlatavý amur',kind:'color',look:'Světlé zlatavé boky'},
- stika:{name:'Obří štika',kind:'record',look:'Rekordní délka a mohutné tělo'},
- candat:{name:'Rekordní candát',kind:'record',look:'Mimořádně mohutný exemplář'},
- sumec:{name:'Albínský sumec',kind:'color',look:'Světlé krémové zbarvení'},
- jeseter:{name:'Bílý jeseter',kind:'color',look:'Neobvykle světlé tělo'},
- lin:{name:'Zlatý lín',kind:'color',look:'Zlatavé boky a typické šupiny'},
- tolstolobik:{name:'Rekordní tolstolobik',kind:'record',look:'Mimořádná délka a hmotnost'},
- bolen:{name:'Stříbrný bolen',kind:'color',look:'Výrazně stříbrné boky'},
- okoun:{name:'Tmavý okoun',kind:'color',look:'Výrazné tmavé pruhy'},
- 'pstruh-obecny':{name:'Zlatavý pstruh obecný',kind:'color',look:'Zlatohnědé tělo s typickými tečkami'},
- 'pstruh-duhovy':{name:'Zlatý pstruh duhový',kind:'color',look:'Vzácná zlatá barevná forma'},
- siven:{name:'Světlý siven alpský',kind:'color',look:'Světlé stříbřité tělo'},
- lipan:{name:'Rekordní lipan',kind:'record',look:'Výjimečná délka a vysoká hřbetní ploutev'},
- losos:{name:'Rekordní losos',kind:'record',look:'Mimořádně mohutný exemplář'}
-};
-function legendarySizeFor(f,cm,type='color'){
- // Every legendary fish is a near-maximum specimen, while staying inside this species' configured range.
- const minRatio=type==='perfect'?.99:type==='record'?.97:.92;
- const maxRatio=type==='perfect'?1:type==='record'?.995:.98;
+const LEGENDARY_FISH_VARIANTS=Object.fromEntries(fishData.map(f=>[f.id,{name:'Rekordní '+f.name,kind:'record',look:'Mimořádná délka a mohutnost exempláře'}]));
+function legendarySizeFor(f,cm){
+ // Legendary fish are reserved for exceptional record-sized specimens.
+ const minRatio=.97,maxRatio=.995;
  const target=Math.round(f.max*(minRatio+Math.random()*(maxRatio-minRatio)));
  const finalCm=Math.min(f.max,Math.max(Number(cm)||0,target,Number(f.min)||0));
  return {cm:finalCm,kg:weightFor(f,finalCm)};
 }
 function rollLegendaryVariant(f,cm){
- const roll=Math.random();
- let type=null;
- if(roll<0.0005)type='perfect';
- else if(roll<0.0035)type='color';
- else if(roll<0.0085)type='record';
- if(!type)return {cm,kg:weightFor(f,cm),legendary:null};
+ // One legendary category only: record-breaking size.
+ if(Math.random()>=.0085)return {cm,kg:weightFor(f,cm),legendary:null};
  const definition=LEGENDARY_FISH_VARIANTS[f.id];
  if(!definition)return {cm,kg:weightFor(f,cm),legendary:null};
- const size=legendarySizeFor(f,cm,type);
- return {...size,legendary:{type,name:type==='perfect'?'Dokonalá legenda':definition.name,variantName:definition.name,look:definition.look}};
+ const size=legendarySizeFor(f,cm);
+ return {...size,legendary:{type:'record',name:definition.name,variantName:definition.name,look:definition.look}};
 }
-function legendaryBonus(type){
- // Legendary fish are exceptionally rare and must be released, so their conservation reward is substantial.
- return type==='perfect'?{xp:2500,multiplier:12}:type==='record'?{xp:1200,multiplier:7}:{xp:600,multiplier:4};
+function legendaryBonus(){
+ return {xp:2000,multiplier:1};
 }
 const LEGENDARY_IMAGE_FILES={
  amur:'2763AD53-2FD9-4ECD-ABA6-E3C4C532AA3C.png',
@@ -2006,9 +1984,9 @@ const LEGENDARY_IMAGE_FILES={
 function legendaryFishImage(fishId){return LEGENDARY_IMAGE_FILES[fishId]||fishImages[fishId];}
 
 function showLegendaryCelebration(f,testAction=null){
- const rarity=f.legendary||{},labels={color:'VZÁCNÉ ZBARVENÍ',record:'REKORDNÍ VELIKOST',perfect:'DOKONALÁ LEGENDA'};
+ const rarity=f.legendary||{},labels={record:'REKORDNÍ VELIKOST'};
  const overlay=document.createElement('div');overlay.className='legendary-celebration';
- overlay.innerHTML=`<div class="legendary-rays"></div><div class="legendary-box"><div class="legendary-kicker">${testAction?'🧪 TESTOVACÍ VÝSLEDEK':'✦ VÝJIMEČNÝ ÚLOVEK ✦'}</div><div class="legendary-art legendary-${rarity.type}"><img src="${legendaryFishImage(f.id)}" alt="${escapeHtml(f.name)}"></div><div class="legendary-label">${labels[rarity.type]||'LEGENDÁRNÍ ÚLOVEK'}</div><h2>${escapeHtml(rarity.type==='perfect'?'Dokonalá legenda':rarity.variantName||rarity.name||f.name)}</h2><p class="legendary-species">${escapeHtml(f.name)}</p><div class="legendary-measures"><span><small>DÉLKA</small><b>${f.cm} cm</b></span><span><small>HMOTNOST</small><b>${Number(f.kg).toFixed(2)} kg</b></span></div><p class="legendary-bonus">${testAction?(testAction==='sold'?`💰 Ryba byla v testu prodána za ${money(f.reward)}.`:'💚 Ryba byla v testu puštěna zpět do vody.'):'✦ Zvláštní odměna byla připsána ✦'}</p><button id="closeLegendary">${testAction?'Zavřít test':'Uložit do sbírky'}</button></div>`;
+ overlay.innerHTML=`<div class="legendary-rays"></div><div class="legendary-box"><div class="legendary-kicker">${testAction?'🧪 TESTOVACÍ VÝSLEDEK':'✦ VÝJIMEČNÝ ÚLOVEK ✦'}</div><div class="legendary-art legendary-${rarity.type}"><img src="${legendaryFishImage(f.id)}" alt="${escapeHtml(f.name)}"></div><div class="legendary-label">${labels[rarity.type]||'LEGENDÁRNÍ ÚLOVEK'}</div><h2>${escapeHtml(rarity.variantName||rarity.name||('Rekordní '+f.name))}</h2><p class="legendary-species">${escapeHtml(f.name)}</p><div class="legendary-measures"><span><small>DÉLKA</small><b>${f.cm} cm</b></span><span><small>HMOTNOST</small><b>${Number(f.kg).toFixed(2)} kg</b></span></div><p class="legendary-bonus">${testAction?(testAction==='sold'?`💰 Ryba byla v testu prodána za ${money(f.reward)}.`:'💚 Ryba byla v testu puštěna zpět do vody.'):'✦ Zvláštní odměna byla připsána ✦'}</p><button id="closeLegendary">${testAction?'Zavřít test':'Uložit do sbírky'}</button></div>`;
  document.body.appendChild(overlay);
  const close=()=>overlay.remove();
  overlay.querySelector('#closeLegendary').onclick=close;
@@ -2053,8 +2031,8 @@ function renderCatchGallery(el){
    const variant=LEGENDARY_FISH_VARIANTS[f.id],caught=legendaryCatches.filter(c=>c.id===f.id);
    const best=caught.slice().sort((a,b)=>(Number(b.cm)||0)-(Number(a.cm)||0))[0];
    return `<article class="legendary-gallery-card ${best?'is-found':'is-locked'}">
-    <div class="legendary-gallery-art">${best?`<img class="legendary-${best.type}" src="${legendaryFishImage(f.id)}" alt="${escapeHtml(variant.name)}">`:'<span>?</span>'}</div>
-    <div><b>${best?escapeHtml(variant.name):'Neobjevená legenda'}</b><small>${best?escapeHtml(f.name)+' · '+best.cm+' cm · '+Number(best.kg).toFixed(2)+' kg':escapeHtml(f.name)+' · '+escapeHtml(f.places.join(', '))}</small><em>${best?(best.type==='perfect'?'✦ Dokonalá legenda':best.type==='record'?'🏆 Rekordní velikost':'✨ Vzácné zbarvení'):'🔒 Zatím neuloveno'}</em></div>
+    <div class="legendary-gallery-art">${best?`<img class="legendary-record" src="${legendaryFishImage(f.id)}" alt="${escapeHtml(variant.name)}">`:'<span>?</span>'}</div>
+    <div><b>${best?escapeHtml(variant.name):'Neobjevená legenda'}</b><small>${best?escapeHtml(f.name)+' · '+best.cm+' cm · '+Number(best.kg).toFixed(2)+' kg':escapeHtml(f.name)+' · '+escapeHtml(f.places.join(', '))}</small><em>${best?'🏆 Rekordní velikost':'🔒 Zatím neuloveno'}</em></div>
    </article>`;
   }).join('')}</div>
  </section>
@@ -2125,8 +2103,8 @@ function renderSettings(el){
  const startActionTest=(release)=>{
   const fish=fishData.find(item=>item.id===el.querySelector('#legendaryTestFish')?.value)||fishData[0];
   const variant=LEGENDARY_FISH_VARIANTS[fish.id]||{name:'Legendární '+fish.name};
-  const size=legendarySizeFor(fish,Math.round(fish.ref||fish.min||50),'color');
-  state.current={...fish,cm:size.cm,kg:size.kg,legendary:{type:'color',name:variant.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'},_testOnly:true,xpReward:0,reward:Math.round((fish.reward||100)*2)};
+  const size=legendarySizeFor(fish,Math.round(fish.ref||fish.min||50));
+  state.current={...fish,cm:size.cm,kg:size.kg,legendary:{type:'record',name:'Rekordní '+fish.name,variantName:'Rekordní '+fish.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'},_testOnly:true,xpReward:0,reward:Math.round((fish.reward||100)*2)};
   state.phase='caught';state.tab='fish';state.message='TEST: Vyzkoušej '+(release?'puštění':'prodej')+' legendární ryby. Žádný postup se neuloží.';
   render();
  };
@@ -2137,7 +2115,7 @@ function renderSettings(el){
   const f=fishData.find(item=>item.id===el.querySelector('#legendaryTestFish')?.value)||fishData[0];
   const variant=LEGENDARY_FISH_VARIANTS[f.id]||{name:'Legendární '+f.name};
   const cm=Math.round(f.ref||f.min||50);
-  showLegendaryCelebration({...f,cm,kg:weightFor(f,cm),legendary:{type:'color',name:variant.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'}});
+  showLegendaryCelebration({...f,cm,kg:weightFor(f,cm),legendary:{type:'record',name:'Rekordní '+f.name,variantName:'Rekordní '+f.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'}});
  };
 }
 const baitImages={"Boilies":"bait-boilies%202.webp","Kukuřice":"bait-corn%202.webp","Guma":"bait-rubber%202.webp","Wobbler":"bait-wobbler%202.webp","Živá nástraha":"bait-live%202.webp"};
@@ -2161,7 +2139,7 @@ function renderFish(el){
  el.querySelector('[data-open-store]')?.addEventListener('click',()=>{state.tab='shop';state.shopCategory='inventory';render()});
  if(byId('cast'))byId('cast').onclick=()=>{state.phase='waiting';state.message='Prut je nahozený. Sleduj špičku prutu a vlasec!';render();startBiteSequence()};
  if(byId('cancel'))byId('cancel').onclick=()=>{clearBiteTimers();state.phase='idle';state.current=null;state.message='Prut jsi vytáhl z vody.';render()};
- if(byId('strike'))byId('strike').onclick=()=>{if(state.phase!=='strike')return;clearBiteTimers();if(window.__fbTestBite){const fish=fishData.find(x=>x.id===window.__fbTestFishId)||fishData[0];const cm=Math.round(fish.ref||fish.min||50);const variant=LEGENDARY_FISH_VARIANTS[fish.id]||{name:'Legendární '+fish.name};const size=legendarySizeFor(fish,cm,'color');state.current={...fish,cm:size.cm,kg:size.kg,legendary:{type:'color',name:variant.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'},_testOnly:true,xpReward:0,reward:0};state.phase='fight';state.progress=35;state.fightStarted=Date.now();state.fight={energy:100,tension:27,distance:35,brake:45,event:'Testovací legendární ryba bojuje!',surgeAt:Date.now()+3500,surgeUntil:0,overTension:0,slackTime:0};state.message='TEST: Zdoláváš legendární rybu!';render();startFightTimer();return;}beginFishFight(true)};
+ if(byId('strike'))byId('strike').onclick=()=>{if(state.phase!=='strike')return;clearBiteTimers();if(window.__fbTestBite){const fish=fishData.find(x=>x.id===window.__fbTestFishId)||fishData[0];const cm=Math.round(fish.ref||fish.min||50);const variant=LEGENDARY_FISH_VARIANTS[fish.id]||{name:'Legendární '+fish.name};const size=legendarySizeFor(fish,cm);state.current={...fish,cm:size.cm,kg:size.kg,legendary:{type:'color',name:variant.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'},_testOnly:true,xpReward:0,reward:0};state.phase='fight';state.progress=35;state.fightStarted=Date.now();state.fight={energy:100,tension:27,distance:35,brake:45,event:'Testovací legendární ryba bojuje!',surgeAt:Date.now()+3500,surgeUntil:0,overTension:0,slackTime:0};state.message='TEST: Zdoláváš legendární rybu!';render();startFightTimer();return;}beginFishFight(true)};
 
  if(byId('reel')){
   const hold=byId('reel');
@@ -2528,7 +2506,7 @@ function getFishingAchievements(){
   {id:'legend-first',category:'Legendární úlovky',icon:'✨',name:'První legenda',desc:'Ulov svou první legendární rybu.',progress:Math.min((state.legendaryCatches||[]).length,1),goal:1,tier:'Bronz'},
   {id:'legend-five',category:'Legendární úlovky',icon:'🌟',name:'Lovec legend',desc:'Ulov 5 legendárních ryb.',progress:Math.min((state.legendaryCatches||[]).length,5),goal:5,tier:'Stříbro'},
   {id:'legend-ten',category:'Legendární úlovky',icon:'👑',name:'Mistr legend',desc:'Ulov 10 legendárních ryb.',progress:Math.min((state.legendaryCatches||[]).length,10),goal:10,tier:'Zlato'},
-  {id:'legend-perfect',category:'Legendární úlovky',icon:'💎',name:'Dokonalý úlovek',desc:'Ulov dokonalou legendu se vzácným zbarvením i rekordní velikostí.',progress:Math.min((state.legendaryCatches||[]).filter(c=>c.type==='perfect').length,1),goal:1,tier:'Legendární'},
+  {id:'legend-record',category:'Legendární úlovky',icon:'🏆',name:'Rekordní legenda',desc:'Ulov legendární rybu rekordní velikosti.',progress:Math.min((state.legendaryCatches||[]).length,1),goal:1,tier:'Legendární'},
   {id:'legend-collector',category:'Legendární úlovky',icon:'🏆',name:'Legendární sběratel',desc:'Ulov legendární variantu všech 15 druhů ryb.',progress:Math.min(new Set((state.legendaryCatches||[]).map(c=>c.id)).size,fishData.length),goal:fishData.length,tier:'Legendární'},
   {id:'trophies25',category:'Vzácné úlovky',icon:'💎',name:'Sběratel trofejí',desc:'Získej 25 trofejních úlovků.',progress:Math.min(records.filter(r=>r.cm >= (fishData.find(f=>f.id===r.id)?.trophy||999)).length,25),goal:25,tier:'Legendární'},
   {id:'first-trout',category:'Mistři jednotlivých druhů',icon:'🐟',name:'První pstruh',desc:'Ulov svého prvního pstruha obecného nebo duhového.',progress:Math.min((Number(species['pstruh-obecny']?.count)||0)+(Number(species['pstruh-duhovy']?.count)||0),1),goal:1,tier:'Bronz'},
