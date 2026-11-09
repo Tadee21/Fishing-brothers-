@@ -495,6 +495,13 @@ button:active:not(:disabled){transform:translateY(1px)}
 @keyframes legendarySparkle{0%,100%{opacity:.25;transform:translateY(5px)}50%{opacity:1;transform:translateY(-5px)}}
 @keyframes legendaryArrival{0%{opacity:0;transform:scale(.94);filter:brightness(1.8)}100%{opacity:1;transform:scale(1);filter:brightness(1)}}
 @media(prefers-reduced-motion:reduce){.legendary-fight .fish-catch-frame,.legendary-caught,.legendary-fight .fish-catch-frame:before,.legendary-fight .fish-catch-frame:after{animation:none}}
+
+/* Legendary result: keep measurement labels and values clearly separated. */
+.legendary-box .legendary-measures{align-items:stretch;gap:12px}
+.legendary-box .legendary-measures span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-width:0;min-height:88px;padding:12px 8px;box-sizing:border-box;text-align:center}
+.legendary-box .legendary-measures small{position:static;display:block;margin:0;line-height:1.3;font-size:10px;letter-spacing:1.2px;white-space:nowrap}
+.legendary-box .legendary-measures b{display:block;position:static;margin:0;line-height:1.2;font-size:clamp(19px,5vw,23px);white-space:nowrap}
+@media(max-width:380px){.legendary-box .legendary-measures{gap:8px}.legendary-box .legendary-measures span{min-height:82px;padding:10px 5px}.legendary-box .legendary-measures small{font-size:9px;letter-spacing:.8px}}
 </style>
 <style>
 /* FINAL REFERENCE-MATCH REDESIGN */
