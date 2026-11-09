@@ -2443,6 +2443,11 @@ function getFishingAchievements(){
   {id:'length150',category:'Vzácné úlovky',icon:'🌟',name:'Ryba nad 150 cm',desc:'Ulov rybu dlouhou alespoň 150 cm.',progress:Math.min(Number(state.best)||0,150),goal:150,unit:'cm',tier:'Legendární'},
   {id:'heavy-record',category:'Vzácné úlovky',icon:'⚖️',name:'Rekordní hmotnost',desc:'Ulov rybu těžší než 30 kg.',progress:Math.min(Number(state.bestWeight)||0,30),goal:30,unit:'kg',tier:'Legendární'},
   {id:'heavy20',category:'Vzácné úlovky',icon:'🏋️',name:'Těžká váha',desc:'Ulov rybu těžší než 20 kg.',progress:Math.min(Number(state.bestWeight)||0,20),goal:20,unit:'kg',tier:'Zlato'},
+  {id:'legend-first',category:'Legendární úlovky',icon:'✨',name:'První legenda',desc:'Ulov svou první legendární rybu.',progress:Math.min((state.legendaryCatches||[]).length,1),goal:1,tier:'Bronz'},
+  {id:'legend-five',category:'Legendární úlovky',icon:'🌟',name:'Lovec legend',desc:'Ulov 5 legendárních ryb.',progress:Math.min((state.legendaryCatches||[]).length,5),goal:5,tier:'Stříbro'},
+  {id:'legend-ten',category:'Legendární úlovky',icon:'👑',name:'Mistr legend',desc:'Ulov 10 legendárních ryb.',progress:Math.min((state.legendaryCatches||[]).length,10),goal:10,tier:'Zlato'},
+  {id:'legend-perfect',category:'Legendární úlovky',icon:'💎',name:'Dokonalý úlovek',desc:'Ulov dokonalou legendu se vzácným zbarvením i rekordní velikostí.',progress:Math.min((state.legendaryCatches||[]).filter(c=>c.type==='perfect').length,1),goal:1,tier:'Legendární'},
+  {id:'legend-collector',category:'Legendární úlovky',icon:'🏆',name:'Legendární sběratel',desc:'Ulov legendární variantu všech 15 druhů ryb.',progress:Math.min(new Set((state.legendaryCatches||[]).map(c=>c.id)).size,fishData.length),goal:fishData.length,tier:'Legendární'},
   {id:'trophies25',category:'Vzácné úlovky',icon:'💎',name:'Sběratel trofejí',desc:'Získej 25 trofejních úlovků.',progress:Math.min(records.filter(r=>r.cm >= (fishData.find(f=>f.id===r.id)?.trophy||999)).length,25),goal:25,tier:'Legendární'},
   {id:'first-trout',category:'Mistři jednotlivých druhů',icon:'🐟',name:'První pstruh',desc:'Ulov svého prvního pstruha obecného nebo duhového.',progress:Math.min((Number(species['pstruh-obecny']?.count)||0)+(Number(species['pstruh-duhovy']?.count)||0),1),goal:1,tier:'Bronz'},
   {id:'mountain-ten',category:'Průzkumníci revírů',icon:'🏔️',name:'Horský rybář',desc:'Ulov 10 ryb na Horském jezeře.',progress:Math.min(Number(places['Horské jezero'])||0,10),goal:10,tier:'Stříbro'},
@@ -2466,7 +2471,7 @@ function getFishingAchievements(){
 function renderLog(el){
  const achievements=getFishingAchievements(),unlocked=achievements.filter(a=>a.done).length;
  const trophies=(state.records||[]).filter(r=>r.cm >= (fishData.find(f=>f.id===r.id)?.trophy||999));
- const categories=['Rybářské úspěchy','Mistři jednotlivých druhů','Vzácné úlovky','Průzkumníci revírů','Postup a vybavení'];
+ const categories=['Rybářské úspěchy','Mistři jednotlivých druhů','Vzácné úlovky','Legendární úlovky','Průzkumníci revírů','Postup a vybavení'];
  const groups=categories.map(category=>({category,items:achievements.filter(a=>a.category===category)})).filter(g=>g.items.length);
  const row=(r,i,metric)=>`<div class="record"><span class="badge">#${i+1}</span><img class="artmini" src="${fishImages[fishIdForCatch(r)]}" alt="${escapeHtml(r.name)}" loading="lazy"><div class="grow"><b>${escapeHtml(r.name)}</b><div class="muted">${r.cm} cm · ${Number(r.kg).toFixed(2)} kg · ${escapeHtml(r.place||'Revír')}</div><small class="muted">Rybář: ${escapeHtml(r.angler||'Ty')} · ${escapeHtml(r.date||'')}</small></div><b>${metric==='cm'?r.cm+' cm':Number(r.kg).toFixed(2)+' kg'}</b></div>`;
  el.innerHTML=`<div class="card stack achievement-page">
