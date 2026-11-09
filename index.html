@@ -1990,10 +1990,10 @@ const LEGENDARY_IMAGE_FILES={
 };
 function legendaryFishImage(fishId){return LEGENDARY_IMAGE_FILES[fishId]||fishImages[fishId];}
 
-function showLegendaryCelebration(f){
+function showLegendaryCelebration(f,testAction=null){
  const rarity=f.legendary||{},labels={color:'VZÁCNÉ ZBARVENÍ',record:'REKORDNÍ VELIKOST',perfect:'DOKONALÁ LEGENDA'};
  const overlay=document.createElement('div');overlay.className='legendary-celebration';
- overlay.innerHTML=`<div class="legendary-rays"></div><div class="legendary-box"><div class="legendary-kicker">✦ VÝJIMEČNÝ ÚLOVEK ✦</div><div class="legendary-art legendary-${rarity.type}"><img src="${legendaryFishImage(f.id)}" alt="${escapeHtml(f.name)}"></div><div class="legendary-label">${labels[rarity.type]||'LEGENDÁRNÍ ÚLOVEK'}</div><h2>${escapeHtml(rarity.type==='perfect'?'Dokonalá legenda':rarity.variantName||rarity.name||f.name)}</h2><p class="legendary-species">${escapeHtml(f.name)}</p><div class="legendary-measures"><span><small>DÉLKA</small><b>${f.cm} cm</b></span><span><small>HMOTNOST</small><b>${Number(f.kg).toFixed(2)} kg</b></span></div><p class="legendary-bonus">✦ Zvláštní odměna byla připsána ✦</p><button id="closeLegendary">Uložit do sbírky</button></div>`;
+ overlay.innerHTML=`<div class="legendary-rays"></div><div class="legendary-box"><div class="legendary-kicker">${testAction?'🧪 TESTOVACÍ VÝSLEDEK':'✦ VÝJIMEČNÝ ÚLOVEK ✦'}</div><div class="legendary-art legendary-${rarity.type}"><img src="${legendaryFishImage(f.id)}" alt="${escapeHtml(f.name)}"></div><div class="legendary-label">${labels[rarity.type]||'LEGENDÁRNÍ ÚLOVEK'}</div><h2>${escapeHtml(rarity.type==='perfect'?'Dokonalá legenda':rarity.variantName||rarity.name||f.name)}</h2><p class="legendary-species">${escapeHtml(f.name)}</p><div class="legendary-measures"><span><small>DÉLKA</small><b>${f.cm} cm</b></span><span><small>HMOTNOST</small><b>${Number(f.kg).toFixed(2)} kg</b></span></div><p class="legendary-bonus">${testAction?(testAction==='sold'?`💰 Ryba byla v testu prodána za ${money(f.reward)}.`:'💚 Ryba byla v testu puštěna zpět do vody.'):'✦ Zvláštní odměna byla připsána ✦'}</p><button id="closeLegendary">${testAction?'Zavřít test':'Uložit do sbírky'}</button></div>`;
  document.body.appendChild(overlay);
  const close=()=>overlay.remove();
  overlay.querySelector('#closeLegendary').onclick=close;
@@ -2094,7 +2094,7 @@ function renderSettings(el){
  const profileName=String(currentProfile?.username||currentUser?.user_metadata?.username||'').trim().toLowerCase();
  const isTadee=currentUser&&['tadee','tadee21'].includes(profileName);
  el.innerHTML=`<div class="card stack"><h2>⚙️ Nastavení hry</h2><p class="muted">Herní postup se ukládá do účtu a synchronizuje mezi zařízeními.</p><div class="status">${currentUser?'☁️ Online účet připojen – postup se ukládá do cloudu.':'📱 Hraješ bez přihlášení – postup je uložen pouze v tomto zařízení.'}</div>
- ${isTadee?`<div class="card stack" style="border:1px solid #d5ad5c;background:linear-gradient(145deg,#3b2b17,#1c150d)"><h3>🧪 Test legendárních ryb</h3><p class="muted">Soukromý testovací nástroj pro účet Tadee. Testovací úlovek se nikam neuloží a nepřidá odměny.</p><select id="legendaryTestFish" style="width:100%;padding:12px;border-radius:10px;background:#20180f;color:#fff0cf;border:1px solid #a17a49">${fishData.map(f=>`<option value="${f.id}">${escapeHtml(f.name)}</option>`).join('')}</select><button id="testLegendaryFish">✨ Zobrazit legendární úlovek</button><button class="secondary" id="testFishBite">🔔 Otestovat záběr ryby</button></div>`:''}
+ ${isTadee?`<div class="card stack" style="border:1px solid #d5ad5c;background:linear-gradient(145deg,#3b2b17,#1c150d)"><h3>🧪 Test legendárních ryb</h3><p class="muted">Soukromý testovací nástroj pro účet Tadee. Testovací úlovek se nikam neuloží a nepřidá odměny.</p><select id="legendaryTestFish" style="width:100%;padding:12px;border-radius:10px;background:#20180f;color:#fff0cf;border:1px solid #a17a49">${fishData.map(f=>`<option value="${f.id}">${escapeHtml(f.name)}</option>`).join('')}</select><button id="testLegendaryFish">✨ Zobrazit legendární úlovek</button><button class="secondary" id="testFishBite">🔔 Otestovat záběr a zdolávání</button><button class="secondary" id="testLegendarySell">💰 Otestovat prodej legendární ryby</button><button class="secondary" id="testLegendaryRelease">💚 Otestovat puštění legendární ryby</button></div>`:''}
  <button data-tab="account">👤 Správa účtu</button><button class="secondary" data-tab="home">Zpět na hlavní obrazovku</button></div>`;
  el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;render()});
  const biteTestButton=el.querySelector('#testFishBite');
@@ -2107,6 +2107,16 @@ function renderSettings(el){
   state.message='TESTOVACÍ ZÁBĚR – zasekni a vyzkoušej celé zdolávání legendární ryby.';
   render();
  };
+ const startActionTest=(release)=>{
+  const fish=fishData.find(item=>item.id===el.querySelector('#legendaryTestFish')?.value)||fishData[0];
+  const variant=LEGENDARY_FISH_VARIANTS[fish.id]||{name:'Legendární '+fish.name};
+  const cm=Math.round(fish.ref||fish.min||50);
+  state.current={...fish,cm,kg:weightFor(fish,cm),legendary:{type:'color',name:variant.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'},_testOnly:true,xpReward:0,reward:Math.round((fish.reward||100)*2)};
+  state.phase='caught';state.tab='fish';state.message='TEST: Vyzkoušej '+(release?'puštění':'prodej')+' legendární ryby. Žádný postup se neuloží.';
+  render();
+ };
+ const testSell=el.querySelector('#testLegendarySell');if(testSell)testSell.onclick=()=>startActionTest(false);
+ const testRelease=el.querySelector('#testLegendaryRelease');if(testRelease)testRelease.onclick=()=>startActionTest(true);
  const testButton=el.querySelector('#testLegendaryFish');
  if(testButton)testButton.onclick=()=>{
   const f=fishData.find(item=>item.id===el.querySelector('#legendaryTestFish')?.value)||fishData[0];
@@ -2272,7 +2282,7 @@ function showTrophyCelebration(f,levelUp=0){
 }
 function finishCatch(release=false){
  const f=state.current;if(!f)return;
- if(f._testOnly){if(fightTimer){clearInterval(fightTimer);fightTimer=null;}isReeling=false;window.__fbTestBite=false;window.__fbTestFishId=null;state.phase='idle';state.current=null;state.tab='settings';state.message='Test zdolání dokončen. Úlovek ani odměny nebyly uloženy.';render();return;}
+ if(f._testOnly){if(fightTimer){clearInterval(fightTimer);fightTimer=null;}isReeling=false;window.__fbTestBite=false;window.__fbTestFishId=null;state.phase='idle';state.current=null;state.tab='settings';state.message=release?'TEST: Legendární ryba byla puštěna zpět do vody. Úlovek ani odměny nebyly uloženy.':`TEST: Legendární ryba byla prodána za ${money(f.reward)}. Úlovek ani odměny nebyly uloženy.`;render();showLegendaryCelebration(f,release?'released':'sold');return;}
  const isTrophy=f.cm >= (f.trophy||999);
  state.lastCatch={name:f.name,id:f.id,cm:f.cm,kg:f.kg,place:state.place,action:release?'Puštěna':'Prodána',date:new Date().toLocaleString('cs-CZ'),legendary:f.legendary||null};
  if(f.legendary){
