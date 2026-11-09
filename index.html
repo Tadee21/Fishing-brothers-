@@ -1955,7 +1955,7 @@ function legendarySizeFor(f,cm){
 }
 function rollLegendaryVariant(f,cm){
  // One legendary category only: record-breaking size.
- if(Math.random()>=.0085)return {cm,kg:weightFor(f,cm),legendary:null};
+ if(Math.random()>=.005)return {cm,kg:weightFor(f,cm),legendary:null};
  const definition=LEGENDARY_FISH_VARIANTS[f.id];
  if(!definition)return {cm,kg:weightFor(f,cm),legendary:null};
  const size=legendarySizeFor(f,cm);
