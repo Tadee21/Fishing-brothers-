@@ -61,12 +61,34 @@ function ffBuy(id,group){
  const x=group==='baits'?FF_STORE.baits.find(y=>y[0]===id):FF_STORE[group].find(y=>y[0]===id);if(!x)return;
  const price=group==='baits'?x[3]:x[2],req=group==='baits'?x[4]:x[3],owned=group==='baits'?state.ownedBaits:state.ownedGear;
  if(owned.includes(id)||playerLevel()<req||state.money<price)return;state.money-=price;owned.push(id);
- if(group==='baits'){state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}else{state.gearPurchases[id]=price;if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines'||group==='braids')state.selectedLine=id;}
+ if(group==='baits'){if(state.place!=='Horské jezero'||id.startsWith('mountain-')){state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}}else{state.gearPurchases[id]=price;if(state.place!=='Horské jezero'||id.endsWith('-mountain')){if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines'||group==='braids')state.selectedLine=id;}}
  save();render();
 }
+function ffIsMountainLoadoutValid(){
+ return state.selectedRod==='rod-mountain'&&state.selectedReel==='reel-mountain'&&state.selectedLine==='line-mountain'&&String(state.selectedBait||'').startsWith('mountain-')&&state.ownedGear?.includes('rod-mountain')&&state.ownedGear?.includes('reel-mountain')&&state.ownedGear?.includes('line-mountain')&&state.ownedBaits?.includes(state.selectedBait);
+}
+function ffMountainLoadoutMessage(){
+ const missing=[];
+ if(state.selectedRod!=='rod-mountain')missing.push('horský prut Alpine Trout Pro');
+ if(state.selectedReel!=='reel-mountain')missing.push('horský naviják Alpine 4000');
+ if(state.selectedLine!=='line-mountain')missing.push('horský vlasec Crystal Clear 0,32 mm');
+ if(!String(state.selectedBait||'').startsWith('mountain-'))missing.push('horskou nástrahu');
+ return missing.length?'🏔️ Na Horském jezeře potřebuješ: '+missing.join(', ')+'.':'';
+}
+function ffPreparePlace(place){
+ state.place=place;
+ if(place==='Horské jezero'){
+  state.bait='Horské jezero';
+  const mountain=ffBaitPreviewForCategory('Horské jezero');
+  if(mountain&&state.ownedBaits?.includes(mountain[0])){state.selectedBait=mountain[0];state.baitSelections=state.baitSelections||{};state.baitSelections['Horské jezero']=mountain[0];}
+ }else if(state.bait==='Horské jezero'){
+  const fallback=['Guma','Wobbler','Kukuřice','Boilies','Živá nástraha'].map(c=>ffBaitPreviewForCategory(c)).find(x=>x&&state.ownedBaits?.includes(x[0]));
+  if(fallback){state.selectedBait=fallback[0];state.bait=fallback[1];}
+ }
+}
 function ffEquip(id,group){
- if(group==='baits'){const x=FF_STORE.baits.find(y=>y[0]===id);if(!x||!state.ownedBaits.includes(id))return;state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}
- else{if(!state.ownedGear.includes(id))return;if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines'||group==='braids')state.selectedLine=id;}
+ if(group==='baits'){const x=FF_STORE.baits.find(y=>y[0]===id);if(!x||!state.ownedBaits.includes(id))return;if(state.place==='Horské jezero'&&!id.startsWith('mountain-')){state.message='🏔️ Na Horském jezeře můžeš používat pouze horské nástrahy.';render();return;}state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}
+ else{if(!state.ownedGear.includes(id))return;if(state.place==='Horské jezero'&&!id.endsWith('-mountain')){state.message='🏔️ Na Horském jezeře můžeš používat pouze horské vybavení.';render();return;}if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines'||group==='braids')state.selectedLine=id;}
  save();render();
 }
 function ffSell(id){
@@ -78,7 +100,7 @@ function ffSell(id){
  state.loadouts=state.loadouts.map(s=>s?{...s,rod:s.rod===id?'rod-basic':s.rod,reel:s.reel===id?'reel-basic':s.reel,line:s.line===id?'line-basic':s.line}:null);save();render();
 }
 function ffSaveLoadout(i){state.loadouts[i]={name:'Moje sestava '+(i+1),rod:state.selectedRod,reel:state.selectedReel,line:state.selectedLine,bait:state.selectedBait};state.activeLoadout=i;save();render();}
-function ffUseLoadout(i){const s=state.loadouts[i];if(!s||![s.rod,s.reel,s.line].every(x=>state.ownedGear.includes(x))||!state.ownedBaits.includes(s.bait))return;state.selectedRod=s.rod;state.selectedReel=s.reel;state.selectedLine=s.line;state.selectedBait=s.bait;state.bait=FF_STORE.baits.find(x=>x[0]===s.bait)?.[1]||state.bait;state.baitSelections=state.baitSelections||{};const loadoutBait=FF_STORE.baits.find(x=>x[0]===s.bait);if(loadoutBait)state.baitSelections[loadoutBait[1]]=s.bait;state.activeLoadout=i;save();render();}
+function ffUseLoadout(i){const s=state.loadouts[i];if(!s||![s.rod,s.reel,s.line].every(x=>state.ownedGear.includes(x))||!state.ownedBaits.includes(s.bait))return;if(state.place==='Horské jezero'&&!(s.rod==='rod-mountain'&&s.reel==='reel-mountain'&&s.line==='line-mountain'&&String(s.bait).startsWith('mountain-'))){state.message='🏔️ Tato sestava není určená pro Horské jezero. Vyber horskou sestavu.';render();return;}state.selectedRod=s.rod;state.selectedReel=s.reel;state.selectedLine=s.line;state.selectedBait=s.bait;state.bait=FF_STORE.baits.find(x=>x[0]===s.bait)?.[1]||state.bait;state.baitSelections=state.baitSelections||{};const loadoutBait=FF_STORE.baits.find(x=>x[0]===s.bait);if(loadoutBait)state.baitSelections[loadoutBait[1]]=s.bait;state.activeLoadout=i;save();render();}
 function renderFishingFriendsShop(el){
  initStoreState();const cat=state.shopCategory,tab=FF_TABS.find(x=>x[0]===cat)||FF_TABS[0],lvl=playerLevel();
  function card(x,g){
