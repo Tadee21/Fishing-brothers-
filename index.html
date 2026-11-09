@@ -1983,7 +1983,8 @@ function rollLegendaryVariant(f,cm){
  return {...size,legendary:{type,name:type==='perfect'?'Dokonalá legenda':definition.name,variantName:definition.name,look:definition.look}};
 }
 function legendaryBonus(type){
- return type==='perfect'?{xp:750,multiplier:5}:type==='record'?{xp:350,multiplier:2.5}:{xp:250,multiplier:2};
+ // Legendary fish are exceptionally rare and must be released, so their conservation reward is substantial.
+ return type==='perfect'?{xp:2500,multiplier:12}:type==='record'?{xp:1200,multiplier:7}:{xp:600,multiplier:4};
 }
 const LEGENDARY_IMAGE_FILES={
  amur:'2763AD53-2FD9-4ECD-ABA6-E3C4C532AA3C.png',
