@@ -2192,7 +2192,7 @@ function beginFishFight(quickStrike){
  const cm=Math.round(f.min+Math.pow(Math.random(),3.0)*(f.max-f.min));
  const rolled=rollLegendaryVariant(f,cm);
  const finalCm=rolled.cm,kg=rolled.kg,legendary=rolled.legendary;
- state.current={...f,cm:finalCm,kg,legendary,xpReward:legendary?2000:Math.round(35+finalCm*1.1+kg*3),reward:legendary?80000:Math.round(kg*f.price*(1+state.rod*.04))};
+ state.current={...f,cm:finalCm,kg,legendary,xpReward:legendary?2000:Math.round(35+finalCm*1.1+kg*3),reward:legendary?20000:Math.round(kg*f.price*(1+state.rod*.04))};
  state.phase='fight';state.progress=35;state.fightStarted=Date.now();
  state.fight={energy:100,tension:quickStrike?27:39,distance:Math.round(24+Math.random()*10),brake:45,event:quickStrike?'Zasekl jsi včas! Ryba se rozjíždí.':'Pozdní zásek! Ryba je opatrná.',surgeAt:Date.now()+3500+Math.random()*3500,surgeUntil:0,overTension:0,slackTime:0};
  state.message=quickStrike?'Skvělý zásek! Ryba zabrala!':'Ryba zabrala!';
@@ -2303,7 +2303,7 @@ function finishCatch(release=false){
  if(Number(f.kg)>Number(state.bestWeight||0)){state.bestWeight=Number(f.kg);state.heaviestCatch={name:f.name,id:f.id,cm:f.cm,kg:f.kg,place:state.place,date:new Date().toLocaleString('cs-CZ')};}
  // Every legendary fish has one fixed conservation reward, regardless of rarity subtype or size.
  const earnedXp=f.legendary?2000:(f.xpReward||Math.round(35+f.cm*1.1+f.kg*3));
- const earnedMoney=f.legendary?80000:(!release?Number(f.reward)||0:0);
+ const earnedMoney=f.legendary?20000:(!release?Number(f.reward)||0:0);
  const oldLevel=Math.floor((Number(state.xp)||0)/500)+1;state.xp=(Number(state.xp)||0)+earnedXp;const newLevel=Math.floor(state.xp/500)+1;state._levelUp=newLevel>oldLevel?newLevel:0;
  if(release||f.legendary){state.released++;if(f.legendary)state.money+=earnedMoney;}else{state.sold++;state.money+=earnedMoney}
  state.current=null;state.phase='idle';state.message=f.legendary?`Legendární ryba byla bezpečně puštěna! Získáváš ${money(earnedMoney)} a +${earnedXp} XP.`:release?'Ryba je zpět ve vodě. Díky za šetrný lov!':`Ryba prodána za ${money(earnedMoney)}!`;
