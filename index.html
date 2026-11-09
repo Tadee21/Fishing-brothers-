@@ -2104,7 +2104,7 @@ function renderSettings(el){
   const fish=fishData.find(item=>item.id===el.querySelector('#legendaryTestFish')?.value)||fishData[0];
   const variant=LEGENDARY_FISH_VARIANTS[fish.id]||{name:'Legendární '+fish.name};
   const size=legendarySizeFor(fish,Math.round(fish.ref||fish.min||50));
-  state.current={...fish,cm:size.cm,kg:size.kg,legendary:{type:'record',name:'Rekordní '+fish.name,variantName:'Rekordní '+fish.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'},_testOnly:true,xpReward:0,reward:Math.round((fish.reward||100)*2)};
+  state.current={...fish,cm:size.cm,kg:size.kg,legendary:{type:'record',name:variant.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'},_testOnly:true,xpReward:0,reward:Math.round((fish.reward||100)*2)};
   state.phase='caught';state.tab='fish';state.message='TEST: Vyzkoušej '+(release?'puštění':'prodej')+' legendární ryby. Žádný postup se neuloží.';
   render();
  };
@@ -2115,7 +2115,7 @@ function renderSettings(el){
   const f=fishData.find(item=>item.id===el.querySelector('#legendaryTestFish')?.value)||fishData[0];
   const variant=LEGENDARY_FISH_VARIANTS[f.id]||{name:'Legendární '+f.name};
   const cm=Math.round(f.ref||f.min||50);
-  showLegendaryCelebration({...f,cm,kg:weightFor(f,cm),legendary:{type:'record',name:'Rekordní '+f.name,variantName:'Rekordní '+f.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'}});
+  showLegendaryCelebration({...f,cm,kg:weightFor(f,cm),legendary:{type:'record',name:variant.name,variantName:variant.name,look:variant.look||'Testovací legendární podoba'}});
  };
 }
 const baitImages={"Boilies":"bait-boilies%202.webp","Kukuřice":"bait-corn%202.webp","Guma":"bait-rubber%202.webp","Wobbler":"bait-wobbler%202.webp","Živá nástraha":"bait-live%202.webp"};
