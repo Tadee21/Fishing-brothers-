@@ -1957,10 +1957,29 @@ function rollLegendaryVariant(f,cm){
 function legendaryBonus(type){
  return type==='perfect'?{xp:750,multiplier:5}:type==='record'?{xp:350,multiplier:2.5}:{xp:250,multiplier:2};
 }
+const LEGENDARY_IMAGE_FILES={
+ amur:'2763AD53-2FD9-4ECD-ABA6-E3C4C532AA3C.png',
+ okoun:'5B01501B-88B8-42BD-9F73-1B629801C8D0.png',
+ candat:'7081C4B3-AE6F-4C84-8A54-2BCD0A21BC7C.png',
+ lin:'7F1B5475-EF05-45E9-91C7-3F17D6AC4C11.png',
+ bolen:'888ADA4A-5EC5-46DA-9F74-E151D923267E.png',
+ losos:'90FFBC2E-BF06-477A-A61A-C846EB223CF8.png',
+ siven:'92FBB4C6-EDE0-4576-87AB-8187C2CF1258.png',
+ stika:'9AD630DE-4199-4E0C-B2BF-91E4DEBBD0EE.png',
+ jeseter:'A2945DE3-CBE4-4D1D-839F-7FED94701270.png',
+ sumec:'A6A9E82C-B58A-41BF-942F-96AF0108F184.png',
+ tolstolobik:'A89B7883-BB4D-48C7-A154-57B1A912A94B.png',
+ lipan:'B3839F88-6B5B-47EE-A531-586F1A21092E.png',
+ kapr:'B8FFD30B-30C1-4EB8-87F2-9A0BCD5DD4BC.png',
+ 'pstruh-duhovy':'F8EC548B-00E1-4B01-8FFE-495FD1BB5FE4.png',
+ 'pstruh-obecny':'FF7CFA7A-DA1F-429C-844C-E2D5C2E87230.png'
+};
+function legendaryFishImage(fishId){return LEGENDARY_IMAGE_FILES[fishId]||fishImages[fishId];}
+
 function showLegendaryCelebration(f){
  const rarity=f.legendary||{},labels={color:'VZÁCNÉ ZBARVENÍ',record:'REKORDNÍ VELIKOST',perfect:'DOKONALÁ LEGENDA'};
  const overlay=document.createElement('div');overlay.className='legendary-celebration';
- overlay.innerHTML=`<div class="legendary-rays"></div><div class="legendary-box"><div class="legendary-kicker">✦ VÝJIMEČNÝ ÚLOVEK ✦</div><div class="legendary-art legendary-${rarity.type}"><img src="${fishImages[f.id]}" alt="${escapeHtml(f.name)}"></div><div class="legendary-label">${labels[rarity.type]||'LEGENDÁRNÍ ÚLOVEK'}</div><h2>${escapeHtml(rarity.type==='perfect'?'Dokonalá legenda':rarity.variantName||rarity.name||f.name)}</h2><p class="legendary-species">${escapeHtml(f.name)}</p><div class="legendary-measures"><span><small>DÉLKA</small><b>${f.cm} cm</b></span><span><small>HMOTNOST</small><b>${Number(f.kg).toFixed(2)} kg</b></span></div><p class="legendary-bonus">✦ Zvláštní odměna byla připsána ✦</p><button id="closeLegendary">Uložit do sbírky</button></div>`;
+ overlay.innerHTML=`<div class="legendary-rays"></div><div class="legendary-box"><div class="legendary-kicker">✦ VÝJIMEČNÝ ÚLOVEK ✦</div><div class="legendary-art legendary-${rarity.type}"><img src="${legendaryFishImage(f.id)}" alt="${escapeHtml(f.name)}"></div><div class="legendary-label">${labels[rarity.type]||'LEGENDÁRNÍ ÚLOVEK'}</div><h2>${escapeHtml(rarity.type==='perfect'?'Dokonalá legenda':rarity.variantName||rarity.name||f.name)}</h2><p class="legendary-species">${escapeHtml(f.name)}</p><div class="legendary-measures"><span><small>DÉLKA</small><b>${f.cm} cm</b></span><span><small>HMOTNOST</small><b>${Number(f.kg).toFixed(2)} kg</b></span></div><p class="legendary-bonus">✦ Zvláštní odměna byla připsána ✦</p><button id="closeLegendary">Uložit do sbírky</button></div>`;
  document.body.appendChild(overlay);
  const close=()=>overlay.remove();
  overlay.querySelector('#closeLegendary').onclick=close;
@@ -2005,7 +2024,7 @@ function renderCatchGallery(el){
    const variant=LEGENDARY_FISH_VARIANTS[f.id],caught=legendaryCatches.filter(c=>c.id===f.id);
    const best=caught.slice().sort((a,b)=>(Number(b.cm)||0)-(Number(a.cm)||0))[0];
    return `<article class="legendary-gallery-card ${best?'is-found':'is-locked'}">
-    <div class="legendary-gallery-art">${best?`<img class="legendary-${best.type}" src="${fishImages[f.id]}" alt="${escapeHtml(variant.name)}">`:'<span>?</span>'}</div>
+    <div class="legendary-gallery-art">${best?`<img class="legendary-${best.type}" src="${legendaryFishImage(f.id)}" alt="${escapeHtml(variant.name)}">`:'<span>?</span>'}</div>
     <div><b>${best?escapeHtml(variant.name):'Neobjevená legenda'}</b><small>${best?escapeHtml(f.name)+' · '+best.cm+' cm · '+Number(best.kg).toFixed(2)+' kg':escapeHtml(f.name)+' · '+escapeHtml(f.places.join(', '))}</small><em>${best?(best.type==='perfect'?'✦ Dokonalá legenda':best.type==='record'?'🏆 Rekordní velikost':'✨ Vzácné zbarvení'):'🔒 Zatím neuloveno'}</em></div>
    </article>`;
   }).join('')}</div>
