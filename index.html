@@ -1845,7 +1845,16 @@ const fishData = [
  {id:'pstruh-duhovy',name:'Pstruh duhový',min:22,max:85,ref:42,kg:.9,variation:.17,color:'#9caa9b',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha','Horské jezero'],price:82,trophy:100},
  {id:'siven',name:'Siven alpský',min:18,max:65,ref:34,kg:.55,variation:.18,color:'#c17a66',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha','Horské jezero'],price:88,trophy:95},
  {id:'lipan',name:'Lipan podhorní',min:22,max:55,ref:35,kg:.45,variation:.16,color:'#8795a2',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha','Horské jezero'],price:92,trophy:85},
- {id:'losos',name:'Losos obecný',min:45,max:120,ref:72,kg:4.5,variation:.18,color:'#b77d6d',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha','Horské jezero'],price:118,trophy:180}
+ {id:'losos',name:'Losos obecný',min:45,max:120,ref:72,kg:4.5,variation:.18,color:'#b77d6d',type:'lososovité',places:['Horské jezero'],baits:['Guma','Wobbler','Živá nástraha','Horské jezero'],price:118,trophy:180},
+ {id:'arapaima',name:'Arapaima velká',min:80,max:300,ref:180,kg:60,variation:.16,color:'#78866a',type:'amazonské',places:['Amazonie'],baits:['Živá nástraha','Wobbler'],price:145,trophy:250},
+ {id:'arowana-stribrna',name:'Arowana stříbrná',min:35,max:120,ref:65,kg:4.5,variation:.17,color:'#c2c8c2',type:'amazonské',places:['Amazonie'],baits:['Živá nástraha'],price:125,trophy:100},
+ {id:'okoun-pavi',name:'Okoun paví',min:25,max:100,ref:50,kg:3.5,variation:.18,color:'#c69b39',type:'amazonské',places:['Amazonie'],baits:['Guma','Wobbler','Živá nástraha'],price:95,trophy:85},
+ {id:'pacu',name:'Pacu',min:20,max:90,ref:45,kg:3.2,variation:.18,color:'#9b8060',type:'amazonské',places:['Amazonie'],baits:['Kukuřice','Boilies'],price:75,trophy:75},
+ {id:'payara',name:'Payara',min:30,max:120,ref:65,kg:3.5,variation:.18,color:'#a6b0a8',type:'amazonské',places:['Amazonie'],baits:['Guma','Wobbler','Živá nástraha'],price:115,trophy:100},
+ {id:'piraiba',name:'Piraíba',min:60,max:300,ref:150,kg:45,variation:.17,color:'#7c7b70',type:'amazonské',places:['Amazonie'],baits:['Živá nástraha'],price:155,trophy:240},
+ {id:'pirana-cervenobrichá',name:'Piraňa červenobřichá',min:12,max:50,ref:25,kg:.8,variation:.2,color:'#c85b35',type:'amazonské',places:['Amazonie'],baits:['Guma','Živá nástraha'],price:65,trophy:42},
+ {id:'sumec-cervenoocasy',name:'Sumec červenoocasý',min:50,max:180,ref:100,kg:12.5,variation:.18,color:'#9d4c32',type:'amazonské',places:['Amazonie'],baits:['Živá nástraha'],price:135,trophy:150},
+ {id:'tambaqui',name:'Tambaqui',min:30,max:100,ref:55,kg:5.5,variation:.18,color:'#9a8052',type:'amazonské',places:['Amazonie'],baits:['Kukuřice','Boilies'],price:88,trophy:85}
 ];
 const fishImages = {
  kapr:'./fish-habitat-kapr%202.webp',
@@ -1862,7 +1871,16 @@ const fishImages = {
  'pstruh-duhovy':'./Pstruh%20duhovy%CC%81%20nad%20mechem%20porostly%CC%81mi%20kameny%202.webp',
  siven:'./Siven%20v%20pru%CC%8Azrac%CC%8Cny%CC%81ch%20r%CC%8Ci%CC%81c%CC%8Cni%CC%81ch%20voda%CC%81ch%202.webp',
  lipan:'./Lipan%20v%20kr%CC%8Cis%CC%8Ct%CC%8Ca%CC%81love%CC%8C%20c%CC%8Ciste%CC%81%20r%CC%8Cece%202.webp',
- losos:'./Losos%20v%20kr%CC%8Cis%CC%8Ct%CC%8Ca%CC%81love%CC%81%20r%CC%8Cece%202.webp'
+ losos:'./Losos%20v%20kr%CC%8Cis%CC%8Ct%CC%8Ca%CC%81love%CC%81%20r%CC%8Cece%202.webp',
+ arapaima:'./01_arapaima%202.jpg',
+ 'arowana-stribrna':'./02_arowana_stribrna%202.jpg',
+ 'okoun-pavi':'./03_okoun_pavi%202.jpg',
+ pacu:'./04_pacu%202.jpg',
+ payara:'./05_payara%202.jpg',
+ piraiba:'./06_piraiba%202.jpg',
+ 'pirana-cervenobrichá':'./07_pirana_cervenobricha%CC%81%202.jpg',
+ 'sumec-cervenoocasy':'./08_sumec_cervenoocasy%202.jpg',
+ tambaqui:'./09_tambaqui%202.jpg'
 };
 function fishImage(f){const id=fishImages[f?.id]?f.id:(fishData.find(x=>x.name===f?.name)?.id||'kapr');const src=f?.legendary?legendaryFishImage(id):fishImages[id];return `<div class="fishart-frame fish-catch-frame"><img class="fishart" src="${src}" alt="${escapeHtml(f?.name||'Ryba')}" loading="eager"></div>`;}
 function fishIdForCatch(c){if(c?.id&&fishImages[c.id])return c.id;return fishData.find(x=>x.name===c?.name)?.id||'kapr';}
@@ -1871,13 +1889,14 @@ function placeArt(place){
   'Rybník':'https://images.pexels.com/photos/17786368/pexels-photo-17786368.jpeg?auto=compress&cs=tinysrgb&w=1200',
   'Jezero':'https://images.pexels.com/photos/35008328/pexels-photo-35008328.jpeg?auto=compress&cs=tinysrgb&w=1200',
   'Řeka':'https://images.pexels.com/photos/24205803/pexels-photo-24205803.jpeg?auto=compress&cs=tinysrgb&w=1200',
-  'Horské jezero':'./Horske%CC%81%20jezero%20v%20lesni%CC%81%20za%CC%81toce%202.webp'
+  'Horské jezero':'./Horske%CC%81%20jezero%20v%20lesni%CC%81%20za%CC%81toce%202.webp',
+  'Amazonie':'./river.jpg'
  };
  return `<img class="place-photo" src="${scenes[place]}" alt="${place} – ostrá fotografie přírody" loading="lazy">`;
 }
 
 function playerLevel(){return Math.floor((Number(state.xp)||0)/500)+1;}
-function placeRequiredLevel(place){return place==='Jezero'?25:place==='Řeka'?50:place==='Horské jezero'?75:1;}
+function placeRequiredLevel(place){return place==='Jezero'?25:place==='Řeka'?50:place==='Horské jezero'?75:place==='Amazonie'?100:1;}
 function placeUnlocked(place){return playerLevel()>=placeRequiredLevel(place);}
 const state = {money:500,rod:1,reel:1,baitLevel:1,count:0,sold:0,released:0,records:[],achievementStats:{species:{},places:{},morning:0,night:0,predators:0},claimedAchievementRewards:{},unlockedTitles:[],activeTitle:null,dailyTasks:null,best:0,bestWeight:0,heaviestCatch:null,lastCatch:null,xp:0,place:'Rybník',bait:'Boilies',phase:'idle',current:null,progress:0,tab:'home'};
 let cloudSaveTimer=null,cloudSaveBusy=false,cloudSaveAgain=false;
@@ -1994,7 +2013,7 @@ function showLegendaryCelebration(f,testAction=null){
 }
 
 function renderCatchGallery(el){
- const places=['Rybník','Jezero','Řeka','Horské jezero'];
+ const places=['Rybník','Jezero','Řeka','Horské jezero','Amazonie'];
  const stats=state.achievementStats?.species||{};
  const records=Array.isArray(state.records)?state.records:[];
  const knownCount=id=>Math.max(0,Number(stats[id]?.count)||0);
@@ -2052,7 +2071,8 @@ function renderHome(el){
   {name:'Rybník',desc:'Kapr, amur, lín, štika, okoun',image:'https://images.pexels.com/photos/17786368/pexels-photo-17786368.jpeg?auto=compress&cs=tinysrgb&w=1200'},
   {name:'Jezero',desc:'Kapr, amur, jeseter, sumec, candát',image:'https://images.pexels.com/photos/35008328/pexels-photo-35008328.jpeg?auto=compress&cs=tinysrgb&w=1200'},
   {name:'Řeka',desc:'Štika, candát, bolen, okoun, sumec',image:'https://images.pexels.com/photos/24205803/pexels-photo-24205803.jpeg?auto=compress&cs=tinysrgb&w=1200'},
-  {name:'Horské jezero',desc:'Pstruzi, siven, lipan a losos',image:'./Horske%CC%81%20jezero%20v%20lesni%CC%81%20za%CC%81toce%202.webp'}
+  {name:'Horské jezero',desc:'Pstruzi, siven, lipan a losos',image:'./Horske%CC%81%20jezero%20v%20lesni%CC%81%20za%CC%81toce%202.webp'},
+  {name:'Amazonie',desc:'Arapaima, arowana, payara, piraíba a další amazonské ryby',image:'./river.jpg'}
  ];
  const recent=(state.records||[]).slice(0,1)[0];
  const fishHere=fishData.filter(f=>f.places.includes(state.place));
@@ -2068,7 +2088,7 @@ function renderHome(el){
     <button class="home-side-button" data-tab="account">👤 Můj profil a kamarádi</button>
    </aside>
    <div class="home-main">
-    <section class="home-panel home-places-panel"><div class="home-section-title"><h2>🌅 Vyber revír</h2><span>3 lokality</span></div><div class="home-places">${places.map(p=>`<article class="home-place ${state.place===p.name?'is-selected':''}"><h3>${p.name}</h3><div class="home-place-image"><img src="${p.image}" alt="${p.name}" loading="lazy"></div><div class="home-place-content"><small>🐟 Typické druhy</small><p>${p.desc}</p><button data-home-place="${p.name}" ${placeUnlocked(p.name)?'':'disabled'}>${placeUnlocked(p.name)?'Vybrat revír　›':'🔒 Úroveň '+placeRequiredLevel(p.name)}</button></div></article>`).join('')}</div></section>
+    <section class="home-panel home-places-panel"><div class="home-section-title"><h2>🌅 Vyber revír</h2><span>5 lokalit</span></div><div class="home-places">${places.map(p=>`<article class="home-place ${state.place===p.name?'is-selected':''}"><h3>${p.name}</h3><div class="home-place-image"><img src="${p.image}" alt="${p.name}" loading="lazy"></div><div class="home-place-content"><small>🐟 Typické druhy</small><p>${p.desc}</p><button data-home-place="${p.name}" ${placeUnlocked(p.name)?'':'disabled'}>${placeUnlocked(p.name)?'Vybrat revír　›':'🔒 Úroveň '+placeRequiredLevel(p.name)}</button></div></article>`).join('')}</div></section>
     <div class="home-main-actions"><button data-tab="fish">🐟 Začít lovit</button><button class="home-secondary" data-tab="shop">🛒 Obchod</button><button class="home-secondary" data-tab="weekly">📅 Týdenní úkoly</button><button class="home-secondary" data-tab="log">🏆 Úspěchy</button><button class="home-secondary" data-tab="gallery">📖 Galerie úlovků</button></div>
    </div>
    <aside class="home-side home-side-right">
@@ -2123,7 +2143,7 @@ function renderFish(el){
  const f=state.current;
  const isSpinning=['Guma','Wobbler','Horské jezero'].includes(state.bait);
  const mountainValid=state.place!=='Horské jezero'||ffIsMountainLoadoutValid();
- let inner=`<div class="card stack"><h2>📍 Vyber revír</h2><div class="choices">${['Rybník','Jezero','Řeka','Horské jezero'].map(p=>`<div class="choice place-choice ${state.place===p?'selected':''} ${placeUnlocked(p)?'':'place-locked'}" data-place="${p}" aria-disabled="${!placeUnlocked(p)}">${placeArt(p)}<b>${p==='Rybník'?'🌿':p==='Jezero'?'🌊':'🏞️'} ${p} ${placeUnlocked(p)?'':'🔒'}</b><small>${placeUnlocked(p)?(p==='Rybník'?'Kapr, amur, štika, okoun, lín':p==='Jezero'?'Amur, dravci, jeseter':p==='Řeka'?'Bolen, okoun, sumec, candát, kapr':'Pstruzi, siven, lipan a losos'):'Odemkneš na úrovni '+placeRequiredLevel(p)}</small></div>`).join('')}</div>
+ let inner=`<div class="card stack"><h2>📍 Vyber revír</h2><div class="choices">${['Rybník','Jezero','Řeka','Horské jezero','Amazonie'].map(p=>`<div class="choice place-choice ${state.place===p?'selected':''} ${placeUnlocked(p)?'':'place-locked'}" data-place="${p}" aria-disabled="${!placeUnlocked(p)}">${placeArt(p)}<b>${p==='Rybník'?'🌿':p==='Jezero'?'🌊':p==='Amazonie'?'🌴':'🏞️'} ${p} ${placeUnlocked(p)?'':'🔒'}</b><small>${placeUnlocked(p)?(p==='Rybník'?'Kapr, amur, štika, okoun, lín':p==='Jezero'?'Amur, dravci, jeseter':p==='Řeka'?'Bolen, okoun, sumec, candát, kapr':p==='Horské jezero'?'Pstruzi, siven, lipan a losos':'Arapaima, arowana, payara, piraíba a další'):'Odemkneš na úrovni '+placeRequiredLevel(p)}</small></div>`).join('')}</div>
  <h2>🪱 Vyber nástrahu</h2>${state.place==='Horské jezero'?'<p class="muted mountain-bait-intro">🏔️ Horská nabídka · Každou nástrahu odemkneš samostatným nákupem</p>':''}<div class="choices bait-square-grid">${(state.place==='Horské jezero'?FF_STORE.baits.filter(x=>x[0].startsWith('mountain-')):['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'].map(b=>ffBaitPreviewForCategory(b))).map(bait=>{const id=bait[0],mountain=id.startsWith('mountain-'),owned=!!state.ownedBaits?.includes(id),selected=state.selectedBait===id&&owned,recommended=(bait[6]||[]).map(fid=>fishData.find(f=>f.id===fid)?.name).filter(Boolean);return `<div class="choice bait-choice bait-square-card ${selected?'selected':''} ${owned?'':'bait-locked'}" data-bait-id="${id}"><div class="bait-art-frame"><img src="${ffBaitImage(id)}" alt="${escapeHtml(bait[2])}" loading="lazy">${owned?'':'<span class="mountain-bait-lock">🔒 ZAMČENO</span>'}</div><div class="bait-copy"><b>${mountain?'🏔️ ':''}${escapeHtml(bait[2])}</b><small>${owned?('🐟 '+(recommended.length?recommended.map(escapeHtml).join(', '):'Univerzální použití')):('🔒 '+money(bait[3])+' · Úroveň '+bait[4])}</small></div></div>`}).join('')}</div>
  ${state.place==='Horské jezero'&&!mountainValid?'<div class="status mountain-rules-warning"><b>🏔️ Speciální pravidla Horského jezera</b><br>Na tomto revíru smíš používat pouze horský prut, naviják, vlasec a horskou nástrahu.<br><small>'+escapeHtml(ffMountainLoadoutMessage())+'</small><button class="secondary" data-open-mountain-store>🛒 Doplnit horské vybavení</button></div>':''}
  <div class="status" id="status">${state.message||'Připrav si vybavení a nahoď prut.'}</div>`;
@@ -2301,7 +2321,7 @@ function finishCatch(release=false){
  const speciesStat=achievementStats.species[f.id]||(achievementStats.species[f.id]={count:0,maxCm:0});
  speciesStat.count=(Number(speciesStat.count)||0)+1;speciesStat.maxCm=Math.max(Number(speciesStat.maxCm)||0,Number(f.cm)||0);
  achievementStats.places[state.place]=(Number(achievementStats.places[state.place])||0)+1;
- if(['stika','candat','sumec','bolen','okoun'].includes(f.id))achievementStats.predators=(Number(achievementStats.predators)||0)+1;
+ if(['stika','candat','sumec','bolen','okoun','okoun-pavi','payara','pirana-cervenobrichá'].includes(f.id))achievementStats.predators=(Number(achievementStats.predators)||0)+1;
  const caughtHour=new Date().getHours();if(caughtHour>=5&&caughtHour<10)achievementStats.morning=(Number(achievementStats.morning)||0)+1;if(caughtHour>=22||caughtHour<5)achievementStats.night=(Number(achievementStats.night)||0)+1;
  if(f.cm>Number(state.best||0))state.best=f.cm;
  if(Number(f.kg)>Number(state.bestWeight||0)){state.bestWeight=Number(f.kg);state.heaviestCatch={name:f.name,id:f.id,cm:f.cm,kg:f.kg,place:state.place,date:new Date().toLocaleString('cs-CZ')};}
