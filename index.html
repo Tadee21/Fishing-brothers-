@@ -2211,7 +2211,7 @@ function startBiteSequence(){
  },waitMs);
 }
 function beginFishFight(quickStrike){
- if(state.place==='Horské jezero'&&!ffIsMountainLoadoutValid()){state.phase='idle';state.message=ffMountainLoadoutMessage();render();return;}if(state.place==='Amazonie'&&!ffIsAmazonLoadoutValid()){state.phase='idle';state.message=ffAmazonLoadoutMessage();render();return;}
+ if(state.place==='Horské jezero'&&!ffIsMountainLoadoutValid()){state.phase='idle';state.message=ffMountainLoadoutMessage();render();return;}if(state.place==='Amazonie'&&!ffIsAmazonLoadoutValid()){state.phase='idle';state.message=ffAmazonLoadoutMessage();render();return;}if(state.place==='Amazonie'&&!ffIsAmazonLoadoutValid()){state.phase='idle';state.message=ffAmazonLoadoutMessage();render();return;}
  const candidates=fishData.filter(f=>f.places.includes(state.place)&&f.baits.includes(state.bait));
  const baitChoice=currentBaitItem();
  const preferred=candidates.filter(x=>baitChoice[6].includes(x.id));
