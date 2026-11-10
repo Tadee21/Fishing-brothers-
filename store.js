@@ -48,15 +48,6 @@ function equippedStats(){
  return {rodPower:Math.max(0,(Number((r[5].match(/Síla (\d+)/)||[])[1]||30)-30)/40),reelPower:Math.max(0,(Number((n[5].match(/Brzda (\d+)/)||[])[1]||4)-4)/4),lineCapacity:Number(((l[5].match(/Nosnost ([\d,]+)/)||[])[1]||'4').replace(',','.'))};
 }
 const FF_CUSTOM_ASSETS={
- 'rod-basic':'rod-basic%202.jpg','rod-river':'rod-river%202.jpg','rod-predator':'rod-predator%202.jpg','rod-carp':'rod-carp%202.jpg','rod-legend':'rod-legend%202.jpg',
- 'reel-basic':'reel-basic%202.jpg','reel-spin':'reel-spin%202.jpg','reel-power':'reel-power%202.jpg','reel-bigfish':'reel-bigfish%202.jpg','reel-titan':'reel-titan%202.jpg',
- 'line-basic':'line-basic%202.jpg','line-strong':'line-strong%202.jpg','line-power':'line-power%202.jpg','line-monster':'line-monster%202.jpg','line-extreme':'line-extreme%202.jpg',
- 'braid-catfish-040':'catfish-braid-040%202.png','braid-monster-050':'monster-catfish-050%202.png','braid-bigcat-060':'big-catfish-pro-060%202.png',
- 'bait-strawberry':'boilies-strawberry%202.jpg','bait-krill':'boilies-krill%202.jpg','bait-pineapple':'boilies-pineapple%202.jpg','bait-scopex':'boilies-scopex%202.jpg','bait-tiger':'boilies-tiger%202.jpg',
- 'corn-yellow':'corn-yellow%202.jpg','corn-red':'corn-red%202.jpg','corn-tiger':'corn-tiger%202.jpg','corn-honey':'corn-honey%202.jpg','corn-pineapple':'corn-pineapple%202.jpg',
- 'lure-kopyto':'lure-kopyto%202.jpg','lure-ripper':'lure-ripper%202.jpg','lure-twister':'lure-twister%202.jpg','lure-smacek':'lure-smacek%202.jpg','lure-frog':'lure-frog%202.jpg',
- 'wob-minnow':'wob-minnow%202.jpg','wob-crank':'wob-crank%202.jpg','wob-popper':'wob-popper%202.jpg','wob-swimbait':'wob-swimbait%202.jpg','wob-jointed':'wob-jointed%202.jpg',
- 'live-worm':'live-worm%202.jpg','live-rousnice':'live-rousnice%202.jpg','live-maggots':'live-maggots%202.jpg','live-minnow':'live-minnow%202.jpg','live-leech':'live-leech%202.jpg',
  'rod-amazon-river-hunter':'amazon-river-hunter%202.jpg','rod-amazon-jungle-predator':'jungle-predator-x%202.jpg','rod-amazon-monster-pro':'amazon-monster-pro%202.jpg',
  'reel-amazon-river-force':'river-force-8000%202.jpg','reel-amazon-jungle-beast':'jungle-beast-12000%202.jpg','reel-amazon-titan':'amazon-titan-20000%202.jpg',
  'braid-amazon-050':'amazon-braid-050mm-45kg%202.jpg','braid-amazon-065':'jungle-braid-065mm-65kg%202.jpg','braid-amazon-080':'monster-braid-080mm-90kg%202.jpg','braid-amazon-100':'titan-braid-100mm-120kg%202.jpg',
@@ -120,7 +111,7 @@ function ffSell(id){
 function ffSaveLoadout(i){state.loadouts[i]={name:'Moje sestava '+(i+1),rod:state.selectedRod,reel:state.selectedReel,line:state.selectedLine,bait:state.selectedBait};state.activeLoadout=i;save();render();}
 function ffUseLoadout(i){const s=state.loadouts[i];if(!s||![s.rod,s.reel,s.line].every(x=>state.ownedGear.includes(x))||!state.ownedBaits.includes(s.bait))return;if(state.place==='Amazonie'&&!(String(s.rod).includes('amazon-')&&String(s.reel).includes('amazon-')&&String(s.line).startsWith('braid-amazon-')&&String(s.bait).startsWith('amazon-'))){state.message='🌴 Tato sestava není určená pro Amazonii. Vyber amazonskou sestavu.';render();return;}if(state.place==='Horské jezero'&&!(s.rod==='rod-mountain'&&s.reel==='reel-mountain'&&s.line==='line-mountain'&&String(s.bait).startsWith('mountain-'))){state.message='🏔️ Tato sestava není určená pro Horské jezero. Vyber horskou sestavu.';render();return;}state.selectedRod=s.rod;state.selectedReel=s.reel;state.selectedLine=s.line;state.selectedBait=s.bait;state.bait=FF_STORE.baits.find(x=>x[0]===s.bait)?.[1]||state.bait;state.baitSelections=state.baitSelections||{};const loadoutBait=FF_STORE.baits.find(x=>x[0]===s.bait);if(loadoutBait)state.baitSelections[loadoutBait[1]]=s.bait;state.activeLoadout=i;save();render();}
 function renderFishingFriendsShop(el){
- initStoreState();if(state.place==='Amazonie'&&state.shopCategory==='lines')state.shopCategory='braids';const cat=state.shopCategory,tab=FF_TABS.find(x=>x[0]===cat)||FF_TABS[0],lvl=playerLevel();
+ initStoreState();const cat=state.shopCategory,tab=FF_TABS.find(x=>x[0]===cat)||FF_TABS[0],lvl=playerLevel();
  function card(x,g){
   const bait=g==='baits',id=x[0],name=bait?x[2]:x[1],price=bait?x[3]:x[2],req=bait?x[4]:x[3],owned=(bait?state.ownedBaits:state.ownedGear).includes(id),active=(bait?state.selectedBait:({rods:state.selectedRod,reels:state.selectedReel,lines:state.selectedLine,braids:state.selectedLine})[g])===id;
   const art='<img src="'+ffAsset(id)+'" alt="'+name+'" loading="lazy">',detail=bait?'Účinnost +'+x[5]+'% · '+x[6].join(', '):x[5],desc=bait?'Vhodná nástraha pro vybrané druhy ryb.':'Vlastnosti ovlivňují kontrolu a zdolávání ryby.';
