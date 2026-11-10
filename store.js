@@ -60,7 +60,7 @@ function ffBaitImage(id){return ffAsset(id);}
 function ffBuy(id,group){
  const x=group==='baits'?FF_STORE.baits.find(y=>y[0]===id):FF_STORE[group].find(y=>y[0]===id);if(!x)return;
  const price=group==='baits'?x[3]:x[2],req=group==='baits'?x[4]:x[3],owned=group==='baits'?state.ownedBaits:state.ownedGear;
- if(owned.includes(id)||playerLevel()<req||state.money<price)return;state.money-=price;owned.push(id);
+ if(owned.includes(id)||playerLevel()<req||state.money<price)return;if(state.place==='Amazonie'&&group!=='baits'&&!id.includes('-amazon-')&&!id.startsWith('braid-amazon-')){state.message='🌴 V Amazonii můžeš kupovat a používat pouze amazonské vybavení.';render();return;}if(state.place==='Amazonie'&&group==='baits'&&!id.startsWith('amazon-')){state.message='🌴 V Amazonii můžeš používat pouze amazonské nástrahy.';render();return;}state.money-=price;owned.push(id);
  if(group==='baits'){if((state.place!=='Horské jezero'||id.startsWith('mountain-'))&&(state.place!=='Amazonie'||id.startsWith('amazon-'))){state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}}else{state.gearPurchases[id]=price;if(state.place!=='Horské jezero'||id.endsWith('-mountain')){if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines'||group==='braids')state.selectedLine=id;}}
  save();render();
 }
@@ -89,8 +89,8 @@ function ffPreparePlace(place){
  }
 }
 function ffEquip(id,group){
- if(group==='baits'){const x=FF_STORE.baits.find(y=>y[0]===id);if(!x||!state.ownedBaits.includes(id))return;if(state.place==='Horské jezero'&&!id.startsWith('mountain-')){state.message='🏔️ Na Horském jezeře můžeš používat pouze horské nástrahy.';render();return;}if(state.place==='Amazonie'&&!id.startsWith('amazon-')){state.message='🌴 V Amazonii můžeš používat pouze amazonské nástrahy.';render();return;}state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}
- else{if(!state.ownedGear.includes(id))return;if(state.place==='Amazonie'&&!id.includes('-amazon-')&&!id.startsWith('braid-amazon-')){state.message='🌴 V Amazonii můžeš používat pouze amazonské vybavení.';render();return;}if(state.place==='Horské jezero'&&!id.endsWith('-mountain')){state.message='🏔️ Na Horském jezeře můžeš používat pouze horské vybavení.';render();return;}if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines'||group==='braids')state.selectedLine=id;}
+ if(group==='baits'){const x=FF_STORE.baits.find(y=>y[0]===id);if(!x||!state.ownedBaits.includes(id))return;if(state.place==='Horské jezero'&&!id.startsWith('mountain-')){state.message='🏔️ Na Horském jezeře můžeš používat pouze horské nástrahy.';render();return;}if(state.place==='Amazonie'&&!id.startsWith('amazon-')){state.message='🌴 V Amazonii můžeš používat pouze amazonské nástrahy.';render();return;}if(state.place==='Amazonie'&&!id.startsWith('amazon-')){state.message='🌴 V Amazonii můžeš používat pouze amazonské nástrahy.';render();return;}state.selectedBait=id;state.bait=x[1];state.baitSelections=state.baitSelections||{};state.baitSelections[x[1]]=id;}
+ else{if(!state.ownedGear.includes(id))return;if(state.place==='Amazonie'&&!id.includes('-amazon-')&&!id.startsWith('braid-amazon-')){state.message='🌴 V Amazonii můžeš používat pouze amazonské vybavení.';render();return;}if(state.place==='Horské jezero'&&!id.endsWith('-mountain')){state.message='🏔️ Na Horském jezeře můžeš používat pouze horské vybavení.';render();return;}if(state.place==='Amazonie'&&!id.includes('-amazon-')&&!id.startsWith('braid-amazon-')){state.message='🌴 V Amazonii můžeš používat pouze amazonské vybavení.';render();return;}if(group==='rods')state.selectedRod=id;if(group==='reels')state.selectedReel=id;if(group==='lines'||group==='braids')state.selectedLine=id;}
  save();render();
 }
 function ffSell(id){
