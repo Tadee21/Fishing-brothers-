@@ -1853,7 +1853,7 @@ const fishData = [
  {id:'payara',name:'Payara',min:30,max:120,ref:65,kg:2.4,variation:.18,color:'#a6b0a8',type:'amazonské',places:['Amazonie'],baits:['Amazonie'],price:115,trophy:96,sizeBands:{common:[30,65],large:[66,95],trophy:[96,120]}},
  {id:'piraiba',name:'Piraíba',min:80,max:360,ref:160,kg:18,variation:.17,color:'#7c7b70',type:'amazonské',places:['Amazonie'],baits:['Amazonie'],price:155,trophy:261,sizeBands:{common:[80,160],large:[161,260],trophy:[261,360]}},
  {id:'pirana-cervenobrichá',name:'Piraňa červenobřichá',min:15,max:35,ref:25,kg:.55,variation:.2,color:'#c85b35',type:'amazonské',places:['Amazonie'],baits:['Amazonie'],price:65,trophy:32,sizeBands:{common:[15,25],large:[26,31],trophy:[32,35]}},
- {id:'sumec-cervenoocasy',name:'Sumec červenoocasý',min:50,max:180,ref:100,kg:12.5,variation:.18,color:'#9d4c32',type:'amazonské',places:['Amazonie'],baits:['Živá nástraha'],price:135,trophy:150},
+ {id:'sumec-cervenoocasy',name:'Sumec červenoocasý',min:40,max:180,ref:100,kg:10,variation:.18,color:'#9d4c32',type:'amazonské',places:['Amazonie'],baits:['Amazonie'],price:135,trophy:146,sizeBands:{common:[40,100],large:[101,145],trophy:[146,180]}},
  {id:'tambaqui',name:'Tambaqui',min:35,max:110,ref:65,kg:6,variation:.18,color:'#9a8052',type:'amazonské',places:['Amazonie'],baits:['Amazonie'],price:88,trophy:91,sizeBands:{common:[35,65],large:[66,90],trophy:[91,110]}}
 ];
 const fishImages = {
@@ -1973,9 +1973,9 @@ function legendarySizeFor(f,cm){
  const finalCm=Math.min(f.max,Math.max(Number(cm)||0,target,Number(f.min)||0));
  return {cm:finalCm,kg:weightFor(f,finalCm)};
 }
-function rollLegendaryVariant(f,cm){
- // One legendary category only: record-breaking size.
- if(Math.random()>=.005)return {cm,kg:weightFor(f,cm),legendary:null};
+function rollLegendaryVariant(f,cm,forceLegendary=false){
+ // Amazonia reserves 0.5% of size rolls for legendary specimens.
+ if(f.sizeBands?!forceLegendary:Math.random()>=.005)return {cm,kg:weightFor(f,cm),legendary:null};
  const definition=LEGENDARY_FISH_VARIANTS[f.id];
  if(!definition)return {cm,kg:weightFor(f,cm),legendary:null};
  const size=legendarySizeFor(f,cm);
@@ -2148,8 +2148,10 @@ function renderSettings(el){
 const baitImages={"Boilies":"bait-boilies%202.webp","Kukuřice":"bait-corn%202.webp","Guma":"bait-rubber%202.webp","Wobbler":"bait-wobbler%202.webp","Živá nástraha":"bait-live%202.webp"};
 function renderFish(el){
  const f=state.current;
- const isSpinning=['Guma','Wobbler','Horské jezero'].includes(state.bait);
+ const isSpinning=['Guma','Wobbler','Horské jezero','Amazonie'].includes(state.bait);
  const mountainValid=state.place!=='Horské jezero'||ffIsMountainLoadoutValid();
+ const amazonValid=state.place!=='Amazonie'||ffIsAmazonLoadoutValid();
+ const loadoutValid=mountainValid&&amazonValid;
  let inner=`<div class="card stack"><h2>📍 Vyber revír</h2><div class="choices">${['Rybník','Jezero','Řeka','Horské jezero','Amazonie'].map(p=>`<div class="choice place-choice ${state.place===p?'selected':''} ${placeUnlocked(p)?'':'place-locked'}" data-place="${p}" aria-disabled="${!placeUnlocked(p)}">${placeArt(p)}<b>${p==='Rybník'?'🌿':p==='Jezero'?'🌊':p==='Amazonie'?'🌴':'🏞️'} ${p} ${placeUnlocked(p)?'':'🔒'}</b><small>${placeUnlocked(p)?(p==='Rybník'?'Kapr, amur, štika, okoun, lín':p==='Jezero'?'Amur, dravci, jeseter':p==='Řeka'?'Bolen, okoun, sumec, candát, kapr':p==='Horské jezero'?'Pstruzi, siven, lipan a losos':'Arapaima, arowana, payara, piraíba a další'):'Odemkneš na úrovni '+placeRequiredLevel(p)}</small></div>`).join('')}</div>
  <h2>🪱 Vyber nástrahu</h2>${state.place==='Horské jezero'?'<p class="muted mountain-bait-intro">🏔️ Horská nabídka · Každou nástrahu odemkneš samostatným nákupem</p>':state.place==='Amazonie'?'<p class="muted mountain-bait-intro">🌴 Amazonské nástrahy · Speciální výběr pro lov v Amazonii</p>':''}<div class="choices bait-square-grid">${(state.place==='Horské jezero'?FF_STORE.baits.filter(x=>x[0].startsWith('mountain-')):state.place==='Amazonie'?FF_STORE.baits.filter(x=>x[0].startsWith('amazon-')):['Boilies','Kukuřice','Guma','Wobbler','Živá nástraha'].map(b=>ffBaitPreviewForCategory(b))).map(bait=>{const id=bait[0],mountain=id.startsWith('mountain-'),owned=!!state.ownedBaits?.includes(id),selected=state.selectedBait===id&&owned,recommended=(bait[6]||[]).map(fid=>fishData.find(f=>f.id===fid)?.name).filter(Boolean);return `<div class="choice bait-choice bait-square-card ${selected?'selected':''} ${owned?'':'bait-locked'}" data-bait-id="${id}"><div class="bait-art-frame"><img src="${ffBaitImage(id)}" alt="${escapeHtml(bait[2])}" loading="lazy">${owned?'':'<span class="mountain-bait-lock">🔒 ZAMČENO</span>'}</div><div class="bait-copy"><b>${mountain?'🏔️ ':id.startsWith('amazon-')?'🌴 ':''}${escapeHtml(bait[2])}</b><small>${owned?('🐟 '+(recommended.length?recommended.map(escapeHtml).join(', '):'Univerzální použití')):('🔒 '+money(bait[3])+' · Úroveň '+bait[4])}</small></div></div>`}).join('')}</div>
  ${state.place==='Horské jezero'&&!mountainValid?'<div class="status mountain-rules-warning"><b>🏔️ Speciální pravidla Horského jezera</b><br>Na tomto revíru smíš používat pouze horský prut, naviják, vlasec a horskou nástrahu.<br><small>'+escapeHtml(ffMountainLoadoutMessage())+'</small><button class="secondary" data-open-mountain-store>🛒 Doplnit horské vybavení</button></div>':state.place==='Amazonie'&&!amazonValid?'<div class="status mountain-rules-warning"><b>🌴 Speciální pravidla Amazonie</b><br>Potřebuješ amazonský prut, naviják, pletenku a jednu z pěti amazonských nástrah. Monofilní vlasce ani běžné vybavení zde nefungují.<br><small>'+escapeHtml(ffAmazonLoadoutMessage())+'</small><button class="secondary" data-open-amazon-store>🛒 Doplnit amazonské vybavení</button></div>':''}
