@@ -45,7 +45,11 @@ function currentBaitItem(){return FF_STORE.baits.find(x=>x[0]===state.selectedBa
 function ffBaitPreviewForCategory(category){const remembered=state.baitSelections?.[category];return FF_STORE.baits.find(x=>x[0]===remembered&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category&&x[0]===state.selectedBait&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category&&state.ownedBaits?.includes(x[0]))||FF_STORE.baits.find(x=>x[1]===category)||FF_STORE.baits[0];}
 function equippedStats(){
  const r=ffItem(state.selectedRod)||FF_STORE.rods[0],n=ffItem(state.selectedReel)||FF_STORE.reels[0],l=ffItem(state.selectedLine)||FF_STORE.lines[0];
- return {rodPower:Math.max(0,(Number((r[5].match(/Síla (\d+)/)||[])[1]||30)-30)/40),reelPower:Math.max(0,(Number((n[5].match(/Brzda (\d+)/)||[])[1]||4)-4)/4),lineCapacity:Number(((l[5].match(/Nosnost ([\d,]+)/)||[])[1]||'4').replace(',','.'))};
+ const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+ const strength=Number((r[5].match(/Síla (\d+)/)||[])[1]||30),control=Number((r[5].match(/Kontrola (\d+)/)||[])[1]||30);
+ const drag=Number((n[5].match(/Brzda (\d+)/)||[])[1]||4),ratio=Number((n[5].match(/Převod ([\d.]+):1/)||[])[1]||5);
+ const lineCapacity=Number(((l[5].match(/Nosnost ([\d,]+)/)||[])[1]||'4').replace(',','.'));
+ return {rodPower:clamp((strength-30)/70,0,1),rodControl:clamp((control-30)/70,0,1),reelPower:clamp((drag-4)/46,0,1),reelRatio:ratio,lineCapacity};
 }
 const FF_CUSTOM_ASSETS={
  'rod-amazon-river-hunter':'amazon-river-hunter%202.jpg','rod-amazon-jungle-predator':'jungle-predator-x%202.jpg','rod-amazon-monster-pro':'amazon-monster-pro%202.jpg',
