@@ -2207,9 +2207,10 @@ function startBiteSequence(){
 }
 function beginFishFight(quickStrike){
  if(state.place==='Horské jezero'&&!ffIsMountainLoadoutValid()){state.phase='idle';state.message=ffMountainLoadoutMessage();render();return;}if(state.place==='Amazonie'&&!ffIsAmazonLoadoutValid()){state.phase='idle';state.message=ffAmazonLoadoutMessage();render();return;}
- const candidates=fishData.filter(f=>f.places.includes(state.place)&&f.baits.includes(state.bait));
  const baitChoice=currentBaitItem();
- const preferred=candidates.filter(x=>baitChoice[6].includes(x.id));
+ // Amazonian baits use their own target-fish list (baitChoice[6]), not generic bait categories.
+ const candidates=fishData.filter(f=>f.places.includes(state.place)&&(state.place==='Amazonie'?baitChoice[6].includes(f.id):f.baits.includes(state.bait)));
+ const preferred=state.place==='Amazonie'?candidates:candidates.filter(x=>baitChoice[6].includes(x.id));
  const biteChance=Math.min(.95,.48+state.rod*.025+state.baitLevel*.025+baitChoice[5]/100);
  if(!candidates.length||Math.random()>=biteChance){
   state.phase='idle';state.current=null;state.message='Ryba nástrahu jen ochutnala a odplula. Zkus znovu nahodit.';render();return;
