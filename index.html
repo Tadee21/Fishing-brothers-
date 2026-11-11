@@ -2330,8 +2330,8 @@ function finishCatch(release=false){
  if(f.cm>Number(state.best||0))state.best=f.cm;
  if(Number(f.kg)>Number(state.bestWeight||0)){state.bestWeight=Number(f.kg);state.heaviestCatch={name:f.name,id:f.id,cm:f.cm,kg:f.kg,place:state.place,date:new Date().toLocaleString('cs-CZ')};}
  // Every legendary fish has one fixed conservation reward, regardless of rarity subtype or size.
- const earnedXp=f.legendary?2000:(f.xpReward||Math.round(35+f.cm*1.1+f.kg*3));
- const earnedMoney=f.legendary?20000:(!release?Number(f.reward)||0:0);
+ const earnedXp=f.legendary?2500:Math.min(1200,Math.round((f.xpReward||Math.round(35+f.cm*1.1+f.kg*3))*0.65));
+ const earnedMoney=f.legendary?35000:(!release?Math.min(5000,Math.round((Number(f.reward)||0)*0.6)):0);
  const oldLevel=Math.floor((Number(state.xp)||0)/500)+1;state.xp=(Number(state.xp)||0)+earnedXp;const newLevel=Math.floor(state.xp/500)+1;state._levelUp=newLevel>oldLevel?newLevel:0;
  if(release||f.legendary){state.released++;if(f.legendary)state.money+=earnedMoney;}else{state.sold++;state.money+=earnedMoney}
  state.current=null;state.phase='idle';state.message=f.legendary?`Legendární ryba byla bezpečně puštěna! Získáváš ${money(earnedMoney)} a +${earnedXp} XP.`:release?'Ryba je zpět ve vodě. Díky za šetrný lov!':`Ryba prodána za ${money(earnedMoney)}!`;
