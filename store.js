@@ -84,7 +84,7 @@ function ffMountainLoadoutMessage(){
 }
 function ffPreparePlace(place){
  state.place=place;
- if(place==='Amazonie'){state.bait='Amazonie';const amazon=ffBaitPreviewForCategory('Amazonie');if(amazon){state.selectedBait=amazon[0];state.baitSelections=state.baitSelections||{};state.baitSelections.Amazonie=amazon[0];}}
+ if(place==='Amazonie'){state.bait='Amazonie';const amazon=ffBaitPreviewForCategory('Amazonie');if(amazon&&state.ownedBaits?.includes(amazon[0])){state.selectedBait=amazon[0];state.baitSelections=state.baitSelections||{};state.baitSelections.Amazonie=amazon[0];}}
   else if(place==='Horské jezero'){
   state.bait='Horské jezero';
   const mountain=ffBaitPreviewForCategory('Horské jezero');
